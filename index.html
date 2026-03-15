@@ -1,106 +1,97 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <!-- Viewport estricto para PWA en iOS: evita el zoom manual y ajusta a los bordes (cover) -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-
-```
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Atelier">
-<meta name="theme-color" content="#f5f6f8">
-
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23f5f6f8' width='100' height='100' rx='20'/><text y='65' x='50' text-anchor='middle' font-size='50'>🎨</text></svg>">
-<title>Atelier アトリエ</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-<style>
-    .hide-scrollbar::-webkit-scrollbar { display: none; }
-    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    <!-- Meta tags para iOS PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Atelier">
+    <meta name="theme-color" content="#f5f6f8">
     
-    html, body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        background-color: #f5f6f8;
-        overscroll-behavior-y: none;
-        overflow: hidden;
-    }
-
-    #root { width: 100%; height: 100%; }
-
-    .h-screen-safe {
-        height: 100vh;
-        height: 100dvh;
-    }
-
-    .safe-pt { padding-top: max(env(safe-area-inset-top), 20px); }
-    .safe-pb-nav { padding-bottom: max(env(safe-area-inset-bottom), 16px); }
-    .main-content-pb { padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
-
-    input, textarea, select {
-        font-size: 16px !important;
-        line-height: normal !important;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        border-radius: 0;
-        touch-action: manipulation; 
-    }
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23f5f6f8' width='100' height='100' rx='20'/><text y='65' x='50' text-anchor='middle' font-size='50'>🎨</text></svg>">
+    <title>Atelier アトリエ</title>
     
-    input[type="date"] {
-        min-height: 48px;
-    }
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    .line-clamp-2 {
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-    .line-clamp-3 {
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 
-    /* Inspiración del día - shimmer loading */
-    @keyframes shimmer {
-        0% { background-position: -200% 0; }
-        100% { background-position: 200% 0; }
-    }
-    .shimmer-loading {
-        background: linear-gradient(90deg, #e8eaee 25%, #f0f1f4 50%, #e8eaee 75%);
-        background-size: 200% 100%;
-        animation: shimmer 1.8s ease-in-out infinite;
-    }
+    <!-- Babel para compilar JSX en el navegador -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    /* Fade-in suave para la imagen de inspiración */
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(12px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    .fade-in-up {
-        animation: fadeInUp 0.6s ease-out forwards;
-    }
-</style>
-```
+    <style>
+        /* Ocultar la barra de scroll para un look más "app" */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f5f6f8;
+            /* Evita el efecto "goma" al hacer scroll fuera de los límites */
+            overscroll-behavior-y: none;
+            overflow: hidden;
+        }
 
+        #root { width: 100%; height: 100%; }
+
+        /* Uso estricto de 100dvh para iOS (Dynamic Viewport Height) */
+        .h-screen-safe {
+            height: 100vh; /* Fallback */
+            height: 100dvh;
+        }
+
+        /* SAFE AREAS (Dynamic Island y Home Indicator) */
+        .safe-pt { padding-top: max(env(safe-area-inset-top), 20px); }
+        .safe-pb-nav { padding-bottom: max(env(safe-area-inset-bottom), 16px); }
+        /* Margen inferior para las listas para que no queden tapadas por el menú inferior */
+        .main-content-pb { padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
+
+        /* BUG FIX: Zoom en inputs de iOS. DEBEN ser al menos 16px */
+        input, textarea, select {
+            font-size: 16px !important;
+            line-height: normal !important;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            border-radius: 0;
+            /* Previene el auto-zoom */
+            touch-action: manipulation; 
+        }
+        
+        input[type="date"] {
+            min-height: 48px;
+        }
+
+        /* Fix para line-clamp en Safari */
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
 </head>
 <body>
     <div id="root"></div>
 
 <script type="text/babel">
-    const { useState, useEffect } = React;
+    const { useState, useEffect, useCallback } = React;
 
     // --- BASE DE DATOS INDEXEDDB ---
     const DB_NAME = "AtelierDB";
@@ -181,7 +172,6 @@
     const Palette = (p) => <Icon {...p} path='<circle cx="13.5" cy="6.5" r=".5"></circle><circle cx="17.5" cy="10.5" r=".5"></circle><circle cx="8.5" cy="7.5" r=".5"></circle><circle cx="6.5" cy="12.5" r=".5"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path>' />;
     const Camera = (p) => <Icon {...p} path='<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle>' />;
     const X = (p) => <Icon {...p} path='<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>' />;
-    const RefreshCw = (p) => <Icon {...p} path='<polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>' />;
 
     // --- TEMA Y ESTILOS CONSTANTES ---
     const theme = {
@@ -190,54 +180,6 @@
       bgAccent: "bg-[#5b85b5]",
       shadowFlat: "shadow-[6px_6px_16px_#d8dde6,-6px_-6px_16px_#ffffff]",
       shadowInset: "shadow-[inset_4px_4px_8px_#d8dde6,inset_-4px_-4px_8px_#ffffff]"
-    };
-
-    // --- FRASES INSPIRADORAS DE ARTE ---
-    const FRASES_ARTE = [
-      { texto: "No pinto lo que veo, sino lo que siento.", autor: "Vincent van Gogh" },
-      { texto: "El arte es la mentira que nos permite comprender la verdad.", autor: "Pablo Picasso" },
-      { texto: "Los colores son las sonrisas de la naturaleza.", autor: "Leigh Hunt" },
-      { texto: "Todo artista fue primero un aficionado.", autor: "Ralph Waldo Emerson" },
-      { texto: "La creatividad requiere el coraje de soltar las certezas.", autor: "Erich Fromm" },
-      { texto: "La pintura es poesía silenciosa, y la poesía es pintura que habla.", autor: "Plutarco" },
-      { texto: "El arte no reproduce lo visible, lo hace visible.", autor: "Paul Klee" },
-      { texto: "El objetivo del arte es representar no la apariencia exterior, sino el significado interior.", autor: "Aristóteles" },
-      { texto: "Cada niño es un artista. El problema es seguir siendo artista cuando creces.", autor: "Pablo Picasso" },
-      { texto: "Aprendí que no se puede dar marcha atrás, que la esencia de la vida es ir hacia adelante.", autor: "Frida Kahlo" },
-      { texto: "El color es un poder que influye directamente en el alma.", autor: "Wassily Kandinsky" },
-      { texto: "Pinto para no llorar.", autor: "Paul Klee" },
-      { texto: "Un cuadro es un poema sin palabras.", autor: "Horacio" },
-      { texto: "Si pudiera decirlo con palabras, no habría razón para pintar.", autor: "Edward Hopper" },
-      { texto: "El arte lava del alma el polvo de la vida cotidiana.", autor: "Pablo Picasso" },
-      { texto: "El dibujo es la sinceridad del arte. No hay posibilidad de trampas.", autor: "Jean-Auguste-Dominique Ingres" },
-      { texto: "El verdadero arte es siempre donde menos lo esperas.", autor: "Jean Dubuffet" },
-      { texto: "El artista no es una persona especial; cada persona es un artista especial.", autor: "Meister Eckhart" },
-      { texto: "Un artista es un explorador. No debería tener miedo de lo desconocido.", autor: "Henri Matisse" },
-      { texto: "En la naturaleza, la luz crea el color. En la pintura, el color crea la luz.", autor: "Hans Hofmann" },
-      { texto: "La inspiración existe, pero tiene que encontrarte trabajando.", autor: "Pablo Picasso" },
-      { texto: "La perfección no es cosa pequeña, pero está hecha de pequeñas cosas.", autor: "Miguel Ángel" },
-      { texto: "Tengo miedo del día en que la tecnología supere la interacción humana.", autor: "Albert Einstein" },
-      { texto: "La simplicidad es la mayor sofisticación.", autor: "Leonardo da Vinci" },
-      { texto: "Uno no puede ser a la vez precavido e imaginativo.", autor: "Georgia O'Keeffe" },
-      { texto: "El arte es la expresión de los más profundos pensamientos por el camino más sencillo.", autor: "Albert Einstein" },
-      { texto: "Cierra los ojos y verás.", autor: "Joseph Joubert" },
-      { texto: "La vida es corta, el arte largo.", autor: "Hipócrates" },
-      { texto: "Donde el espíritu no trabaja con la mano, no hay arte.", autor: "Leonardo da Vinci" },
-      { texto: "Sin atmósfera, un cuadro no es nada.", autor: "Rembrandt" },
-      { texto: "La pintura es cosa mental.", autor: "Leonardo da Vinci" },
-    ];
-
-    // --- Función para obtener un número "semilla" basado en el día ---
-    const getDaySeed = () => {
-      const today = new Date();
-      const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
-      return today.getFullYear() * 1000 + dayOfYear;
-    };
-
-    // --- Seeded pseudo-random (para consistencia diaria) ---
-    const seededRandom = (seed) => {
-      const x = Math.sin(seed * 9301 + 49297) * 49297;
-      return x - Math.floor(x);
     };
 
     // --- FUNCIONES UTILERÍA ---
@@ -250,187 +192,6 @@
 
     const obtenerFechaActual = () => {
       return new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    };
-
-    // --- COMPONENTE: INSPIRACIÓN DEL DÍA ---
-    const InspiracionDelDia = () => {
-      const [obra, setObra] = useState(null);
-      const [frase, setFrase] = useState(null);
-      const [loading, setLoading] = useState(true);
-      const [error, setError] = useState(false);
-      const [imgLoaded, setImgLoaded] = useState(false);
-
-      const fetchObraDelDia = function(forceNew) {
-        setLoading(true);
-        setError(false);
-        setImgLoaded(false);
-
-        var seed = getDaySeed() + (forceNew ? Math.floor(Math.random() * 10000) : 0);
-
-        // Seleccionar frase del día
-        var fraseIndex = Math.floor(seededRandom(seed) * FRASES_ARTE.length);
-        setFrase(FRASES_ARTE[fraseIndex]);
-
-        // Comprobar caché en sessionStorage (solo si no es forzado)
-        if (!forceNew) {
-          try {
-            var cached = sessionStorage.getItem('atelier_inspiracion');
-            if (cached) {
-              var parsed = JSON.parse(cached);
-              if (parsed.seed === getDaySeed()) {
-                setObra(parsed.obra);
-                setLoading(false);
-                return;
-              }
-            }
-          } catch(e) {}
-        }
-
-        // IDs de obras destacadas del Art Institute of Chicago (public domain, con imagen)
-        var CURATED_IDS = [
-          27992, 28560, 111628, 129884, 80607, 87479, 14598, 20684, 
-          16568, 111317, 111442, 16571, 16487, 28067, 59426, 21023,
-          14655, 100858, 76395, 117271, 185905, 151363, 24645, 4081,
-          11434, 15401, 6596, 14620, 117266, 16327, 86385, 109819,
-          25865, 76244, 83642, 102611, 11272, 15468, 229406, 75644,
-          27281, 24836, 89856, 66039, 64818, 100472, 70443, 87045,
-          52560, 21976, 80084, 7124, 23684, 20579, 73417, 146953,
-          36161, 110634, 8958, 142476, 22432, 71829, 90048, 93820,
-        ];
-
-        var artworkIndex = Math.floor(seededRandom(seed + 1) * CURATED_IDS.length);
-        var artworkId = CURATED_IDS[artworkIndex];
-        var url = 'https://api.artic.edu/api/v1/artworks/' + artworkId + '?fields=id,title,artist_display,date_display,image_id,thumbnail,medium_display,dimensions,classification_title';
-
-        // Fetch con timeout de 8 segundos
-        var controller = new AbortController();
-        var timeoutId = setTimeout(function() { controller.abort(); }, 8000);
-
-        fetch(url, { signal: controller.signal })
-          .then(function(response) {
-            clearTimeout(timeoutId);
-            if (!response.ok) throw new Error('API error');
-            return response.json();
-          })
-          .then(function(data) {
-            var artwork = data.data;
-            if (!artwork || !artwork.image_id) throw new Error('No image');
-
-            var thumb = artwork.thumbnail || {};
-            var obraData = {
-              titulo: artwork.title || 'Sin título',
-              artista: artwork.artist_display || 'Artista desconocido',
-              fecha: artwork.date_display || '',
-              medio: artwork.medium_display || '',
-              clasificacion: artwork.classification_title || '',
-              imageUrl: 'https://www.artic.edu/iiif/2/' + artwork.image_id + '/full/843,/0/default.jpg',
-              thumbColor: thumb.lqip || null,
-              altText: thumb.alt_text || artwork.title,
-              link: 'https://www.artic.edu/artworks/' + artwork.id,
-            };
-
-            setObra(obraData);
-            setLoading(false);
-
-            // Cachear para el día
-            try {
-              sessionStorage.setItem('atelier_inspiracion', JSON.stringify({ seed: getDaySeed(), obra: obraData }));
-            } catch(e) {}
-          })
-          .catch(function(err) {
-            clearTimeout(timeoutId);
-            console.warn('Error fetching artwork:', err);
-            setError(true);
-            setLoading(false);
-          });
-      };
-
-      useEffect(function() { fetchObraDelDia(false); }, []);
-
-      // Estado: cargando
-      if (loading) {
-        return (
-          <div className="mb-8">
-            <h3 className="text-xs text-gray-400 mb-3 ml-2 font-bold uppercase tracking-widest">Inspiración del Día</h3>
-            <div className={`rounded-3xl ${theme.bgMain} ${theme.shadowFlat} overflow-hidden`}>
-              <div className="shimmer-loading w-full" style={{ paddingTop: '125%' }}></div>
-              <div className="px-5 py-5 space-y-2">
-                <div className="shimmer-loading h-3 w-2/3 rounded-full"></div>
-                <div className="shimmer-loading h-2 w-1/2 rounded-full"></div>
-              </div>
-            </div>
-          </div>
-        );
-      }
-
-      // Estado: error
-      if (error || !obra) {
-        return (
-          <div className="mb-8">
-            <h3 className="text-xs text-gray-400 mb-3 ml-2 font-bold uppercase tracking-widest">Inspiración del Día</h3>
-            <div className={`p-6 rounded-3xl ${theme.bgMain} ${theme.shadowFlat} text-center`}>
-              <Palette size={32} className="mx-auto mb-3 text-gray-300" />
-              <p className="text-sm text-gray-400 italic font-serif mb-4">No se pudo cargar la obra de hoy.</p>
-              <button onClick={() => fetchObraDelDia(true)} className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest text-[#5b85b5] ${theme.shadowFlat} active:shadow-[inset_4px_4px_8px_#d8dde6,inset_-4px_-4px_8px_#ffffff] active:scale-95 transition-all`}>
-                <RefreshCw size={14} /> Reintentar
-              </button>
-            </div>
-          </div>
-        );
-      }
-
-      return (
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-3 ml-2 mr-2">
-            <h3 className="text-xs text-gray-400 font-bold uppercase tracking-widest">Inspiración del Día</h3>
-            <button onClick={() => fetchObraDelDia(true)} className="text-gray-300 active:text-[#5b85b5] active:scale-90 transition-all p-1" title="Otra obra">
-              <RefreshCw size={14} />
-            </button>
-          </div>
-          
-          <div className={`rounded-3xl ${theme.bgMain} ${theme.shadowFlat} overflow-hidden fade-in-up`}>
-            {/* Imagen de la obra */}
-            <div className="relative w-full overflow-hidden rounded-t-3xl" style={{ 
-              backgroundColor: obra.thumbColor ? undefined : '#2a2a2a',
-            }}>
-              {/* LQIP background while loading */}
-              {obra.thumbColor && !imgLoaded && (
-                <img src={obra.thumbColor} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ filter: 'blur(20px)', transform: 'scale(1.1)' }} />
-              )}
-              <img 
-                src={obra.imageUrl} 
-                alt={obra.altText}
-                className="w-full object-contain relative z-[1]"
-                style={{ 
-                  maxHeight: '420px',
-                  opacity: imgLoaded ? 1 : 0,
-                  transition: 'opacity 0.5s ease-in-out',
-                  backgroundColor: '#1a1a1a'
-                }}
-                onLoad={() => setImgLoaded(true)}
-                onError={(e) => { e.target.style.display = 'none'; }}
-              />
-              
-              {/* Overlay con info en la parte inferior de la imagen */}
-              <div className="absolute bottom-0 left-0 right-0 z-[2]" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.3) 60%, transparent 100%)' }}>
-                <div className="px-5 py-4">
-                  <p className="text-[9px] text-white/60 uppercase tracking-[0.2em] font-bold mb-1">Inspiración del Día</p>
-                  <p className="text-white text-sm font-serif leading-snug line-clamp-2" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>{obra.titulo}</p>
-                  <p className="text-white/70 text-xs mt-1 line-clamp-1">{obra.artista}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Frase inspiradora */}
-            {frase && (
-              <div className="px-6 py-5 text-center">
-                <p className={`font-serif italic ${theme.textDark} text-base leading-relaxed mb-2`}>"{frase.texto}"</p>
-                <p className="text-[10px] text-[#5b85b5] font-bold uppercase tracking-[0.2em]">— {frase.autor}</p>
-              </div>
-            )}
-          </div>
-        </div>
-      );
     };
 
     // --- COMPONENTES DE UI ---
@@ -458,6 +219,50 @@
     };
 
     const HomeView = ({ historia, libros, notas, referencias, expos, tecnicas, setActiveTab, abrirFormulario }) => {
+      const [inspiracion, setInspiracion] = useState({ img: '', titulo: '', autor: '' });
+      const [frase, setFrase] = useState({ texto: 'La inspiración existe, pero tiene que encontrarte trabajando.', firma: 'Pablo Picasso' });
+      const [cargandoInspiracion, setCargandoInspiracion] = useState(true);
+
+      const frases = [
+        { texto: "La inspiración existe, pero tiene que encontrarte trabajando.", firma: "Pablo Picasso" },
+        { texto: "Si oyes una voz dentro de ti que dice 'no puedes pintar', entonces pinta por todos los medios.", firma: "Vincent van Gogh" },
+        { texto: "El arte lava del alma el polvo de la vida cotidiana.", firma: "Pablo Picasso" },
+        { texto: "No pinto las cosas como las veo, sino como las siento.", firma: "Pablo Picasso" },
+        { texto: "El arte es la mentira que nos permite comprender la verdad.", firma: "Pablo Picasso" },
+        { texto: "La pintura es poesía muda; la poesía, pintura ciega.", firma: "Leonardo da Vinci" },
+        { texto: "Aprende las reglas como un profesional para poder romperlas como un artista.", firma: "Pablo Picasso" },
+        { texto: "No hay arte sin transformación.", firma: "Robert Bresson" },
+        { texto: "El arte no reproduce lo visible, sino que hace visible lo que no siempre lo es.", firma: "Paul Klee" },
+        { texto: "Pinto las flores para que no mueran.", firma: "Frida Kahlo" }
+      ];
+
+      const fetchInspiration = useCallback(() => {
+        setCargandoInspiracion(true);
+        // Frase aleatoria
+        setFrase(frases[Math.floor(Math.random() * frases.length)]);
+
+        // Fetch de obra aleatoria del Art Institute of Chicago
+        const randomPage = Math.floor(Math.random() * 100) + 1;
+        fetch(`https://api.artic.edu/api/v1/artworks?page=${randomPage}&limit=1&fields=id,title,image_id,artist_display`)
+          .then(res => res.json())
+          .then(response => {
+            const obra = response.data[0];
+            if (obra && obra.image_id) {
+              setInspiracion({
+                img: `https://www.artic.edu/iiif/2/${obra.image_id}/full/843,/0/default.jpg`,
+                titulo: obra.title,
+                autor: obra.artist_display
+              });
+            }
+          })
+          .catch(err => console.log("Error cargando inspiración:", err))
+          .finally(() => setCargandoInspiracion(false));
+      }, []);
+
+      useEffect(() => {
+        fetchInspiration();
+      }, [fetchInspiration]);
+
       const menuItems = [
         { label: 'HISTORIA', count: historia.length, tab: 'historia' },
         { label: 'LIBROS', count: libros.length, tab: 'libros' },
@@ -474,11 +279,38 @@
             <p className="text-sm text-gray-500 capitalize">{obtenerFechaActual()}</p>
           </div>
 
-          {/* === INSPIRACIÓN DEL DÍA === */}
-          <InspiracionDelDia />
+          {/* NUEVA SECCIÓN: VENTANA DE INSPIRACIÓN */}
+          <div className="space-y-4">
+            <div 
+              onClick={fetchInspiration}
+              className={`p-2 rounded-[2rem] ${theme.bgMain} ${theme.shadowFlat} overflow-hidden cursor-pointer active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-[0.98] group`}
+              title="Toca para inspirarte con otra obra"
+            >
+              <div className="aspect-video w-full rounded-[1.6rem] overflow-hidden bg-gray-200 relative">
+                {inspiracion.img && !cargandoInspiracion ? (
+                  <img src={inspiracion.img} alt="Inspiración" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center bg-[#e2e8f0] animate-pulse">
+                     <ImageIcon className="text-gray-400 mb-2" size={32} />
+                  </div>
+                )}
+                {!cargandoInspiracion && inspiracion.titulo && (
+                  <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 via-black/40 to-transparent pt-10">
+                     <p className="text-xs text-white/90 uppercase tracking-widest font-bold truncate leading-tight mb-1">{inspiracion.titulo}</p>
+                     <p className="text-[10px] text-white/70 truncate italic">{inspiracion.autor}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            <div onClick={fetchInspiration} className="px-4 text-center cursor-pointer active:opacity-50 transition-opacity">
+               <p className={`font-serif italic text-lg ${theme.textDark} leading-tight`}>"{frase.texto}"</p>
+               <p className="text-[10px] text-[#5b85b5] font-bold uppercase tracking-[0.2em] mt-2">— {frase.firma}</p>
+            </div>
+          </div>
 
           <div>
-            <h3 className="text-xs text-gray-400 mb-3 ml-2 font-bold uppercase tracking-widest">Reflexión Reciente</h3>
+            <h3 className="text-xs text-gray-400 mb-3 ml-2 font-bold uppercase tracking-widest text-center italic">Cuaderno de Bitácora</h3>
             <div onClick={() => historia.length > 0 ? setActiveTab('historia') : abrirFormulario('historia')} className={`p-6 rounded-3xl ${theme.bgMain} ${theme.shadowFlat} border-l-4 border-[#5b85b5] cursor-pointer active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-[0.98]`}>
               {historia.length > 0 ? (
                 <>
@@ -744,544 +576,543 @@
                 <div className="pt-2">
                   <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Visión Especializada</label>
                   <textarea name="historia" value={formData.historia || ''} placeholder="Análisis técnico, composición, color..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-3xl px-6 py-5 min-h-[120px] text-base ${theme.textDark} leading-relaxed focus:outline-none`}></textarea>
-
-```
-            </div>
-            <div>
-              <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Inspiración personal</label>
-              <textarea name="inspiracion" value={formData.inspiracion || ''} placeholder="¿Qué ideas sacas para tus cuadros?" onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-3xl px-6 py-5 min-h-[100px] text-base ${theme.textDark} italic font-serif leading-relaxed focus:outline-none`}></textarea>
-            </div>
-          </div>
-        )}
-
-        {isAdding === 'historia' && (
-          <div className="space-y-4">
-            <input type="text" name="tema" value={formData.tema || ''} placeholder="Tema (ej. Renacimiento)..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 font-serif ${theme.textDark} text-base focus:outline-none`} />
-            <input type="text" name="etiquetas" value={formData.etiquetas || ''} placeholder="Etiquetas (luz, oleo...)" onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`} />
-            <div className="pt-2">
-              <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Tu reflexión o resumen</label>
-              <textarea name="resumen" value={formData.resumen || ''} placeholder="Escribe aquí los puntos clave aprendidos..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-3xl px-6 py-5 min-h-[200px] text-base ${theme.textDark} leading-relaxed focus:outline-none`}></textarea>
-            </div>
-          </div>
-        )}
-
-        {isAdding === 'libro' && (
-          <div className="space-y-4">
-            <input type="text" name="titulo" value={formData.titulo || ''} placeholder="Título del libro..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 font-serif ${theme.textDark} text-base focus:outline-none`} />
-            <input type="text" name="autor" value={formData.autor || ''} placeholder="Autor del libro..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`} />
-            <div>
-              <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Estado de lectura</label>
-              <select name="estado" value={formData.estado || 'Pendiente'} onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`}>
-                <option value="Pendiente">Pendiente</option>
-                <option value="Leyendo">Leyendo</option>
-                <option value="Terminado">Terminado</option>
-              </select>
-            </div>
-            <input type="text" name="imagen" value={formData.imagen || ''} placeholder="URL de la portada..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base text-[#5b85b5] focus:outline-none`} />
-            <div className="pt-2">
-              <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Reseña o notas clave</label>
-              <textarea name="reseña" value={formData.reseña || ''} placeholder="Lecciones más valiosas de este libro..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-3xl px-6 py-5 min-h-[120px] text-base ${theme.textDark} leading-relaxed focus:outline-none`}></textarea>
-            </div>
-          </div>
-        )}
-
-        {isAdding === 'tecnica' && (
-          <div className="space-y-4">
-            <input type="text" name="titulo" value={formData.titulo || ''} placeholder="Título (ej. Mezcla piel)..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 font-serif ${theme.textDark} text-base focus:outline-none`} />
-            <div>
-              <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Medio / Material</label>
-              <select name="medio" value={formData.medio || 'Óleo'} onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`}>
-                <option value="Óleo">Óleo</option>
-                <option value="Acrílico">Acrílico</option>
-                <option value="Acuarela">Acuarela</option>
-                <option value="Dibujo">Dibujo / Grafito</option>
-                <option value="Soporte">Preparación de Soporte</option>
-                <option value="Otro">Otro</option>
-              </select>
-            </div>
-            <div className="pt-2">
-              <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Proceso o Receta</label>
-              <textarea name="pasos" value={formData.pasos || ''} placeholder="Colores exactos, proporciones o pasos..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-3xl px-6 py-5 min-h-[200px] text-base ${theme.textDark} leading-relaxed focus:outline-none`}></textarea>
-            </div>
-            <div className="pt-4 border-t border-gray-200/50">
-              <label className="text-[10px] text-[#5b85b5] uppercase tracking-widest ml-2 mb-3 block font-bold">Imágenes de Referencia (Carrete)</label>
-              <div className="flex flex-wrap gap-4">
-                {formData.imagenesRef && formData.imagenesRef.map((imgSrc, idx) => (
-                  <div key={idx} className={`relative w-20 h-20 rounded-2xl ${theme.shadowFlat} bg-[#f5f6f8] p-1`}>
-                    <img src={imgSrc} alt="Preview" className="w-full h-full object-cover rounded-xl" />
-                    <button onClick={() => removeImageRef(idx)} className="absolute -top-2 -right-2 bg-red-400 text-white p-1 rounded-full shadow-md active:scale-90"><X size={10} /></button>
-                  </div>
-                ))}
-                <label className={`w-20 h-20 rounded-2xl ${theme.shadowInset} flex flex-col items-center justify-center text-[#5b85b5] cursor-pointer hover:opacity-80 transition-opacity active:scale-95`}>
-                   <Camera size={24} className="mb-1" />
-                   <span className="text-[8px] uppercase tracking-widest font-bold">Añadir</span>
-                   <input type="file" accept="image/*" multiple onChange={handleLocalImageUpload} className="hidden" />
-                </label>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {isAdding === 'galeria' && (
-          <div className="space-y-4">
-            <input type="text" name="imagen" value={formData.imagen || ''} placeholder="URL de la imagen de referencia..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base text-[#5b85b5] focus:outline-none`} />
-            <div>
-              <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Categoría principal</label>
-              <select name="categoria" value={formData.categoria || 'Luz'} onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`}>
-                <option value="Luz">Luz</option>
-                <option value="Color">Color</option>
-                <option value="Composición">Composición</option>
-                <option value="Textura">Textura</option>
-              </select>
-            </div>
-            <div className="pt-2">
-              <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Nota rápida</label>
-              <textarea name="nota" value={formData.nota || ''} placeholder="Ej. Fíjate en el contraste de bordes..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-3xl px-6 py-5 min-h-[100px] text-base ${theme.textDark} leading-relaxed focus:outline-none`}></textarea>
-            </div>
-          </div>
-        )}
-
-        {isAdding === 'expo' && (
-          <div className="space-y-6">
-            <div className="space-y-4">
-              <input type="text" name="titulo" value={formData.titulo || ''} placeholder="Nombre de la exposición..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 font-serif ${theme.textDark} text-base focus:outline-none`} />
-              <input type="text" name="lugar" value={formData.lugar || ''} placeholder="Museo o Galería" onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`} />
-            </div>
-            <div className="flex gap-4">
-              <div className="flex-1 min-w-0">
-                <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Inicia</label>
-                <input type="date" name="fechaInicio" value={formData.fechaInicio || ''} onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-4 py-3 text-base text-gray-500 uppercase focus:outline-none`} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Termina</label>
-                <input type="date" name="fechaFin" value={formData.fechaFin || ''} onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-4 py-3 text-base text-gray-500 uppercase focus:outline-none`} />
-              </div>
-            </div>
-            <div>
-              <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Días de apertura</label>
-              <div className="flex justify-between gap-1">
-                {['L', 'M', 'X', 'J', 'V', 'S', 'D'].map(dia => {
-                  const isSelected = (formData.dias || []).includes(dia);
-                  return <button key={dia} onClick={(e) => { e.preventDefault(); toggleDia(dia); }} className={`w-[13%] aspect-square rounded-full flex items-center justify-center text-xs font-bold transition-all active:scale-90 ${isSelected ? `${theme.bgAccent} text-white shadow-inner` : `${theme.bgMain} ${theme.shadowFlat} text-gray-400 hover:text-[#5b85b5]`}`}>{dia}</button>
-                })}
-              </div>
-            </div>
-            <div className="flex gap-4 items-center">
-              <select name="esGratis" value={formData.esGratis ? 'true' : 'false'} onChange={(e) => setFormData({...formData, esGratis: e.target.value === 'true', precio: e.target.value === 'true' ? '' : formData.precio})} className={`flex-1 min-w-0 ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`}>
-                <option value="false">De Pago</option>
-                <option value="true">Entrada Libre</option>
-              </select>
-              {formData.esGratis !== true && (
-                <input type="text" name="precio" value={formData.precio || ''} placeholder="Ej. 12€" onChange={handleInputChange} className={`w-28 flex-shrink-0 ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base text-center ${theme.textDark} focus:outline-none`} />
-              )}
-            </div>
-            <div className="space-y-4 pt-4 border-t border-gray-200/50">
-              <input type="text" name="imagen" value={formData.imagen || ''} placeholder="URL foto o cartel..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base text-[#5b85b5] focus:outline-none`} />
-              <textarea name="reseña" value={formData.reseña || ''} placeholder="Anota tus impresiones sobre la exposición..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-3xl px-6 py-5 min-h-[120px] text-base ${theme.textDark} leading-relaxed focus:outline-none`}></textarea>
-            </div>
-          </div>
-        )}
-      </div>
-    </main>
-  );
-};
-
-const VistaDetalle = ({ 
-  selectedItem, setSelectedItem, handleEliminarClick, 
-  isEditingImage, setIsEditingImage, tempImageUrl, setTempImageUrl, handleSaveImageEdit, handleKeyDownImageEdit,
-  isEditingResena, setIsEditingResena, tempResena, setTempResena, handleSaveResena
-}) => {
-  const { type, data } = selectedItem;
-  const titulosDetalle = { nota: 'Obra', historia: 'Apunte', libro: 'Libro', expo: 'Exposición', tecnica: 'Receta de Estudio' };
-
-  return (
-    <main className="h-full overflow-y-auto hide-scrollbar pb-36 bg-[#f5f6f8]">
-      <div className="px-6 pb-4 safe-pt flex justify-between items-center sticky top-0 z-[40] bg-[#f5f6f8]/90 backdrop-blur-md" style={{WebkitBackdropFilter: 'blur(12px)', position: '-webkit-sticky'}}>
-        <button onClick={() => setSelectedItem(null)} className={`w-10 h-10 rounded-full ${theme.shadowFlat} flex items-center justify-center text-gray-500 active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-95`}><ArrowLeft size={20} /></button>
-        <span className="text-xs uppercase tracking-widest font-bold text-gray-400">{titulosDetalle[type]}</span>
-        <button onClick={handleEliminarClick} className={`w-10 h-10 rounded-full ${theme.shadowFlat} flex items-center justify-center text-red-400 hover:text-red-500 active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-95`}><Trash2 size={18} /></button>
-      </div>
-      
-      {type === 'expo' && (
-        <>
-          <div className="px-6 mb-8 mt-2 relative">
-            {isEditingImage ? (
-               <div className={`w-full rounded-3xl p-6 ${theme.shadowInset} flex flex-col items-center justify-center min-h-[200px] bg-[#f5f6f8]`}>
-                  <ImageIcon size={32} className="text-[#5b85b5] mb-4 opacity-50" />
-                  <input autoFocus type="text" value={tempImageUrl} onChange={(e) => setTempImageUrl(e.target.value)} onBlur={handleSaveImageEdit} onKeyDown={handleKeyDownImageEdit} placeholder="URL (vacío para cancelar)" className="w-full text-center bg-transparent border-b border-[#5b85b5] text-base text-[#4a5568] focus:outline-none pb-2" />
-                  <p className="text-[10px] text-gray-400 mt-4 uppercase tracking-widest">Esc para cancelar · Enter para guardar</p>
-               </div>
-            ) : (
-              <div onClick={() => { setTempImageUrl(data.imagen); setIsEditingImage(true); }} className={`w-full rounded-3xl p-2 ${theme.shadowFlat} cursor-pointer hover:opacity-90 transition-opacity relative group active:scale-[0.98]`}>
-                <div className="w-full rounded-2xl overflow-hidden shadow-inner bg-gray-200 aspect-[16/9]">
-                  <img src={data.imagen} alt={data.titulo} className="w-full h-full object-cover" />
                 </div>
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                   <div className="bg-black/50 text-white px-4 py-2 rounded-full text-xs font-bold tracking-widest uppercase flex items-center gap-2 backdrop-blur-sm"><Edit2 size={12} /> Cambiar Foto</div>
+                <div>
+                  <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Inspiración personal</label>
+                  <textarea name="inspiracion" value={formData.inspiracion || ''} placeholder="¿Qué ideas sacas para tus cuadros?" onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-3xl px-6 py-5 min-h-[100px] text-base ${theme.textDark} italic font-serif leading-relaxed focus:outline-none`}></textarea>
+                </div>
+              </div>
+            )}
+
+            {isAdding === 'historia' && (
+              <div className="space-y-4">
+                <input type="text" name="tema" value={formData.tema || ''} placeholder="Tema (ej. Renacimiento)..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 font-serif ${theme.textDark} text-base focus:outline-none`} />
+                <input type="text" name="etiquetas" value={formData.etiquetas || ''} placeholder="Etiquetas (luz, oleo...)" onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`} />
+                <div className="pt-2">
+                  <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Tu reflexión o resumen</label>
+                  <textarea name="resumen" value={formData.resumen || ''} placeholder="Escribe aquí los puntos clave aprendidos..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-3xl px-6 py-5 min-h-[200px] text-base ${theme.textDark} leading-relaxed focus:outline-none`}></textarea>
+                </div>
+              </div>
+            )}
+
+            {isAdding === 'libro' && (
+              <div className="space-y-4">
+                <input type="text" name="titulo" value={formData.titulo || ''} placeholder="Título del libro..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 font-serif ${theme.textDark} text-base focus:outline-none`} />
+                <input type="text" name="autor" value={formData.autor || ''} placeholder="Autor del libro..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`} />
+                <div>
+                  <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Estado de lectura</label>
+                  <select name="estado" value={formData.estado || 'Pendiente'} onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`}>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Leyendo">Leyendo</option>
+                    <option value="Terminado">Terminado</option>
+                  </select>
+                </div>
+                <input type="text" name="imagen" value={formData.imagen || ''} placeholder="URL de la portada..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base text-[#5b85b5] focus:outline-none`} />
+                <div className="pt-2">
+                  <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Reseña o notas clave</label>
+                  <textarea name="reseña" value={formData.reseña || ''} placeholder="Lecciones más valiosas de este libro..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-3xl px-6 py-5 min-h-[120px] text-base ${theme.textDark} leading-relaxed focus:outline-none`}></textarea>
+                </div>
+              </div>
+            )}
+
+            {isAdding === 'tecnica' && (
+              <div className="space-y-4">
+                <input type="text" name="titulo" value={formData.titulo || ''} placeholder="Título (ej. Mezcla piel)..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 font-serif ${theme.textDark} text-base focus:outline-none`} />
+                <div>
+                  <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Medio / Material</label>
+                  <select name="medio" value={formData.medio || 'Óleo'} onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`}>
+                    <option value="Óleo">Óleo</option>
+                    <option value="Acrílico">Acrílico</option>
+                    <option value="Acuarela">Acuarela</option>
+                    <option value="Dibujo">Dibujo / Grafito</option>
+                    <option value="Soporte">Preparación de Soporte</option>
+                    <option value="Otro">Otro</option>
+                  </select>
+                </div>
+                <div className="pt-2">
+                  <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Proceso o Receta</label>
+                  <textarea name="pasos" value={formData.pasos || ''} placeholder="Colores exactos, proporciones o pasos..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-3xl px-6 py-5 min-h-[200px] text-base ${theme.textDark} leading-relaxed focus:outline-none`}></textarea>
+                </div>
+                <div className="pt-4 border-t border-gray-200/50">
+                  <label className="text-[10px] text-[#5b85b5] uppercase tracking-widest ml-2 mb-3 block font-bold">Imágenes de Referencia (Carrete)</label>
+                  <div className="flex flex-wrap gap-4">
+                    {formData.imagenesRef && formData.imagenesRef.map((imgSrc, idx) => (
+                      <div key={idx} className={`relative w-20 h-20 rounded-2xl ${theme.shadowFlat} bg-[#f5f6f8] p-1`}>
+                        <img src={imgSrc} alt="Preview" className="w-full h-full object-cover rounded-xl" />
+                        <button onClick={() => removeImageRef(idx)} className="absolute -top-2 -right-2 bg-red-400 text-white p-1 rounded-full shadow-md active:scale-90"><X size={10} /></button>
+                      </div>
+                    ))}
+                    <label className={`w-20 h-20 rounded-2xl ${theme.shadowInset} flex flex-col items-center justify-center text-[#5b85b5] cursor-pointer hover:opacity-80 transition-opacity active:scale-95`}>
+                       <Camera size={24} className="mb-1" />
+                       <span className="text-[8px] uppercase tracking-widest font-bold">Añadir</span>
+                       <input type="file" accept="image/*" multiple onChange={handleLocalImageUpload} className="hidden" />
+                    </label>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {isAdding === 'galeria' && (
+              <div className="space-y-4">
+                <input type="text" name="imagen" value={formData.imagen || ''} placeholder="URL de la imagen de referencia..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base text-[#5b85b5] focus:outline-none`} />
+                <div>
+                  <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Categoría principal</label>
+                  <select name="categoria" value={formData.categoria || 'Luz'} onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`}>
+                    <option value="Luz">Luz</option>
+                    <option value="Color">Color</option>
+                    <option value="Composición">Composición</option>
+                    <option value="Textura">Textura</option>
+                  </select>
+                </div>
+                <div className="pt-2">
+                  <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Nota rápida</label>
+                  <textarea name="nota" value={formData.nota || ''} placeholder="Ej. Fíjate en el contraste de bordes..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-3xl px-6 py-5 min-h-[100px] text-base ${theme.textDark} leading-relaxed focus:outline-none`}></textarea>
+                </div>
+              </div>
+            )}
+
+            {isAdding === 'expo' && (
+              <div className="space-y-6">
+                <div className="space-y-4">
+                  <input type="text" name="titulo" value={formData.titulo || ''} placeholder="Nombre de la exposición..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 font-serif ${theme.textDark} text-base focus:outline-none`} />
+                  <input type="text" name="lugar" value={formData.lugar || ''} placeholder="Museo o Galería" onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`} />
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex-1 min-w-0">
+                    <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Inicia</label>
+                    <input type="date" name="fechaInicio" value={formData.fechaInicio || ''} onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-4 py-3 text-base text-gray-500 uppercase focus:outline-none`} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Termina</label>
+                    <input type="date" name="fechaFin" value={formData.fechaFin || ''} onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-4 py-3 text-base text-gray-500 uppercase focus:outline-none`} />
+                  </div>
+                </div>
+                <div>
+                  <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Días de apertura</label>
+                  <div className="flex justify-between gap-1">
+                    {['L', 'M', 'X', 'J', 'V', 'S', 'D'].map(dia => {
+                      const isSelected = (formData.dias || []).includes(dia);
+                      return <button key={dia} onClick={(e) => { e.preventDefault(); toggleDia(dia); }} className={`w-[13%] aspect-square rounded-full flex items-center justify-center text-xs font-bold transition-all active:scale-90 ${isSelected ? `${theme.bgAccent} text-white shadow-inner` : `${theme.bgMain} ${theme.shadowFlat} text-gray-400 hover:text-[#5b85b5]`}`}>{dia}</button>
+                    })}
+                  </div>
+                </div>
+                <div className="flex gap-4 items-center">
+                  <select name="esGratis" value={formData.esGratis ? 'true' : 'false'} onChange={(e) => setFormData({...formData, esGratis: e.target.value === 'true', precio: e.target.value === 'true' ? '' : formData.precio})} className={`flex-1 min-w-0 ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`}>
+                    <option value="false">De Pago</option>
+                    <option value="true">Entrada Libre</option>
+                  </select>
+                  {formData.esGratis !== true && (
+                    <input type="text" name="precio" value={formData.precio || ''} placeholder="Ej. 12€" onChange={handleInputChange} className={`w-28 flex-shrink-0 ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base text-center ${theme.textDark} focus:outline-none`} />
+                  )}
+                </div>
+                <div className="space-y-4 pt-4 border-t border-gray-200/50">
+                  <input type="text" name="imagen" value={formData.imagen || ''} placeholder="URL foto o cartel..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base text-[#5b85b5] focus:outline-none`} />
+                  <textarea name="reseña" value={formData.reseña || ''} placeholder="Anota tus impresiones sobre la exposición..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-3xl px-6 py-5 min-h-[120px] text-base ${theme.textDark} leading-relaxed focus:outline-none`}></textarea>
                 </div>
               </div>
             )}
           </div>
+        </main>
+      );
+    };
 
-          <div className="px-8 mb-8 text-center">
-            <h1 className={`font-serif text-3xl ${theme.textDark} mb-3 leading-tight`}>{data.titulo}</h1>
-            <div className="flex flex-col items-center gap-2 text-xs text-gray-500 uppercase tracking-widest mb-6">
-              <span className="flex items-center gap-1 text-[#5b85b5] font-bold"><MapPin size={14}/> {data.lugar}</span>
-              <span className="flex items-center gap-1"><Calendar size={14}/> {formatShortDate(data.fechaInicio)} {data.fechaFin ? ` al ${formatShortDate(data.fechaFin)}` : ''}</span>
-              <span className="flex items-center gap-1 bg-white px-3 py-1 rounded-full shadow-sm mt-1">
-                <Tag size={12} className={data.esGratis ? 'text-green-500' : 'text-[#b85b5b]'} /> 
-                <span className={data.esGratis ? 'text-green-600' : 'text-[#b85b5b]'}>{data.esGratis ? 'Entrada Libre' : (data.precio ? `${data.precio}€` : 'De Pago')}</span>
-              </span>
-            </div>
+    const VistaDetalle = ({ 
+      selectedItem, setSelectedItem, handleEliminarClick, 
+      isEditingImage, setIsEditingImage, tempImageUrl, setTempImageUrl, handleSaveImageEdit, handleKeyDownImageEdit,
+      isEditingResena, setIsEditingResena, tempResena, setTempResena, handleSaveResena
+    }) => {
+      const { type, data } = selectedItem;
+      const titulosDetalle = { nota: 'Obra', historia: 'Apunte', libro: 'Libro', expo: 'Exposición', tecnica: 'Receta de Estudio' };
+
+      return (
+        <main className="h-full overflow-y-auto hide-scrollbar pb-36 bg-[#f5f6f8]">
+          <div className="px-6 pb-4 safe-pt flex justify-between items-center sticky top-0 z-[40] bg-[#f5f6f8]/90 backdrop-blur-md" style={{WebkitBackdropFilter: 'blur(12px)', position: '-webkit-sticky'}}>
+            <button onClick={() => setSelectedItem(null)} className={`w-10 h-10 rounded-full ${theme.shadowFlat} flex items-center justify-center text-gray-500 active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-95`}><ArrowLeft size={20} /></button>
+            <span className="text-xs uppercase tracking-widest font-bold text-gray-400">{titulosDetalle[type]}</span>
+            <button onClick={handleEliminarClick} className={`w-10 h-10 rounded-full ${theme.shadowFlat} flex items-center justify-center text-red-400 hover:text-red-500 active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-95`}><Trash2 size={18} /></button>
           </div>
           
-          <div className="px-8 space-y-10">
-            <section>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-full ${theme.shadowInset} flex items-center justify-center text-[#5b85b5]`}><Ticket size={14} /></div>
-                  <h3 className="text-sm uppercase tracking-widest text-gray-500 font-bold">Mis Impresiones</h3>
-                </div>
-                {!isEditingResena && (
-                  <button onClick={() => { setTempResena(data.reseña || ''); setIsEditingResena(true); }} className="text-xs font-bold text-[#5b85b5] uppercase tracking-widest flex items-center gap-1 px-3 py-1 rounded-full active:shadow-inner transition-all"><Edit2 size={12} /> Editar</button>
-                )}
-              </div>
-
-              <div className={`p-6 rounded-3xl ${isEditingResena ? theme.shadowInset : theme.shadowFlat} border-l-4 border-[#5b85b5] bg-[#f5f6f8] transition-all`}>
-                {isEditingResena ? (
-                  <div className="flex flex-col gap-3">
-                    <textarea autoFocus value={tempResena} onChange={e => setTempResena(e.target.value)} placeholder="Escribe aquí lo que te ha parecido..." className={`w-full bg-transparent text-base ${theme.textDark} leading-relaxed focus:outline-none min-h-[150px] resize-none`} />
-                    <div className="flex justify-end gap-2 mt-2">
-                      <button onClick={() => setIsEditingResena(false)} className="px-4 py-2 rounded-xl text-xs font-bold text-gray-400 uppercase tracking-widest active:scale-95">Cancelar</button>
-                      <button onClick={handleSaveResena} className={`px-4 py-2 rounded-xl ${theme.bgAccent} text-white text-xs font-bold uppercase tracking-widest shadow-md active:scale-95`}>Guardar</button>
+          {type === 'expo' && (
+            <>
+              <div className="px-6 mb-8 mt-2 relative">
+                {isEditingImage ? (
+                   <div className={`w-full rounded-3xl p-6 ${theme.shadowInset} flex flex-col items-center justify-center min-h-[200px] bg-[#f5f6f8]`}>
+                      <ImageIcon size={32} className="text-[#5b85b5] mb-4 opacity-50" />
+                      <input autoFocus type="text" value={tempImageUrl} onChange={(e) => setTempImageUrl(e.target.value)} onBlur={handleSaveImageEdit} onKeyDown={handleKeyDownImageEdit} placeholder="URL (vacío para cancelar)" className="w-full text-center bg-transparent border-b border-[#5b85b5] text-base text-[#4a5568] focus:outline-none pb-2" />
+                      <p className="text-[10px] text-gray-400 mt-4 uppercase tracking-widest">Esc para cancelar · Enter para guardar</p>
+                   </div>
+                ) : (
+                  <div onClick={() => { setTempImageUrl(data.imagen); setIsEditingImage(true); }} className={`w-full rounded-3xl p-2 ${theme.shadowFlat} cursor-pointer hover:opacity-90 transition-opacity relative group active:scale-[0.98]`}>
+                    <div className="w-full rounded-2xl overflow-hidden shadow-inner bg-gray-200 aspect-[16/9]">
+                      <img src={data.imagen} alt={data.titulo} className="w-full h-full object-cover" />
+                    </div>
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                       <div className="bg-black/50 text-white px-4 py-2 rounded-full text-xs font-bold tracking-widest uppercase flex items-center gap-2 backdrop-blur-sm"><Edit2 size={12} /> Cambiar Foto</div>
                     </div>
                   </div>
-                ) : (
-                  data.reseña ? <p className={`${theme.textDark} leading-relaxed text-sm whitespace-pre-line`}>{data.reseña}</p> : <p className="text-gray-400 text-sm italic font-serif">"Aún no has anotado nada."</p>
                 )}
               </div>
-            </section>
-          </div>
-        </>
-      )}
 
-      {type === 'nota' && (
-        <>
-          <div className="px-6 mb-8 mt-2 relative">
-            {isEditingImage ? (
-               <div className={`w-full rounded-3xl p-6 ${theme.shadowInset} flex flex-col items-center justify-center min-h-[250px] bg-[#f5f6f8]`}>
-                  <ImageIcon size={32} className="text-[#5b85b5] mb-4 opacity-50" />
-                  <input autoFocus type="text" value={tempImageUrl} onChange={(e) => setTempImageUrl(e.target.value)} onBlur={handleSaveImageEdit} onKeyDown={handleKeyDownImageEdit} placeholder="URL (dejar vacío para cancelar)" className="w-full text-center bg-transparent border-b border-[#5b85b5] text-base text-[#4a5568] focus:outline-none pb-2" />
-               </div>
-            ) : (
-              <div onClick={() => { setTempImageUrl(data.imagen); setIsEditingImage(true); }} className={`w-full rounded-3xl p-2 ${theme.shadowFlat} cursor-pointer hover:opacity-90 transition-opacity relative group active:scale-[0.98]`}>
-                <div className="w-full rounded-2xl overflow-hidden shadow-inner bg-gray-200">
-                  <img src={data.imagen} alt={data.titulo} className="w-full object-cover min-h-[200px]" />
+              <div className="px-8 mb-8 text-center">
+                <h1 className={`font-serif text-3xl ${theme.textDark} mb-3 leading-tight`}>{data.titulo}</h1>
+                <div className="flex flex-col items-center gap-2 text-xs text-gray-500 uppercase tracking-widest mb-6">
+                  <span className="flex items-center gap-1 text-[#5b85b5] font-bold"><MapPin size={14}/> {data.lugar}</span>
+                  <span className="flex items-center gap-1"><Calendar size={14}/> {formatShortDate(data.fechaInicio)} {data.fechaFin ? ` al ${formatShortDate(data.fechaFin)}` : ''}</span>
+                  <span className="flex items-center gap-1 bg-white px-3 py-1 rounded-full shadow-sm mt-1">
+                    <Tag size={12} className={data.esGratis ? 'text-green-500' : 'text-[#b85b5b]'} /> 
+                    <span className={data.esGratis ? 'text-green-600' : 'text-[#b85b5b]'}>{data.esGratis ? 'Entrada Libre' : (data.precio ? `${data.precio}€` : 'De Pago')}</span>
+                  </span>
                 </div>
               </div>
-            )}
-          </div>
-
-          <div className="px-8 mb-10 text-center">
-            <h1 className={`font-serif text-3xl ${theme.textDark} mb-2`}>{data.titulo}</h1>
-            <p className="text-[#5b85b5] text-lg mb-4">{data.autor} <span className="text-gray-400 text-sm">({data.año})</span></p>
-          </div>
-          <div className="px-8 space-y-10">
-            <section>
-              <div className="flex items-center gap-3 mb-4"><div className={`w-8 h-8 rounded-full ${theme.shadowInset} flex items-center justify-center text-[#5b85b5]`}><Book size={14} /></div><h3 className="text-sm uppercase tracking-widest text-gray-500 font-bold">Visión Especializada</h3></div>
-              <div className={`p-6 rounded-3xl ${theme.shadowInset} bg-[#f5f6f8]`}><p className={`${theme.textDark} leading-relaxed text-sm whitespace-pre-line`}>{data.historia}</p></div>
-            </section>
-          </div>
-        </>
-      )}
-
-      {type === 'historia' && (
-        <div className="px-8 mt-6 space-y-8">
-          <div className="text-center">
-            <h1 className={`font-serif text-3xl ${theme.textDark} mb-2 leading-tight`}>{data.tema}</h1>
-            <p className="text-xs text-gray-400 font-mono mb-4">{data.fecha}</p>
-          </div>
-          <div className={`p-8 rounded-3xl ${theme.shadowInset} bg-[#f5f6f8]`}>
-            <p className={`${theme.textDark} leading-relaxed text-sm whitespace-pre-line`}>{data.resumen}</p>
-          </div>
-        </div>
-      )}
-
-      {type === 'libro' && (
-        <div className="px-6 mt-6 space-y-8">
-          <div className="flex justify-center mb-6 relative">
-             {isEditingImage ? (
-               <div className={`w-40 h-56 rounded-2xl p-4 ${theme.shadowInset} flex flex-col items-center justify-center bg-[#f5f6f8]`}>
-                  <ImageIcon size={24} className="text-[#5b85b5] mb-2 opacity-50" />
-                  <input autoFocus type="text" value={tempImageUrl} onChange={(e) => setTempImageUrl(e.target.value)} onBlur={handleSaveImageEdit} onKeyDown={handleKeyDownImageEdit} placeholder="URL foto" className="w-full text-center bg-transparent border-b border-[#5b85b5] text-base text-[#4a5568] focus:outline-none pb-1" />
-               </div>
-            ) : (
-              <div onClick={() => { setTempImageUrl(data.imagen); setIsEditingImage(true); }} className={`w-40 h-56 rounded-2xl p-1.5 ${theme.shadowFlat} cursor-pointer hover:opacity-90 transition-opacity relative group active:scale-95`}>
-                <div className="w-full h-full rounded-xl overflow-hidden shadow-inner bg-gray-200">
-                  <img src={data.imagen} alt={data.titulo} className="w-full h-full object-cover" />
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div className="text-center px-4">
-            <h1 className={`font-serif text-2xl ${theme.textDark} mb-2 leading-tight`}>{data.titulo}</h1>
-            <p className="text-[#5b85b5] text-sm mb-4">{data.autor}</p>
-          </div>
-
-          <section className="px-2">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <div className={`w-8 h-8 rounded-full ${theme.shadowInset} flex items-center justify-center text-[#5b85b5]`}><Book size={14} /></div>
-                <h3 className="text-sm uppercase tracking-widest text-gray-500 font-bold">Mis Notas</h3>
-              </div>
-              {!isEditingResena && (
-                <button onClick={() => { setTempResena(data.reseña || ''); setIsEditingResena(true); }} className="text-xs font-bold text-[#5b85b5] uppercase tracking-widest flex items-center gap-1 px-3 py-1 rounded-full active:shadow-inner transition-all"><Edit2 size={12} /> Editar</button>
-              )}
-            </div>
-
-            <div className={`p-6 rounded-3xl ${isEditingResena ? theme.shadowInset : theme.shadowFlat} bg-[#f5f6f8] transition-all`}>
-              {isEditingResena ? (
-                <div className="flex flex-col gap-3">
-                  <textarea autoFocus value={tempResena} onChange={e => setTempResena(e.target.value)} placeholder="Anota aquí las lecciones de este libro..." className={`w-full bg-transparent text-base ${theme.textDark} leading-relaxed focus:outline-none min-h-[150px] resize-none`} />
-                  <div className="flex justify-end gap-2 mt-2">
-                    <button onClick={() => setIsEditingResena(false)} className="px-4 py-2 rounded-xl text-xs font-bold text-gray-400 uppercase tracking-widest active:scale-95">Cancelar</button>
-                    <button onClick={handleSaveResena} className={`px-4 py-2 rounded-xl ${theme.bgAccent} text-white text-xs font-bold uppercase tracking-widest shadow-md active:scale-95`}>Guardar</button>
+              
+              <div className="px-8 space-y-10">
+                <section>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 rounded-full ${theme.shadowInset} flex items-center justify-center text-[#5b85b5]`}><Ticket size={14} /></div>
+                      <h3 className="text-sm uppercase tracking-widest text-gray-500 font-bold">Mis Impresiones</h3>
+                    </div>
+                    {!isEditingResena && (
+                      <button onClick={() => { setTempResena(data.reseña || ''); setIsEditingResena(true); }} className="text-xs font-bold text-[#5b85b5] uppercase tracking-widest flex items-center gap-1 px-3 py-1 rounded-full active:shadow-inner transition-all"><Edit2 size={12} /> Editar</button>
+                    )}
                   </div>
+
+                  <div className={`p-6 rounded-3xl ${isEditingResena ? theme.shadowInset : theme.shadowFlat} border-l-4 border-[#5b85b5] bg-[#f5f6f8] transition-all`}>
+                    {isEditingResena ? (
+                      <div className="flex flex-col gap-3">
+                        <textarea autoFocus value={tempResena} onChange={e => setTempResena(e.target.value)} placeholder="Escribe aquí lo que te ha parecido..." className={`w-full bg-transparent text-base ${theme.textDark} leading-relaxed focus:outline-none min-h-[150px] resize-none`} />
+                        <div className="flex justify-end gap-2 mt-2">
+                          <button onClick={() => setIsEditingResena(false)} className="px-4 py-2 rounded-xl text-xs font-bold text-gray-400 uppercase tracking-widest active:scale-95">Cancelar</button>
+                          <button onClick={handleSaveResena} className={`px-4 py-2 rounded-xl ${theme.bgAccent} text-white text-xs font-bold uppercase tracking-widest shadow-md active:scale-95`}>Guardar</button>
+                        </div>
+                      </div>
+                    ) : (
+                      data.reseña ? <p className={`${theme.textDark} leading-relaxed text-sm whitespace-pre-line`}>{data.reseña}</p> : <p className="text-gray-400 text-sm italic font-serif">"Aún no has anotado nada."</p>
+                    )}
+                  </div>
+                </section>
+              </div>
+            </>
+          )}
+
+          {type === 'nota' && (
+            <>
+              <div className="px-6 mb-8 mt-2 relative">
+                {isEditingImage ? (
+                   <div className={`w-full rounded-3xl p-6 ${theme.shadowInset} flex flex-col items-center justify-center min-h-[250px] bg-[#f5f6f8]`}>
+                      <ImageIcon size={32} className="text-[#5b85b5] mb-4 opacity-50" />
+                      <input autoFocus type="text" value={tempImageUrl} onChange={(e) => setTempImageUrl(e.target.value)} onBlur={handleSaveImageEdit} onKeyDown={handleKeyDownImageEdit} placeholder="URL (dejar vacío para cancelar)" className="w-full text-center bg-transparent border-b border-[#5b85b5] text-base text-[#4a5568] focus:outline-none pb-2" />
+                   </div>
+                ) : (
+                  <div onClick={() => { setTempImageUrl(data.imagen); setIsEditingImage(true); }} className={`w-full rounded-3xl p-2 ${theme.shadowFlat} cursor-pointer hover:opacity-90 transition-opacity relative group active:scale-[0.98]`}>
+                    <div className="w-full rounded-2xl overflow-hidden shadow-inner bg-gray-200">
+                      <img src={data.imagen} alt={data.titulo} className="w-full object-cover min-h-[200px]" />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="px-8 mb-10 text-center">
+                <h1 className={`font-serif text-3xl ${theme.textDark} mb-2`}>{data.titulo}</h1>
+                <p className="text-[#5b85b5] text-lg mb-4">{data.autor} <span className="text-gray-400 text-sm">({data.año})</span></p>
+              </div>
+              <div className="px-8 space-y-10">
+                <section>
+                  <div className="flex items-center gap-3 mb-4"><div className={`w-8 h-8 rounded-full ${theme.shadowInset} flex items-center justify-center text-[#5b85b5]`}><Book size={14} /></div><h3 className="text-sm uppercase tracking-widest text-gray-500 font-bold">Visión Especializada</h3></div>
+                  <div className={`p-6 rounded-3xl ${theme.shadowInset} bg-[#f5f6f8]`}>
+                    <p className={`${theme.textDark} leading-relaxed text-sm whitespace-pre-line`}>{data.historia}</p>
+                  </div>
+                </section>
+              </div>
+            </>
+          )}
+
+          {type === 'historia' && (
+            <div className="px-8 mt-6 space-y-8">
+              <div className="text-center">
+                <h1 className={`font-serif text-3xl ${theme.textDark} mb-2 leading-tight`}>{data.tema}</h1>
+                <p className="text-xs text-gray-400 font-mono mb-4">{data.fecha}</p>
+              </div>
+              <div className={`p-8 rounded-3xl ${theme.shadowInset} bg-[#f5f6f8]`}>
+                <p className={`${theme.textDark} leading-relaxed text-sm whitespace-pre-line`}>{data.resumen}</p>
+              </div>
+            </div>
+          )}
+
+          {type === 'libro' && (
+            <div className="px-6 mt-6 space-y-8">
+              <div className="flex justify-center mb-6 relative">
+                 {isEditingImage ? (
+                   <div className={`w-40 h-56 rounded-2xl p-4 ${theme.shadowInset} flex flex-col items-center justify-center bg-[#f5f6f8]`}>
+                      <ImageIcon size={24} className="text-[#5b85b5] mb-2 opacity-50" />
+                      <input autoFocus type="text" value={tempImageUrl} onChange={(e) => setTempImageUrl(e.target.value)} onBlur={handleSaveImageEdit} onKeyDown={handleKeyDownImageEdit} placeholder="URL foto" className="w-full text-center bg-transparent border-b border-[#5b85b5] text-base text-[#4a5568] focus:outline-none pb-1" />
+                   </div>
+                ) : (
+                  <div onClick={() => { setTempImageUrl(data.imagen); setIsEditingImage(true); }} className={`w-40 h-56 rounded-2xl p-1.5 ${theme.shadowFlat} cursor-pointer hover:opacity-90 transition-opacity relative group active:scale-95`}>
+                    <div className="w-full h-full rounded-xl overflow-hidden shadow-inner bg-gray-200">
+                      <img src={data.imagen} alt={data.titulo} className="w-full h-full object-cover" />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="text-center px-4">
+                <h1 className={`font-serif text-2xl ${theme.textDark} mb-2 leading-tight`}>{data.titulo}</h1>
+                <p className="text-[#5b85b5] text-sm mb-4">{data.autor}</p>
+              </div>
+
+              <section className="px-2">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded-full ${theme.shadowInset} flex items-center justify-center text-[#5b85b5]`}><Book size={14} /></div>
+                    <h3 className="text-sm uppercase tracking-widest text-gray-500 font-bold">Mis Notas</h3>
+                  </div>
+                  {!isEditingResena && (
+                    <button onClick={() => { setTempResena(data.reseña || ''); setIsEditingResena(true); }} className="text-xs font-bold text-[#5b85b5] uppercase tracking-widest flex items-center gap-1 px-3 py-1 rounded-full active:shadow-inner transition-all"><Edit2 size={12} /> Editar</button>
+                  )}
                 </div>
-              ) : (
-                data.reseña ? <p className={`${theme.textDark} leading-relaxed text-sm whitespace-pre-line`}>{data.reseña}</p> : <p className="text-gray-400 text-sm italic font-serif">"Sin notas. Pulsa Editar para escribir."</p>
-              )}
+
+                <div className={`p-6 rounded-3xl ${isEditingResena ? theme.shadowInset : theme.shadowFlat} bg-[#f5f6f8] transition-all`}>
+                  {isEditingResena ? (
+                    <div className="flex flex-col gap-3">
+                      <textarea autoFocus value={tempResena} onChange={e => setTempResena(e.target.value)} placeholder="Anota aquí las lecciones de este libro..." className={`w-full bg-transparent text-base ${theme.textDark} leading-relaxed focus:outline-none min-h-[150px] resize-none`} />
+                      <div className="flex justify-end gap-2 mt-2">
+                        <button onClick={() => setIsEditingResena(false)} className="px-4 py-2 rounded-xl text-xs font-bold text-gray-400 uppercase tracking-widest active:scale-95">Cancelar</button>
+                        <button onClick={handleSaveResena} className={`px-4 py-2 rounded-xl ${theme.bgAccent} text-white text-xs font-bold uppercase tracking-widest shadow-md active:scale-95`}>Guardar</button>
+                      </div>
+                    </div>
+                  ) : (
+                    data.reseña ? <p className={`${theme.textDark} leading-relaxed text-sm whitespace-pre-line`}>{data.reseña}</p> : <p className="text-gray-400 text-sm italic font-serif">"Sin notas. Pulsa Editar para escribir."</p>
+                  )}
+                </div>
+              </section>
             </div>
-          </section>
-        </div>
-      )}
+          )}
 
-      {type === 'tecnica' && (
-        <div className="px-8 mt-6 space-y-8">
-          <div className="text-center border-b border-gray-200/50 pb-6">
-            <span className="inline-flex items-center justify-center w-12 h-12 rounded-full text-[#5b85b5] mb-4 bg-[#f5f6f8] shadow-[inset_4px_4px_8px_#d8dde6,inset_-4px_-4px_8px_#ffffff]">
-              <Palette size={20} />
-            </span>
-            <h1 className={`font-serif text-3xl ${theme.textDark} mb-4 leading-tight`}>{data.titulo}</h1>
-          </div>
-          <div className="pt-2">
-            <h3 className="text-xs text-gray-400 mb-4 font-bold uppercase tracking-widest text-center">Proceso / Receta</h3>
-            <div className={`p-8 rounded-3xl ${theme.shadowInset} bg-[#f5f6f8] mb-8`}>
-              <p className={`${theme.textDark} leading-relaxed text-sm whitespace-pre-line`}>{data.pasos}</p>
+          {type === 'tecnica' && (
+            <div className="px-8 mt-6 space-y-8">
+              <div className="text-center border-b border-gray-200/50 pb-6">
+                <span className="inline-flex items-center justify-center w-12 h-12 rounded-full text-[#5b85b5] mb-4 bg-[#f5f6f8] shadow-[inset_4px_4px_8px_#d8dde6,inset_-4px_-4px_8px_#ffffff]">
+                  <Palette size={20} />
+                </span>
+                <h1 className={`font-serif text-3xl ${theme.textDark} mb-4 leading-tight`}>{data.titulo}</h1>
+              </div>
+              <div className="pt-2">
+                <h3 className="text-xs text-gray-400 mb-4 font-bold uppercase tracking-widest text-center">Proceso / Receta</h3>
+                <div className={`p-8 rounded-3xl ${theme.shadowInset} bg-[#f5f6f8] mb-8`}>
+                  <p className={`${theme.textDark} leading-relaxed text-sm whitespace-pre-line`}>{data.pasos}</p>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
-    </main>
-  );
-};
-
-const App = () => {
-  const [activeTab, setActiveTab] = useState('inicio');
-  const [selectedItem, setSelectedItem] = useState(null); 
-  const [isAdding, setIsAdding] = useState(null); 
-  const [filtroGaleria, setFiltroGaleria] = useState('Todas');
-
-  const [isEditingImage, setIsEditingImage] = useState(false);
-  const [tempImageUrl, setTempImageUrl] = useState('');
-  const [itemToDelete, setItemToDelete] = useState(null);
-
-  const [isEditingResena, setIsEditingResena] = useState(false);
-  const [tempResena, setTempResena] = useState('');
-
-  const [notas, setNotas] = useState([]);
-  const [referencias, setReferencias] = useState([]);
-  const [libros, setLibros] = useState([]);
-  const [historia, setHistoria] = useState([]);
-  const [expos, setExpos] = useState([]);
-  const [tecnicas, setTecnicas] = useState([]);
-
-  useEffect(() => {
-    const loadAllData = async () => {
-      try {
-        const storesMap = {
-          'atelier_notas': 'notas', 'atelier_referencias': 'referencias',
-          'atelier_libros': 'libros', 'atelier_historia': 'historia',
-          'atelier_expos': 'expos', 'atelier_tecnicas': 'tecnicas'
-        };
-        for (const [localKey, dbStore] of Object.entries(storesMap)) {
-          const localData = localStorage.getItem(localKey);
-          if (localData) {
-            try {
-              const parsedData = JSON.parse(localData);
-              if (Array.isArray(parsedData) && parsedData.length > 0) {
-                const currentDbData = await dbGetAll(dbStore);
-                if (currentDbData.length === 0) {
-                  for (const item of parsedData) await dbSave(dbStore, item);
-                }
-              }
-            } catch (e) {}
-          }
-        }
-        setNotas(await dbGetAll('notas')); setReferencias(await dbGetAll('referencias'));
-        setLibros(await dbGetAll('libros')); setHistoria(await dbGetAll('historia'));
-        setExpos(await dbGetAll('expos')); setTecnicas(await dbGetAll('tecnicas'));
-      } catch (error) { console.error(error); }
+          )}
+        </main>
+      );
     };
-    loadAllData();
-  }, []);
 
-  const [formData, setFormData] = useState({});
-  const handleInputChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+    const App = () => {
+      const [activeTab, setActiveTab] = useState('inicio');
+      const [selectedItem, setSelectedItem] = useState(null); 
+      const [isAdding, setIsAdding] = useState(null); 
+      const [filtroGaleria, setFiltroGaleria] = useState('Todas');
 
-  const toggleDia = (dia) => {
-    const diasActuales = formData.dias || [];
-    if (diasActuales.includes(dia)) { setFormData({ ...formData, dias: diasActuales.filter(d => d !== dia) }); } 
-    else { setFormData({ ...formData, dias: [...diasActuales, dia] }); }
-  };
+      const [isEditingImage, setIsEditingImage] = useState(false);
+      const [tempImageUrl, setTempImageUrl] = useState('');
+      const [itemToDelete, setItemToDelete] = useState(null);
 
-  const abrirFormulario = (tipo) => {
-    setFormData(tipo === 'expo' ? { esGratis: false, dias: [] } : {});
-    setIsAdding(tipo);
-  };
+      const [isEditingResena, setIsEditingResena] = useState(false);
+      const [tempResena, setTempResena] = useState('');
 
-  const resetForm = () => { setFormData({}); setIsAdding(null); };
+      const [notas, setNotas] = useState([]);
+      const [referencias, setReferencias] = useState([]);
+      const [libros, setLibros] = useState([]);
+      const [historia, setHistoria] = useState([]);
+      const [expos, setExpos] = useState([]);
+      const [tecnicas, setTecnicas] = useState([]);
 
-  const handleGuardar = async () => {
-    const id = Date.now();
-    let nuevoItem = null; let storeName = "";
-    
-    if (isAdding === 'nota') {
-      storeName = 'notas'; nuevoItem = { id, titulo: formData.titulo || 'Sin título', autor: formData.autor || 'Desconocido', año: formData.año || 'S/F', disciplina: formData.disciplina || 'Pintura', imagen: formData.imagen || 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=800&q=80', etiquetas: [(formData.disciplina || 'Pintura').toLowerCase()], historia: formData.historia || 'Sin detalles.', inspiracion: formData.inspiracion || 'Sin notas.', evolucion: [] };
-      setNotas([nuevoItem, ...notas]);
-    } 
-    else if (isAdding === 'historia') {
-      storeName = 'historia'; const etiquetasArray = formData.etiquetas ? formData.etiquetas.split(',').map(e => e.trim()) : [];
-      nuevoItem = { id, tema: formData.tema || 'Apunte sin título', fecha: new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short' }), etiquetas: etiquetasArray, resumen: formData.resumen || 'Sin contenido.' };
-      setHistoria([nuevoItem, ...historia]);
-    }
-    else if (isAdding === 'libro') {
-      storeName = 'libros'; nuevoItem = { id, titulo: formData.titulo || 'Libro sin título', autor: formData.autor || 'S/A', estado: formData.estado || 'Pendiente', progreso: 0, imagen: formData.imagen || 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400&q=80', reseña: formData.reseña || '' };
-      setLibros([nuevoItem, ...libros]);
-    }
-    else if (isAdding === 'galeria') {
-      storeName = 'referencias'; nuevoItem = { id, img: formData.imagen || 'https://images.unsplash.com/photo-1597255998145-66270ebfc6e1?w=500&q=80', cat: formData.categoria || 'Luz', nota: formData.nota || 'Sin nota' };
-      setReferencias([nuevoItem, ...referencias]);
-    }
-    else if (isAdding === 'tecnica') {
-      storeName = 'tecnicas'; nuevoItem = { id, titulo: formData.titulo || 'Receta sin título', medio: formData.medio || 'Óleo', pasos: formData.pasos || 'Sin pasos descritos.', imagenesRef: formData.imagenesRef || [] };
-      setTecnicas([nuevoItem, ...tecnicas]);
-    }
-    else if (isAdding === 'expo') {
-      storeName = 'expos'; nuevoItem = { id, titulo: formData.titulo || 'Exposición sin título', lugar: formData.lugar || 'Lugar desconocido', fechaInicio: formData.fechaInicio || '', fechaFin: formData.fechaFin || '', dias: formData.dias || [], esGratis: formData.esGratis === true, precio: formData.esGratis ? '0' : (formData.precio || ''), imagen: formData.imagen || 'https://images.unsplash.com/photo-1531058020387-3be344556be6?w=800&q=80', reseña: formData.reseña || '' };
-      setExpos([nuevoItem, ...expos]);
-    }
-    if (nuevoItem && storeName) await dbSave(storeName, nuevoItem);
-    resetForm();
-  };
+      useEffect(() => {
+        const loadAllData = async () => {
+          try {
+            const storesMap = {
+              'atelier_notas': 'notas', 'atelier_referencias': 'referencias',
+              'atelier_libros': 'libros', 'atelier_historia': 'historia',
+              'atelier_expos': 'expos', 'atelier_tecnicas': 'tecnicas'
+            };
+            for (const [localKey, dbStore] of Object.entries(storesMap)) {
+              const localData = localStorage.getItem(localKey);
+              if (localData) {
+                try {
+                  const parsedData = JSON.parse(localData);
+                  if (Array.isArray(parsedData) && parsedData.length > 0) {
+                    const currentDbData = await dbGetAll(dbStore);
+                    if (currentDbData.length === 0) {
+                      for (const item of parsedData) await dbSave(dbStore, item);
+                    }
+                  }
+                } catch (e) {}
+              }
+            }
+            setNotas(await dbGetAll('notas')); setReferencias(await dbGetAll('referencias'));
+            setLibros(await dbGetAll('libros')); setHistoria(await dbGetAll('historia'));
+            setExpos(await dbGetAll('expos')); setTecnicas(await dbGetAll('tecnicas'));
+          } catch (error) { console.error(error); }
+        };
+        loadAllData();
+      }, []);
 
-  const handleEliminarClick = () => setItemToDelete({ type: selectedItem.type, id: selectedItem.data.id, isDetail: true });
-  const handleEliminarReferenciaClick = (id) => setItemToDelete({ type: 'referencia', id: id, isDetail: false });
+      const [formData, setFormData] = useState({});
+      const handleInputChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const confirmarEliminar = async () => {
-    const storeMap = { nota: 'notas', historia: 'historia', libro: 'libros', referencia: 'referencias', expo: 'expos', tecnica: 'tecnicas' };
-    const storeName = storeMap[itemToDelete.type];
-    if (storeName) await dbDelete(storeName, itemToDelete.id);
+      const toggleDia = (dia) => {
+        const diasActuales = formData.dias || [];
+        if (diasActuales.includes(dia)) { setFormData({ ...formData, dias: diasActuales.filter(d => d !== dia) }); } 
+        else { setFormData({ ...formData, dias: [...diasActuales, dia] }); }
+      };
 
-    if (itemToDelete.type === 'nota') setNotas(notas.filter(n => n.id !== itemToDelete.id));
-    if (itemToDelete.type === 'historia') setHistoria(historia.filter(h => h.id !== itemToDelete.id));
-    if (itemToDelete.type === 'libro') setLibros(libros.filter(l => l.id !== itemToDelete.id));
-    if (itemToDelete.type === 'referencia') setReferencias(referencias.filter(r => r.id !== itemToDelete.id));
-    if (itemToDelete.type === 'expo') setExpos(expos.filter(e => e.id !== itemToDelete.id));
-    if (itemToDelete.type === 'tecnica') setTecnicas(tecnicas.filter(t => t.id !== itemToDelete.id));
-    
-    if (itemToDelete.isDetail) setSelectedItem(null);
-    setItemToDelete(null);
-  };
+      const abrirFormulario = (tipo) => {
+        setFormData(tipo === 'expo' ? { esGratis: false, dias: [] } : {});
+        setIsAdding(tipo);
+      };
 
-  const handleSaveImageEdit = async () => {
-    if (!tempImageUrl.trim()) { setIsEditingImage(false); return; }
-    let storeName = ""; let updatedItem = null;
-    if (selectedItem && selectedItem.type === 'nota') { updatedItem = { ...selectedItem.data, imagen: tempImageUrl }; storeName = 'notas'; setNotas(notas.map(nota => nota.id === selectedItem.data.id ? updatedItem : nota)); }
-    else if (selectedItem && selectedItem.type === 'expo') { updatedItem = { ...selectedItem.data, imagen: tempImageUrl }; storeName = 'expos'; setExpos(expos.map(expo => expo.id === selectedItem.data.id ? updatedItem : expo)); }
-    else if (selectedItem && selectedItem.type === 'libro') { updatedItem = { ...selectedItem.data, imagen: tempImageUrl }; storeName = 'libros'; setLibros(libros.map(libro => libro.id === selectedItem.data.id ? updatedItem : libro)); }
-    if (updatedItem && storeName) { await dbSave(storeName, updatedItem); setSelectedItem({ ...selectedItem, data: updatedItem }); }
-    setIsEditingImage(false);
-  };
+      const resetForm = () => { setFormData({}); setIsAdding(null); };
 
-  const handleKeyDownImageEdit = (e) => {
-    if (e.key === 'Enter') handleSaveImageEdit();
-    if (e.key === 'Escape') setIsEditingImage(false); 
-  };
+      const handleGuardar = async () => {
+        const id = Date.now();
+        let nuevoItem = null; let storeName = "";
+        
+        if (isAdding === 'nota') {
+          storeName = 'notas'; nuevoItem = { id, titulo: formData.titulo || 'Sin título', autor: formData.autor || 'Desconocido', año: formData.año || 'S/F', disciplina: formData.disciplina || 'Pintura', imagen: formData.imagen || 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=800&q=80', etiquetas: [(formData.disciplina || 'Pintura').toLowerCase()], historia: formData.historia || 'Sin detalles.', inspiracion: formData.inspiracion || 'Sin notas.', evolucion: [] };
+          setNotas([nuevoItem, ...notas]);
+        } 
+        else if (isAdding === 'historia') {
+          storeName = 'historia'; const etiquetasArray = formData.etiquetas ? formData.etiquetas.split(',').map(e => e.trim()) : [];
+          nuevoItem = { id, tema: formData.tema || 'Apunte sin título', fecha: new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short' }), etiquetas: etiquetasArray, resumen: formData.resumen || 'Sin contenido.' };
+          setHistoria([nuevoItem, ...historia]);
+        }
+        else if (isAdding === 'libro') {
+          storeName = 'libros'; nuevoItem = { id, titulo: formData.titulo || 'Libro sin título', autor: formData.autor || 'S/A', estado: formData.estado || 'Pendiente', progreso: 0, imagen: formData.imagen || 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400&q=80', reseña: formData.reseña || '' };
+          setLibros([nuevoItem, ...libros]);
+        }
+        else if (isAdding === 'galeria') {
+          storeName = 'referencias'; nuevoItem = { id, img: formData.imagen || 'https://images.unsplash.com/photo-1597255998145-66270ebfc6e1?w=500&q=80', cat: formData.categoria || 'Luz', nota: formData.nota || 'Sin nota' };
+          setReferencias([nuevoItem, ...referencias]);
+        }
+        else if (isAdding === 'tecnica') {
+          storeName = 'tecnicas'; nuevoItem = { id, titulo: formData.titulo || 'Receta sin título', medio: formData.medio || 'Óleo', pasos: formData.pasos || 'Sin pasos descritos.', imagenesRef: formData.imagenesRef || [] };
+          setTecnicas([nuevoItem, ...tecnicas]);
+        }
+        else if (isAdding === 'expo') {
+          storeName = 'expos'; nuevoItem = { id, titulo: formData.titulo || 'Exposición sin título', lugar: formData.lugar || 'Lugar desconocido', fechaInicio: formData.fechaInicio || '', fechaFin: formData.fechaFin || '', dias: formData.dias || [], esGratis: formData.esGratis === true, precio: formData.esGratis ? '0' : (formData.precio || ''), imagen: formData.imagen || 'https://images.unsplash.com/photo-1531058020387-3be344556be6?w=800&q=80', reseña: formData.reseña || '' };
+          setExpos([nuevoItem, ...expos]);
+        }
+        if (nuevoItem && storeName) await dbSave(storeName, nuevoItem);
+        resetForm();
+      };
 
-  const handleSaveResena = async () => {
-    let storeName = ""; let updatedItem = null;
-    if (selectedItem && selectedItem.type === 'expo') { updatedItem = { ...selectedItem.data, reseña: tempResena }; storeName = 'expos'; setExpos(expos.map(expo => expo.id === selectedItem.data.id ? updatedItem : expo)); }
-    else if (selectedItem && selectedItem.type === 'libro') { updatedItem = { ...selectedItem.data, reseña: tempResena }; storeName = 'libros'; setLibros(libros.map(libro => libro.id === selectedItem.data.id ? updatedItem : libro)); }
-    if (updatedItem && storeName) { await dbSave(storeName, updatedItem); setSelectedItem({ ...selectedItem, data: updatedItem }); }
-    setIsEditingResena(false);
-  };
+      const handleEliminarClick = () => setItemToDelete({ type: selectedItem.type, id: selectedItem.data.id, isDetail: true });
+      const handleEliminarReferenciaClick = (id) => setItemToDelete({ type: 'referencia', id: id, isDetail: false });
 
-  const renderModal = () => {
-    if (!itemToDelete) return null;
-    return (
-      <div className="absolute inset-0 z-[60] bg-black/40 backdrop-blur-sm flex items-center justify-center px-6 transition-all" style={{WebkitBackdropFilter: 'blur(4px)'}}>
-        <div className={`w-full max-w-sm ${theme.bgMain} rounded-3xl p-6 ${theme.shadowFlat} flex flex-col items-center text-center`}>
-          <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mb-4 shadow-inner"><Trash2 size={28} className="text-red-400" /></div>
-          <h3 className={`font-serif text-2xl ${theme.textDark} mb-2`}>¿Eliminar elemento?</h3>
-          <p className="text-sm text-gray-500 mb-8 px-4">Esta acción no se puede deshacer.</p>
-          <div className="flex gap-4 w-full">
-            <button onClick={() => setItemToDelete(null)} className={`flex-1 py-4 rounded-2xl ${theme.bgMain} ${theme.shadowFlat} text-gray-500 font-bold text-xs uppercase tracking-widest active:scale-95 transition-all`}>Cancelar</button>
-            <button onClick={confirmarEliminar} className="flex-1 py-4 rounded-2xl bg-red-400 text-white font-bold text-xs uppercase tracking-widest shadow-[4px_4px_10px_#d8dde6,-4px_-4px_10px_#ffffff] active:shadow-inner transition-all active:scale-95">Eliminar</button>
+      const confirmarEliminar = async () => {
+        const storeMap = { nota: 'notas', historia: 'historia', libro: 'libros', referencia: 'referencias', expo: 'expos', tecnica: 'tecnicas' };
+        const storeName = storeMap[itemToDelete.type];
+        if (storeName) await dbDelete(storeName, itemToDelete.id);
+
+        if (itemToDelete.type === 'nota') setNotas(notas.filter(n => n.id !== itemToDelete.id));
+        if (itemToDelete.type === 'historia') setHistoria(historia.filter(h => h.id !== itemToDelete.id));
+        if (itemToDelete.type === 'libro') setLibros(libros.filter(l => l.id !== itemToDelete.id));
+        if (itemToDelete.type === 'referencia') setReferencias(referencias.filter(r => r.id !== itemToDelete.id));
+        if (itemToDelete.type === 'expo') setExpos(expos.filter(e => e.id !== itemToDelete.id));
+        if (itemToDelete.type === 'tecnica') setTecnicas(tecnicas.filter(t => t.id !== itemToDelete.id));
+        
+        if (itemToDelete.isDetail) setSelectedItem(null);
+        setItemToDelete(null);
+      };
+
+      const handleSaveImageEdit = async () => {
+        if (!tempImageUrl.trim()) { setIsEditingImage(false); return; }
+        let storeName = ""; let updatedItem = null;
+        if (selectedItem && selectedItem.type === 'nota') { updatedItem = { ...selectedItem.data, imagen: tempImageUrl }; storeName = 'notas'; setNotas(notas.map(nota => nota.id === selectedItem.data.id ? updatedItem : nota)); }
+        else if (selectedItem && selectedItem.type === 'expo') { updatedItem = { ...selectedItem.data, imagen: tempImageUrl }; storeName = 'expos'; setExpos(expos.map(expo => expo.id === selectedItem.data.id ? updatedItem : expo)); }
+        else if (selectedItem && selectedItem.type === 'libro') { updatedItem = { ...selectedItem.data, imagen: tempImageUrl }; storeName = 'libros'; setLibros(libros.map(libro => libro.id === selectedItem.data.id ? updatedItem : libro)); }
+        if (updatedItem && storeName) { await dbSave(storeName, updatedItem); setSelectedItem({ ...selectedItem, data: updatedItem }); }
+        setIsEditingImage(false);
+      };
+
+      const handleKeyDownImageEdit = (e) => {
+        if (e.key === 'Enter') handleSaveImageEdit();
+        if (e.key === 'Escape') setIsEditingImage(false); 
+      };
+
+      const handleSaveResena = async () => {
+        let storeName = ""; let updatedItem = null;
+        if (selectedItem && selectedItem.type === 'expo') { updatedItem = { ...selectedItem.data, reseña: tempResena }; storeName = 'expos'; setExpos(expos.map(expo => expo.id === selectedItem.data.id ? updatedItem : expo)); }
+        else if (selectedItem && selectedItem.type === 'libro') { updatedItem = { ...selectedItem.data, reseña: tempResena }; storeName = 'libros'; setLibros(libros.map(libro => libro.id === selectedItem.data.id ? updatedItem : libro)); }
+        if (updatedItem && storeName) { await dbSave(storeName, updatedItem); setSelectedItem({ ...selectedItem, data: updatedItem }); }
+        setIsEditingResena(false);
+      };
+
+      const renderModal = () => {
+        if (!itemToDelete) return null;
+        return (
+          <div className="absolute inset-0 z-[60] bg-black/40 backdrop-blur-sm flex items-center justify-center px-6 transition-all" style={{WebkitBackdropFilter: 'blur(4px)'}}>
+            <div className={`w-full max-w-sm ${theme.bgMain} rounded-3xl p-6 ${theme.shadowFlat} flex flex-col items-center text-center`}>
+              <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mb-4 shadow-inner"><Trash2 size={28} className="text-red-400" /></div>
+              <h3 className={`font-serif text-2xl ${theme.textDark} mb-2`}>¿Eliminar elemento?</h3>
+              <p className="text-sm text-gray-500 mb-8 px-4">Esta acción no se puede deshacer.</p>
+              <div className="flex gap-4 w-full">
+                <button onClick={() => setItemToDelete(null)} className={`flex-1 py-4 rounded-2xl ${theme.bgMain} ${theme.shadowFlat} text-gray-500 font-bold text-xs uppercase tracking-widest active:scale-95 transition-all`}>Cancelar</button>
+                <button onClick={confirmarEliminar} className="flex-1 py-4 rounded-2xl bg-red-400 text-white font-bold text-xs uppercase tracking-widest shadow-[4px_4px_10px_#d8dde6,-4px_-4px_10px_#ffffff] active:shadow-inner transition-all active:scale-95">Eliminar</button>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      const renderCurrentView = () => {
+        if (isAdding) return <FormularioDinamico {...{isAdding, formData, handleInputChange, toggleDia, setFormData, resetForm, handleGuardar}} />;
+        if (selectedItem) return <VistaDetalle {...{ selectedItem, setSelectedItem, handleEliminarClick, isEditingImage, setIsEditingImage, tempImageUrl, setTempImageUrl, handleSaveImageEdit, handleKeyDownImageEdit, isEditingResena, setIsEditingResena, tempResena, setTempResena, handleSaveResena }} />;
+        
+        switch (activeTab) {
+          case 'inicio': return <HomeView {...{historia, libros, notas, referencias, expos, tecnicas, setActiveTab, abrirFormulario}} />;
+          case 'historia': return <HistoriaList {...{historia, abrirFormulario, setSelectedItem}} />;
+          case 'libros': return <LibrosList {...{libros, abrirFormulario, setSelectedItem}} />;
+          case 'notas': return <NotasList {...{notas, abrirFormulario, setSelectedItem}} />;
+          case 'tecnicas': return <TecnicasList {...{tecnicas, abrirFormulario, setSelectedItem}} />;
+          case 'galeria': return <GaleriaList {...{referencias, filtroGaleria, setFiltroGaleria, abrirFormulario, handleEliminarReferenciaClick}} />;
+          case 'expos': return <ExposicionesList {...{expos, abrirFormulario, setSelectedItem}} />;
+          default: return <HomeView {...{historia, libros, notas, referencias, expos, tecnicas, setActiveTab, abrirFormulario}} />;
+        }
+      };
+
+      const showBottomNav = !isAdding && !selectedItem;
+
+      return (
+        <div className={`min-h-screen ${theme.bgMain} font-sans flex justify-center`}>
+          <div className={`w-full relative ${theme.bgMain} overflow-hidden flex flex-col h-screen-safe`}>
+            {renderModal()}
+            {showBottomNav && (
+              <header className="px-6 pb-4 safe-pt flex justify-between items-end flex-shrink-0 z-[40]">
+                <div>
+                  <h1 className={`${theme.textDark} text-2xl font-light tracking-wide flex items-baseline gap-2`}>
+                    Atelier <span className="text-sm text-gray-400 font-sans">アトリエ</span>
+                  </h1>
+                </div>
+                <div className="flex gap-4 text-gray-500">
+                  <span className="text-xs uppercase tracking-widest mt-2">Estudio</span>
+                </div>
+              </header>
+            )}
+            <div className="flex-1 overflow-hidden relative">
+              {renderCurrentView()}
+            </div>
+            {showBottomNav && <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />}
           </div>
         </div>
-      </div>
-    );
-  };
+      );
+    };
 
-  const renderCurrentView = () => {
-    if (isAdding) return <FormularioDinamico {...{isAdding, formData, handleInputChange, toggleDia, setFormData, resetForm, handleGuardar}} />;
-    if (selectedItem) return <VistaDetalle {...{ selectedItem, setSelectedItem, handleEliminarClick, isEditingImage, setIsEditingImage, tempImageUrl, setTempImageUrl, handleSaveImageEdit, handleKeyDownImageEdit, isEditingResena, setIsEditingResena, tempResena, setTempResena, handleSaveResena }} />;
-    
-    switch (activeTab) {
-      case 'inicio': return <HomeView {...{historia, libros, notas, referencias, expos, tecnicas, setActiveTab, abrirFormulario}} />;
-      case 'historia': return <HistoriaList {...{historia, abrirFormulario, setSelectedItem}} />;
-      case 'libros': return <LibrosList {...{libros, abrirFormulario, setSelectedItem}} />;
-      case 'notas': return <NotasList {...{notas, abrirFormulario, setSelectedItem}} />;
-      case 'tecnicas': return <TecnicasList {...{tecnicas, abrirFormulario, setSelectedItem}} />;
-      case 'galeria': return <GaleriaList {...{referencias, filtroGaleria, setFiltroGaleria, abrirFormulario, handleEliminarReferenciaClick}} />;
-      case 'expos': return <ExposicionesList {...{expos, abrirFormulario, setSelectedItem}} />;
-      default: return <HomeView {...{historia, libros, notas, referencias, expos, tecnicas, setActiveTab, abrirFormulario}} />;
-    }
-  };
-
-  const showBottomNav = !isAdding && !selectedItem;
-
-  return (
-    <div className={`min-h-screen ${theme.bgMain} font-sans flex justify-center`}>
-      <div className={`w-full relative ${theme.bgMain} overflow-hidden flex flex-col h-screen-safe`}>
-        {renderModal()}
-        {showBottomNav && (
-          <header className="px-6 pb-4 safe-pt flex justify-between items-end flex-shrink-0 z-[40]">
-            <div>
-              <h1 className={`${theme.textDark} text-2xl font-light tracking-wide flex items-baseline gap-2`}>
-                Atelier <span className="text-sm text-gray-400 font-sans">アトリエ</span>
-              </h1>
-            </div>
-            <div className="flex gap-4 text-gray-500">
-              <span className="text-xs uppercase tracking-widest mt-2">Estudio</span>
-            </div>
-          </header>
-        )}
-        <div className="flex-1 overflow-hidden relative">
-          {renderCurrentView()}
-        </div>
-        {showBottomNav && <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />}
-      </div>
-    </div>
-  );
-};
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
-```
-
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
 </script>
 </body>
 </html>
+
