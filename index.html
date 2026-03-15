@@ -276,7 +276,6 @@
       const [isSavingImg, setIsSavingImg] = useState(false);
       const [savedQuote, setSavedQuote] = useState(false);
 
-      // Ref para trackear la última vez que se actualizó la inspiración
       const lastFetchTimeRef = useRef(0);
 
       const frases = [
@@ -333,12 +332,9 @@
           });
       };
 
-      // Manejador del click con cooldown de 5 minutos
       const handleRefreshClick = () => {
         const now = Date.now();
         const CINCO_MINUTOS = 5 * 60 * 1000;
-        
-        // Solo recarga si han pasado 5 minutos desde la última vez
         if (now - lastFetchTimeRef.current >= CINCO_MINUTOS) {
             fetchInspiration();
             lastFetchTimeRef.current = now;
@@ -360,15 +356,20 @@
       ];
 
       const onSaveImageClick = async (e) => {
+          e.preventDefault();
           e.stopPropagation();
           if(savedImg || isSavingImg) return;
           
           setIsSavingImg(true);
-          await handleGuardarRapido('galeria', inspiracion);
-          setIsSavingImg(false);
-          setSavedImg(true);
-          
-          setTimeout(() => setSavedImg(false), 2000);
+          try {
+              await handleGuardarRapido('galeria', inspiracion);
+              setSavedImg(true);
+              setTimeout(() => setSavedImg(false), 2000);
+          } catch (err) {
+              console.error("Error al guardar la imagen: ", err);
+          } finally {
+              setIsSavingImg(false);
+          }
       };
 
       return (
@@ -385,8 +386,6 @@
               title="Cambia cada 5 minutos"
             >
               <div className="aspect-video w-full rounded-[1.6rem] overflow-hidden bg-gray-200 relative">
-                
-                {/* BOTÓN GUARDAR IMAGEN EN GALERÍA CON SPINNER */}
                 {!cargandoInspiracion && inspiracion.img && (
                   <button
                     onClick={onSaveImageClick}
@@ -517,7 +516,7 @@
           {libros.map(libro => (
             <div key={libro.id} onClick={() => setSelectedItem({ type: 'libro', data: libro })} className={`p-4 rounded-3xl ${theme.bgMain} ${theme.shadowFlat} flex gap-4 items-center cursor-pointer active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-[0.98]`}>
               <div className="w-20 h-28 rounded-xl overflow-hidden shadow-inner flex-shrink-0 bg-gray-200">
-                <img src={libro.imagen} alt={libro.titulo} className="w-full h-full object-cover" />
+                <img src={libro.imagen} alt={libro.titulo} className="w-full h-full object-cover" onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400&q=80'; }} />
               </div>
               <div className="flex-1 pr-2">
                 <h3 className={`font-serif text-lg leading-tight mb-1 ${theme.textDark}`}>{libro.titulo}</h3>
@@ -544,7 +543,7 @@
           {notas.map(nota => (
             <div key={nota.id} onClick={() => setSelectedItem({ type: 'nota', data: nota })} className={`p-4 rounded-3xl ${theme.bgMain} ${theme.shadowFlat} active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all cursor-pointer active:scale-[0.98]`}>
               <div className="aspect-[4/3] w-full rounded-2xl overflow-hidden mb-4 shadow-inner bg-gray-200">
-                <img src={nota.imagen} alt={nota.titulo} className="w-full h-full object-cover opacity-90" />
+                <img src={nota.imagen} alt={nota.titulo} className="w-full h-full object-cover opacity-90" onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=800&q=80'; }} />
               </div>
               <div className="px-2">
                 <div className="flex justify-between items-start mb-1">
@@ -605,7 +604,7 @@
           {expos.map(expo => (
             <div key={expo.id} onClick={() => setSelectedItem({ type: 'expo', data: expo })} className={`p-4 rounded-3xl ${theme.bgMain} ${theme.shadowFlat} flex flex-col cursor-pointer active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-[0.98]`}>
               <div className="h-32 w-full rounded-xl overflow-hidden shadow-inner bg-gray-200 mb-3 relative">
-                <img src={expo.imagen} alt={expo.titulo} className="w-full h-full object-cover" />
+                <img src={expo.imagen} alt={expo.titulo} className="w-full h-full object-cover" onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1531058020387-3be344556be6?w=800&q=80'; }} />
                 <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-md text-[10px] font-bold text-gray-600 shadow-sm uppercase tracking-widest">
                   {expo.esGratis ? 'Gratis' : (expo.precio ? `${expo.precio}€` : 'De Pago')}
                 </div>
@@ -651,7 +650,7 @@
                   <Trash2 size={12} />
                 </button>
                 <div className="w-full rounded-xl overflow-hidden shadow-inner aspect-[3/4] bg-gray-200">
-                  <img src={ref.img} alt={ref.nota} className="w-full h-full object-cover" />
+                  <img src={ref.img} alt={ref.nota} className="w-full h-full object-cover" onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=800&q=80'; }} />
                 </div>
                 <p className="text-[10px] text-center text-gray-500 mt-3 mb-1 uppercase tracking-widest px-1 line-clamp-2">{ref.nota}</p>
               </div>
@@ -661,8 +660,24 @@
       );
     };
 
-    const FormularioDinamico = ({ isAdding, formData, handleInputChange, toggleDia, resetForm, handleGuardar, setFormData }) => {
+    // --- FORMULARIO OPTIMIZADO: Estado local para no re-renderizar toda la App ---
+    const FormularioDinamico = ({ isAdding, onCancel, onSave }) => {
+      const [formData, setFormData] = useState(() => {
+        if (isAdding === 'expo') return { esGratis: false, dias: [] };
+        return {};
+      });
+
       const titulos = { nota: 'Nueva Obra', historia: 'Nuevo Apunte', libro: 'Añadir Libro', galeria: 'Nueva Referencia', expo: 'Añadir Exposición', tecnica: 'Nueva Receta / Técnica' };
+
+      const handleInputChange = (e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+
+      const toggleDia = (dia) => {
+        setFormData(prev => {
+            const diasActuales = prev.dias || [];
+            if (diasActuales.includes(dia)) return { ...prev, dias: diasActuales.filter(d => d !== dia) };
+            return { ...prev, dias: [...diasActuales, dia] };
+        });
+      };
 
       const handleLocalImageUpload = (e) => {
         const files = Array.from(e.target.files);
@@ -693,9 +708,9 @@
       return (
         <main className="h-full overflow-y-auto hide-scrollbar pb-36 bg-[#f5f6f8]">
           <div className="px-6 pb-4 safe-pt flex justify-between items-center sticky top-0 z-[40] bg-[#f5f6f8]/90 backdrop-blur-md" style={{WebkitBackdropFilter: 'blur(12px)'}}>
-            <button onClick={resetForm} className={`w-10 h-10 rounded-full ${theme.shadowFlat} flex items-center justify-center text-gray-500 active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-95`}><ArrowLeft size={20} /></button>
+            <button onClick={onCancel} className={`w-10 h-10 rounded-full ${theme.shadowFlat} flex items-center justify-center text-gray-500 active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-95`}><ArrowLeft size={20} /></button>
             <h2 className={`font-serif text-xl ${theme.textDark}`}>{titulos[isAdding]}</h2>
-            <button onClick={handleGuardar} className={`w-10 h-10 rounded-full ${theme.bgAccent} text-white shadow-[4px_4px_10px_#d8dde6,-4px_-4px_10px_#ffffff] flex items-center justify-center active:shadow-inner transition-all active:scale-95`}><Check size={20} /></button>
+            <button onClick={() => onSave(formData)} className={`w-10 h-10 rounded-full ${theme.bgAccent} text-white shadow-[4px_4px_10px_#d8dde6,-4px_-4px_10px_#ffffff] flex items-center justify-center active:shadow-inner transition-all active:scale-95`}><Check size={20} /></button>
           </div>
           
           <div className="px-6 space-y-6 mt-4">
@@ -852,13 +867,31 @@
       );
     };
 
-    const VistaDetalle = ({ 
-      selectedItem, setSelectedItem, handleEliminarClick, 
-      isEditingImage, setIsEditingImage, tempImageUrl, setTempImageUrl, handleSaveImageEdit, handleKeyDownImageEdit,
-      isEditingResena, setIsEditingResena, tempResena, setTempResena, handleSaveResena
-    }) => {
+    // --- VISTA DETALLE OPTIMIZADA: Estado local de edición ---
+    const VistaDetalle = ({ selectedItem, setSelectedItem, handleEliminarClick, onUpdateItem }) => {
       const { type, data } = selectedItem;
       const titulosDetalle = { nota: 'Obra', historia: 'Apunte', libro: 'Libro', expo: 'Exposición', tecnica: 'Receta de Estudio' };
+
+      const [isEditingImage, setIsEditingImage] = useState(false);
+      const [tempImageUrl, setTempImageUrl] = useState('');
+      const [isEditingResena, setIsEditingResena] = useState(false);
+      const [tempResena, setTempResena] = useState('');
+
+      const handleSaveImageEdit = () => {
+        if (!tempImageUrl.trim()) { setIsEditingImage(false); return; }
+        onUpdateItem({ ...data, imagen: tempImageUrl });
+        setIsEditingImage(false);
+      };
+
+      const handleKeyDownImageEdit = (e) => {
+        if (e.key === 'Enter') handleSaveImageEdit();
+        if (e.key === 'Escape') setIsEditingImage(false); 
+      };
+
+      const handleSaveResena = () => {
+        onUpdateItem({ ...data, reseña: tempResena });
+        setIsEditingResena(false);
+      };
 
       return (
         <main className="h-full overflow-y-auto hide-scrollbar pb-36 bg-[#f5f6f8]">
@@ -1050,13 +1083,7 @@
       const [selectedItem, setSelectedItem] = useState(null); 
       const [isAdding, setIsAdding] = useState(null); 
       const [filtroGaleria, setFiltroGaleria] = useState('Todas');
-
-      const [isEditingImage, setIsEditingImage] = useState(false);
-      const [tempImageUrl, setTempImageUrl] = useState('');
       const [itemToDelete, setItemToDelete] = useState(null);
-
-      const [isEditingResena, setIsEditingResena] = useState(false);
-      const [tempResena, setTempResena] = useState('');
 
       const [notas, setNotas] = useState([]);
       const [referencias, setReferencias] = useState([]);
@@ -1068,50 +1095,49 @@
       useEffect(() => {
         const loadAllData = async () => {
           try {
-            const storesMap = {
-              'atelier_notas': 'notas', 'atelier_referencias': 'referencias',
-              'atelier_libros': 'libros', 'atelier_historia': 'historia',
-              'atelier_expos': 'expos', 'atelier_tecnicas': 'tecnicas'
-            };
-            for (const [localKey, dbStore] of Object.entries(storesMap)) {
-              const localData = localStorage.getItem(localKey);
-              if (localData) {
-                try {
-                  const parsedData = JSON.parse(localData);
-                  if (Array.isArray(parsedData) && parsedData.length > 0) {
-                    const currentDbData = await dbGetAll(dbStore);
-                    if (currentDbData.length === 0) {
-                      for (const item of parsedData) await dbSave(dbStore, item);
+            // Migración condicional: solo se ejecuta una vez
+            const isMigrated = localStorage.getItem('atelier_migrated');
+            if (!isMigrated) {
+              const storesMap = {
+                'atelier_notas': 'notas', 'atelier_referencias': 'referencias',
+                'atelier_libros': 'libros', 'atelier_historia': 'historia',
+                'atelier_expos': 'expos', 'atelier_tecnicas': 'tecnicas'
+              };
+              for (const [localKey, dbStore] of Object.entries(storesMap)) {
+                const localData = localStorage.getItem(localKey);
+                if (localData) {
+                  try {
+                    const parsedData = JSON.parse(localData);
+                    if (Array.isArray(parsedData) && parsedData.length > 0) {
+                      const currentDbData = await dbGetAll(dbStore);
+                      if (currentDbData.length === 0) {
+                        for (const item of parsedData) await dbSave(dbStore, item);
+                      }
                     }
-                  }
-                } catch (e) {}
+                  } catch (e) {}
+                }
               }
+              localStorage.setItem('atelier_migrated', 'true');
             }
-            setNotas(await dbGetAll('notas')); setReferencias(await dbGetAll('referencias'));
-            setLibros(await dbGetAll('libros')); setHistoria(await dbGetAll('historia'));
-            setExpos(await dbGetAll('expos')); setTecnicas(await dbGetAll('tecnicas'));
+            
+            // Carga concurrente optimizada
+            const [dbNotas, dbRefs, dbLibros, dbHistoria, dbExpos, dbTecnicas] = await Promise.all([
+                dbGetAll('notas'), dbGetAll('referencias'), dbGetAll('libros'),
+                dbGetAll('historia'), dbGetAll('expos'), dbGetAll('tecnicas')
+            ]);
+            
+            setNotas(dbNotas); setReferencias(dbRefs); setLibros(dbLibros);
+            setHistoria(dbHistoria); setExpos(dbExpos); setTecnicas(dbTecnicas);
           } catch (error) { console.error(error); }
         };
         loadAllData();
       }, []);
 
-      const [formData, setFormData] = useState({});
-      const handleInputChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
-
-      const toggleDia = (dia) => {
-        const diasActuales = formData.dias || [];
-        if (diasActuales.includes(dia)) { setFormData({ ...formData, dias: diasActuales.filter(d => d !== dia) }); } 
-        else { setFormData({ ...formData, dias: [...diasActuales, dia] }); }
-      };
-
       const abrirFormulario = (tipo) => {
-        setFormData(tipo === 'expo' ? { esGratis: false, dias: [] } : {});
         setIsAdding(tipo);
       };
 
-      const resetForm = () => { setFormData({}); setIsAdding(null); };
-
-      const handleGuardar = async () => {
+      const handleGuardarFormulario = async (formData) => {
         const id = Date.now();
         let nuevoItem = null; let storeName = "";
         
@@ -1141,25 +1167,21 @@
           setExpos([nuevoItem, ...expos]);
         }
         if (nuevoItem && storeName) await dbSave(storeName, nuevoItem);
-        resetForm();
+        setIsAdding(null);
       };
 
       const handleGuardarRapido = async (tipo, data) => {
         const id = Date.now();
         if (tipo === 'galeria') {
-          let finalImgSrc = data.img;
-          
+          // Guardamos directamente la URL externa sin intentar comprimirla.
+          // Esto evita bloqueos del navegador por CORS o límites de memoria en Canvas.
+          const nuevoItem = { id, img: data.img, cat: 'Inspiración', nota: `${data.titulo} - ${data.autor}` };
           try {
-            // Descarga y comprime la imagen a Base64 antes de guardar
-            finalImgSrc = await compressImageFromUrl(data.img);
-          } catch (e) {
-            console.warn("No se pudo comprimir la imagen por la política del servidor, guardando URL original.", e);
+            await dbSave('referencias', nuevoItem);
+            setReferencias(prev => [nuevoItem, ...prev]);
+          } catch (err) {
+            console.error("Error guardando referencia rápida:", err);
           }
-
-          const nuevoItem = { id, img: finalImgSrc, cat: 'Inspiración', nota: `${data.titulo} - ${data.autor}` };
-          await dbSave('referencias', nuevoItem);
-          setReferencias(prev => [nuevoItem, ...prev]);
-          
         } else if (tipo === 'historia') {
           const nuevoItem = { 
              id, 
@@ -1168,8 +1190,24 @@
              etiquetas: ['Inspiración', 'Cita'], 
              resumen: data.texto 
           };
-          await dbSave('historia', nuevoItem);
-          setHistoria(prev => [nuevoItem, ...prev]);
+          try {
+            await dbSave('historia', nuevoItem);
+            setHistoria(prev => [nuevoItem, ...prev]);
+          } catch (err) {
+            console.error("Error guardando historia rápida:", err);
+          }
+        }
+      };
+
+      const handleUpdateItemDetail = async (updatedItem) => {
+        let storeName = "";
+        if (selectedItem.type === 'nota') { storeName = 'notas'; setNotas(notas.map(n => n.id === updatedItem.id ? updatedItem : n)); }
+        else if (selectedItem.type === 'expo') { storeName = 'expos'; setExpos(expos.map(e => e.id === updatedItem.id ? updatedItem : e)); }
+        else if (selectedItem.type === 'libro') { storeName = 'libros'; setLibros(libros.map(l => l.id === updatedItem.id ? updatedItem : l)); }
+        
+        if (storeName) { 
+           await dbSave(storeName, updatedItem); 
+           setSelectedItem({ ...selectedItem, data: updatedItem }); 
         }
       };
 
@@ -1192,29 +1230,6 @@
         setItemToDelete(null);
       };
 
-      const handleSaveImageEdit = async () => {
-        if (!tempImageUrl.trim()) { setIsEditingImage(false); return; }
-        let storeName = ""; let updatedItem = null;
-        if (selectedItem && selectedItem.type === 'nota') { updatedItem = { ...selectedItem.data, imagen: tempImageUrl }; storeName = 'notas'; setNotas(notas.map(nota => nota.id === selectedItem.data.id ? updatedItem : nota)); }
-        else if (selectedItem && selectedItem.type === 'expo') { updatedItem = { ...selectedItem.data, imagen: tempImageUrl }; storeName = 'expos'; setExpos(expos.map(expo => expo.id === selectedItem.data.id ? updatedItem : expo)); }
-        else if (selectedItem && selectedItem.type === 'libro') { updatedItem = { ...selectedItem.data, imagen: tempImageUrl }; storeName = 'libros'; setLibros(libros.map(libro => libro.id === selectedItem.data.id ? updatedItem : libro)); }
-        if (updatedItem && storeName) { await dbSave(storeName, updatedItem); setSelectedItem({ ...selectedItem, data: updatedItem }); }
-        setIsEditingImage(false);
-      };
-
-      const handleKeyDownImageEdit = (e) => {
-        if (e.key === 'Enter') handleSaveImageEdit();
-        if (e.key === 'Escape') setIsEditingImage(false); 
-      };
-
-      const handleSaveResena = async () => {
-        let storeName = ""; let updatedItem = null;
-        if (selectedItem && selectedItem.type === 'expo') { updatedItem = { ...selectedItem.data, reseña: tempResena }; storeName = 'expos'; setExpos(expos.map(expo => expo.id === selectedItem.data.id ? updatedItem : expo)); }
-        else if (selectedItem && selectedItem.type === 'libro') { updatedItem = { ...selectedItem.data, reseña: tempResena }; storeName = 'libros'; setLibros(libros.map(libro => libro.id === selectedItem.data.id ? updatedItem : libro)); }
-        if (updatedItem && storeName) { await dbSave(storeName, updatedItem); setSelectedItem({ ...selectedItem, data: updatedItem }); }
-        setIsEditingResena(false);
-      };
-
       const renderModal = () => {
         if (!itemToDelete) return null;
         return (
@@ -1233,8 +1248,8 @@
       };
 
       const renderCurrentView = () => {
-        if (isAdding) return <FormularioDinamico {...{isAdding, formData, handleInputChange, toggleDia, setFormData, resetForm, handleGuardar}} />;
-        if (selectedItem) return <VistaDetalle {...{ selectedItem, setSelectedItem, handleEliminarClick, isEditingImage, setIsEditingImage, tempImageUrl, setTempImageUrl, handleSaveImageEdit, handleKeyDownImageEdit, isEditingResena, setIsEditingResena, tempResena, setTempResena, handleSaveResena }} />;
+        if (isAdding) return <FormularioDinamico isAdding={isAdding} onCancel={() => setIsAdding(null)} onSave={handleGuardarFormulario} />;
+        if (selectedItem) return <VistaDetalle selectedItem={selectedItem} setSelectedItem={setSelectedItem} handleEliminarClick={handleEliminarClick} onUpdateItem={handleUpdateItemDetail} />;
         
         switch (activeTab) {
           case 'inicio': return <HomeView {...{historia, libros, notas, referencias, expos, tecnicas, setActiveTab, abrirFormulario, handleGuardarRapido}} />;
@@ -1280,5 +1295,3 @@
 </script>
 </body>
 </html>
-
-
