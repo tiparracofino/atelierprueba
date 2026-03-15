@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -14,39 +15,85 @@
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <style>
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html, body {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            background-color: #f5f6f8; overscroll-behavior-y: none; overflow: hidden;
-        }
-        #root { width: 100%; height: 100%; }
-        .h-screen-safe { height: 100vh; height: 100dvh; }
-        .safe-pt { padding-top: max(env(safe-area-inset-top), 20px); }
-        .safe-pb-nav { padding-bottom: max(env(safe-area-inset-bottom), 16px); }
-        .main-content-pb { padding-bottom: calc(110px + env(safe-area-inset-bottom)); }
+```
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
 
-        input, textarea, select { font-size: 16px !important; touch-action: manipulation; }
-        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-        
-        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body {
+        margin: 0; padding: 0; width: 100%; height: 100%;
+        background-color: #f5f6f8; overscroll-behavior-y: none; overflow: hidden;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    #root { width: 100%; height: 100%; }
+    .h-screen-safe { height: 100vh; height: 100dvh; }
+    .safe-pt { padding-top: max(env(safe-area-inset-top), 20px); }
+    .safe-pb-nav { padding-bottom: max(env(safe-area-inset-bottom), 16px); }
+    .main-content-pb { padding-bottom: calc(110px + env(safe-area-inset-bottom)); }
 
-        /* Estilo Neomórfico */
-        .nm-flat { background: #f5f6f8; box-shadow: 6px 6px 16px #d8dde6, -6px -6px 16px #ffffff; }
-        .nm-inset { background: #f5f6f8; box-shadow: inset 4px 4px 8px #d8dde6, inset -4px -4px 8px #ffffff; }
-    </style>
+    input, textarea, select { font-size: 16px !important; touch-action: manipulation; }
+    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    
+    .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .slide-up { animation: slideUp 0.3s ease-out forwards; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(100%); } to { opacity: 1; transform: translateY(0); } }
+
+    .nm-flat { background: #f5f6f8; box-shadow: 6px 6px 16px #d8dde6, -6px -6px 16px #ffffff; }
+    .nm-inset { background: #f5f6f8; box-shadow: inset 4px 4px 8px #d8dde6, inset -4px -4px 8px #ffffff; }
+    .nm-btn { background: #f5f6f8; box-shadow: 4px 4px 10px #d8dde6, -4px -4px 10px #ffffff; }
+    .nm-btn:active { box-shadow: inset 4px 4px 8px #d8dde6, inset -4px -4px 8px #ffffff; }
+
+    .font-display { font-family: 'Cormorant Garamond', Georgia, serif; }
+
+    .nm-input {
+        background: #f5f6f8;
+        box-shadow: inset 3px 3px 6px #d8dde6, inset -3px -3px 6px #ffffff;
+        border: none; outline: none;
+        border-radius: 16px; padding: 14px 18px;
+        width: 100%; color: #4a5568;
+        -webkit-appearance: none;
+    }
+    .nm-input:focus { box-shadow: inset 4px 4px 8px #d0d5de, inset -4px -4px 8px #ffffff; }
+    .nm-input::placeholder { color: #a0aec0; }
+
+    select.nm-input { padding-right: 40px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%235b85b5' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 5.5l6.5 6 6.5-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; }
+
+    .modal-overlay {
+        position: fixed; inset: 0; z-index: 100;
+        background: rgba(0,0,0,0.3); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+        display: flex; align-items: flex-end; justify-content: center;
+    }
+    .modal-body {
+        background: #f5f6f8; border-radius: 28px 28px 0 0;
+        width: 100%; max-width: 500px;
+        max-height: 92vh; overflow-y: auto;
+        padding: 24px 24px calc(24px + env(safe-area-inset-bottom));
+    }
+
+    .tag { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+    .tag-blue { background: #dbeafe; color: #3b82f6; }
+    .tag-green { background: #dcfce7; color: #22c55e; }
+    .tag-amber { background: #fef3c7; color: #f59e0b; }
+    .tag-rose { background: #ffe4e6; color: #f43f5e; }
+    .tag-violet { background: #ede9fe; color: #8b5cf6; }
+    .tag-slate { background: #e2e8f0; color: #64748b; }
+</style>
+```
+
 </head>
 <body>
     <div id="root"></div>
 
 <script type="text/babel">
-    const { useState, useEffect, useMemo } = React;
+    const { useState, useEffect, useCallback, useRef } = React;
 
-    // --- UTILS INDEXEDDB ---
+    // ═══════════════════════════════════════════════
+    // INDEXEDDB
+    // ═══════════════════════════════════════════════
     const STORES = ['notas', 'referencias', 'libros', 'historia', 'expos', 'tecnicas'];
     const initDB = () => new Promise((res) => {
         const req = indexedDB.open("AtelierDB", 1);
@@ -61,8 +108,11 @@
         });
     };
     const dbSave = async (s, d) => { const db = await initDB(); db.transaction(s, "readwrite").objectStore(s).put(d); };
+    const dbDelete = async (s, id) => { const db = await initDB(); db.transaction(s, "readwrite").objectStore(s).delete(id); };
 
-    // --- ICONOS ---
+    // ═══════════════════════════════════════════════
+    // ICONOS
+    // ═══════════════════════════════════════════════
     const Icon = ({ path, size = 24, className = "" }) => (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} dangerouslySetInnerHTML={{ __html: path }} />
     );
@@ -70,10 +120,19 @@
     const BookIco = (p) => <Icon {...p} path='<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>' />;
     const NoteIco = (p) => <Icon {...p} path='<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line>' />;
     const GalleryIco = (p) => <Icon {...p} path='<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline>' />;
-    const ExpoIco = (p) => <Icon {...p} path='<path d="M15 5.25a3 3 0 0 1-3-3H6a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3a3 3 0 0 1-3-3v-5.25z"></path>' />;
-    const HistIco = (p) => <Icon {...p} path='<line x1="3" y1="22" x2="21" y2="22"></line><line x1="6" y1="18" x2="6" y2="11"></line><line x1="10" y1="18" x2="10" y2="11"></line><line x1="14" y1="18" x2="14" y2="11"></line>' />;
+    const ExpoIco = (p) => <Icon {...p} path='<rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline>' />;
+    const HistIco = (p) => <Icon {...p} path='<circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>' />;
+    const PlusIco = (p) => <Icon {...p} path='<line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line>' />;
+    const TrashIco = (p) => <Icon {...p} path='<polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>' />;
+    const EditIco = (p) => <Icon {...p} path='<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>' />;
+    const BackIco = (p) => <Icon {...p} path='<line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline>' />;
+    const SearchIco = (p) => <Icon {...p} path='<circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>' />;
+    const StarIco = (p) => <Icon {...p} path='<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>' />;
+    const XIco = (p) => <Icon {...p} path='<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>' />;
 
-    // --- DATOS DE RESPALDO (INSTANTÁNEOS) ---
+    // ═══════════════════════════════════════════════
+    // DATOS DE RESPALDO
+    // ═══════════════════════════════════════════════
     const FALLBACK_ART = [
         { img: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800", title: "Composición Floral", artist: "Abstracción Moderna" },
         { img: "https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=800", title: "Impresión de Amanecer", artist: "Claude Monet (Ref)" },
@@ -86,15 +145,539 @@
         { q: "El arte lava del alma el polvo de la vida cotidiana.", a: "Pablo Picasso" },
         { q: "La inspiración existe, pero tiene que encontrarte trabajando.", a: "Pablo Picasso" }
     ];
+    const todayStr = () => new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
-    // --- COMPONENTES ---
+    // ═══════════════════════════════════════════════
+    // MODAL CONFIRMAR
+    // ═══════════════════════════════════════════════
+    const ConfirmModal = ({ msg, onOk, onCancel }) => (
+        <div className="modal-overlay" onClick={onCancel}>
+            <div className="modal-body slide-up" onClick={e => e.stopPropagation()} style={{borderRadius: '28px', maxWidth: '360px', margin: '0 auto 0'}}>
+                <p className="text-center text-[#4a5568] text-sm mb-6 mt-2">{msg}</p>
+                <div className="flex gap-3">
+                    <button onClick={onCancel} className="flex-1 py-3 rounded-2xl nm-btn text-sm font-bold text-gray-500">Cancelar</button>
+                    <button onClick={onOk} className="flex-1 py-3 rounded-2xl bg-red-400 text-white text-sm font-bold" style={{boxShadow:'4px 4px 10px #d8dde6, -4px -4px 10px #ffffff'}}>Eliminar</button>
+                </div>
+            </div>
+        </div>
+    );
+
+    // ═══════════════════════════════════════════════
+    // FORM MODAL GENÉRICO
+    // ═══════════════════════════════════════════════
+    const FormModal = ({ title, fields, data, onSave, onClose }) => {
+        const [form, setForm] = useState(data || {});
+        const set = (k, v) => setForm(p => ({...p, [k]: v}));
+        const handleSave = () => {
+            const required = fields.filter(f => f.required);
+            for (const f of required) {
+                if (!form[f.key] || !form[f.key].trim()) return;
+            }
+            onSave(form);
+        };
+        return (
+            <div className="modal-overlay" onClick={onClose}>
+                <div className="modal-body slide-up hide-scrollbar" onClick={e => e.stopPropagation()}>
+                    <div className="flex justify-between items-center mb-6">
+                        <h2 className="font-display text-2xl italic text-[#4a5568]">{title}</h2>
+                        <button onClick={onClose} className="p-2 nm-btn rounded-full"><XIco size={18} /></button>
+                    </div>
+                    <div className="space-y-4">
+                        {fields.map(f => (
+                            <div key={f.key}>
+                                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-2 mb-1 block">{f.label}</label>
+                                {f.type === 'textarea' ? (
+                                    <textarea className="nm-input" rows={f.rows || 4} placeholder={f.placeholder || ''} value={form[f.key] || ''} onChange={e => set(f.key, e.target.value)} />
+                                ) : f.type === 'select' ? (
+                                    <select className="nm-input" value={form[f.key] || f.options[0]} onChange={e => set(f.key, e.target.value)}>
+                                        {f.options.map(o => <option key={o} value={o}>{o}</option>)}
+                                    </select>
+                                ) : f.type === 'rating' ? (
+                                    <div className="flex gap-2 ml-2 mt-1">
+                                        {[1,2,3,4,5].map(n => (
+                                            <button key={n} onClick={() => set(f.key, n)} className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${(form[f.key] || 0) >= n ? 'text-amber-400' : 'text-gray-300'} nm-btn`}>
+                                                <StarIco size={18} className={(form[f.key] || 0) >= n ? 'fill-amber-400' : ''} />
+                                            </button>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <input type={f.type || 'text'} className="nm-input" placeholder={f.placeholder || ''} value={form[f.key] || ''} onChange={e => set(f.key, e.target.value)} />
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                    <button onClick={handleSave} className="w-full mt-6 py-4 rounded-2xl bg-[#5b85b5] text-white font-bold text-sm tracking-wider uppercase" style={{boxShadow:'4px 4px 10px #d8dde6, -4px -4px 10px #ffffff'}}>
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        );
+    };
+
+    // ═══════════════════════════════════════════════
+    // SECTION HEADER (reutilizable)
+    // ═══════════════════════════════════════════════
+    const SectionHeader = ({ title, subtitle, onBack, onAdd, count }) => (
+        <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+                <button onClick={onBack} className="p-2 nm-btn rounded-full"><BackIco size={18} /></button>
+                <div>
+                    <h2 className="font-display text-xl italic text-[#4a5568]">{title}</h2>
+                    <p className="text-[10px] text-gray-400 uppercase tracking-widest">{count} {subtitle}</p>
+                </div>
+            </div>
+            <button onClick={onAdd} className="p-3 nm-btn rounded-full text-[#5b85b5]"><PlusIco size={20} /></button>
+        </div>
+    );
+
+    // ═══════════════════════════════════════════════
+    // SEARCH BAR
+    // ═══════════════════════════════════════════════
+    const SearchBar = ({ value, onChange, placeholder }) => (
+        <div className="relative mb-4">
+            <SearchIco size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input className="nm-input pl-11" placeholder={placeholder || 'Buscar...'} value={value} onChange={e => onChange(e.target.value)} />
+        </div>
+    );
+
+    // ═══════════════════════════════════════════════
+    // EMPTY STATE
+    // ═══════════════════════════════════════════════
+    const EmptyState = ({ icon: Ico, text }) => (
+        <div className="flex flex-col items-center justify-center py-20 text-gray-400 fade-in">
+            <Ico size={48} className="opacity-20 mb-4" />
+            <p className="font-display italic text-lg">{text}</p>
+        </div>
+    );
+
+    // ═══════════════════════════════════════════════
+    // SECCIÓN: HISTORIA
+    // ═══════════════════════════════════════════════
+    const PERIODOS = ['Prehistoria', 'Antigüedad', 'Medieval', 'Renacimiento', 'Barroco', 'Neoclásico', 'Romanticismo', 'Impresionismo', 'Moderno', 'Contemporáneo', 'Otro'];
+    const periodoTag = (p) => {
+        const map = { 'Prehistoria':'tag-slate','Antigüedad':'tag-amber','Medieval':'tag-rose','Renacimiento':'tag-green','Barroco':'tag-violet','Impresionismo':'tag-blue','Moderno':'tag-amber','Contemporáneo':'tag-blue' };
+        return map[p] || 'tag-slate';
+    };
+
+    const HistoriaSection = ({ onBack, onDataChange }) => {
+        const [items, setItems] = useState([]);
+        const [search, setSearch] = useState('');
+        const [showForm, setShowForm] = useState(false);
+        const [editing, setEditing] = useState(null);
+        const [confirm, setConfirm] = useState(null);
+
+        const load = async () => { const d = await dbGetAll('historia'); setItems(d); };
+        useEffect(() => { load(); }, []);
+
+        const filtered = items.filter(i => !search || [i.tema, i.resumen, i.periodo].join(' ').toLowerCase().includes(search.toLowerCase()));
+
+        const save = async (form) => {
+            const item = { ...form, id: editing ? editing.id : Date.now(), fecha: editing ? editing.fecha : todayStr() };
+            await dbSave('historia', item);
+            setShowForm(false); setEditing(null); load(); onDataChange();
+        };
+        const del = async (id) => { await dbDelete('historia', id); setConfirm(null); load(); onDataChange(); };
+
+        const fields = [
+            { key: 'tema', label: 'Tema', required: true, placeholder: 'Ej: El claroscuro de Caravaggio' },
+            { key: 'periodo', label: 'Periodo', type: 'select', options: PERIODOS },
+            { key: 'resumen', label: 'Apuntes', type: 'textarea', rows: 5, placeholder: 'Tu reflexión o apuntes sobre el tema...' }
+        ];
+
+        return (
+            <div className="fade-in">
+                <SectionHeader title="Historia" subtitle="apuntes" onBack={onBack} onAdd={() => { setEditing(null); setShowForm(true); }} count={items.length} />
+                <SearchBar value={search} onChange={setSearch} placeholder="Buscar en historia..." />
+                {filtered.length === 0 ? <EmptyState icon={HistIco} text="Sin apuntes de historia aún" /> : (
+                    <div className="space-y-3">
+                        {filtered.map(item => (
+                            <div key={item.id} className="p-5 rounded-2xl nm-flat fade-in">
+                                <div className="flex justify-between items-start mb-2">
+                                    <h3 className="font-display text-lg italic text-[#4a5568] flex-1 mr-2">{item.tema}</h3>
+                                    <div className="flex gap-1 flex-shrink-0">
+                                        <button onClick={() => { setEditing(item); setShowForm(true); }} className="p-2 nm-btn rounded-xl text-gray-400"><EditIco size={14} /></button>
+                                        <button onClick={() => setConfirm(item.id)} className="p-2 nm-btn rounded-xl text-gray-400"><TrashIco size={14} /></button>
+                                    </div>
+                                </div>
+                                {item.resumen && <p className="text-sm text-gray-500 line-clamp-3 mb-3 leading-relaxed">{item.resumen}</p>}
+                                <div className="flex justify-between items-center">
+                                    {item.periodo && <span className={`tag ${periodoTag(item.periodo)}`}>{item.periodo}</span>}
+                                    <span className="text-[10px] text-gray-400">{item.fecha}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+                {showForm && <FormModal title={editing ? 'Editar Apunte' : 'Nuevo Apunte'} fields={fields} data={editing || { periodo: PERIODOS[0] }} onSave={save} onClose={() => { setShowForm(false); setEditing(null); }} />}
+                {confirm && <ConfirmModal msg="¿Eliminar este apunte de historia?" onOk={() => del(confirm)} onCancel={() => setConfirm(null)} />}
+            </div>
+        );
+    };
+
+    // ═══════════════════════════════════════════════
+    // SECCIÓN: LIBROS
+    // ═══════════════════════════════════════════════
+    const ESTADOS_LIBRO = ['Pendiente', 'Leyendo', 'Leído', 'Abandonado'];
+    const estadoTag = (e) => {
+        const map = { 'Pendiente':'tag-slate','Leyendo':'tag-blue','Leído':'tag-green','Abandonado':'tag-rose' };
+        return map[e] || 'tag-slate';
+    };
+
+    const LibrosSection = ({ onBack, onDataChange }) => {
+        const [items, setItems] = useState([]);
+        const [search, setSearch] = useState('');
+        const [showForm, setShowForm] = useState(false);
+        const [editing, setEditing] = useState(null);
+        const [confirm, setConfirm] = useState(null);
+
+        const load = async () => { const d = await dbGetAll('libros'); setItems(d); };
+        useEffect(() => { load(); }, []);
+
+        const filtered = items.filter(i => !search || [i.titulo, i.autor, i.estado].join(' ').toLowerCase().includes(search.toLowerCase()));
+
+        const save = async (form) => {
+            const item = { ...form, id: editing ? editing.id : Date.now(), fecha: editing ? editing.fecha : todayStr() };
+            await dbSave('libros', item);
+            setShowForm(false); setEditing(null); load(); onDataChange();
+        };
+        const del = async (id) => { await dbDelete('libros', id); setConfirm(null); load(); onDataChange(); };
+
+        const fields = [
+            { key: 'titulo', label: 'Título', required: true, placeholder: 'Ej: Goodbye Things' },
+            { key: 'autor', label: 'Autor', placeholder: 'Ej: Fumio Sasaki' },
+            { key: 'estado', label: 'Estado', type: 'select', options: ESTADOS_LIBRO },
+            { key: 'valoracion', label: 'Valoración', type: 'rating' },
+            { key: 'notas', label: 'Notas', type: 'textarea', rows: 4, placeholder: 'Tus impresiones del libro...' }
+        ];
+
+        return (
+            <div className="fade-in">
+                <SectionHeader title="Libros" subtitle="en tu biblioteca" onBack={onBack} onAdd={() => { setEditing(null); setShowForm(true); }} count={items.length} />
+                <SearchBar value={search} onChange={setSearch} placeholder="Buscar libros..." />
+                {filtered.length === 0 ? <EmptyState icon={BookIco} text="Tu biblioteca está vacía" /> : (
+                    <div className="space-y-3">
+                        {filtered.map(item => (
+                            <div key={item.id} className="p-5 rounded-2xl nm-flat fade-in">
+                                <div className="flex justify-between items-start mb-1">
+                                    <h3 className="font-display text-lg italic text-[#4a5568] flex-1 mr-2">{item.titulo}</h3>
+                                    <div className="flex gap-1 flex-shrink-0">
+                                        <button onClick={() => { setEditing(item); setShowForm(true); }} className="p-2 nm-btn rounded-xl text-gray-400"><EditIco size={14} /></button>
+                                        <button onClick={() => setConfirm(item.id)} className="p-2 nm-btn rounded-xl text-gray-400"><TrashIco size={14} /></button>
+                                    </div>
+                                </div>
+                                {item.autor && <p className="text-xs text-[#5b85b5] font-bold uppercase tracking-wider mb-2">{item.autor}</p>}
+                                {item.notas && <p className="text-sm text-gray-500 line-clamp-2 mb-3 leading-relaxed">{item.notas}</p>}
+                                <div className="flex justify-between items-center">
+                                    <div className="flex items-center gap-2">
+                                        <span className={`tag ${estadoTag(item.estado)}`}>{item.estado || 'Pendiente'}</span>
+                                        {item.valoracion > 0 && (
+                                            <span className="text-[10px] text-amber-400">{'★'.repeat(item.valoracion)}{'☆'.repeat(5-item.valoracion)}</span>
+                                        )}
+                                    </div>
+                                    <span className="text-[10px] text-gray-400">{item.fecha}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+                {showForm && <FormModal title={editing ? 'Editar Libro' : 'Nuevo Libro'} fields={fields} data={editing || { estado: ESTADOS_LIBRO[0], valoracion: 0 }} onSave={save} onClose={() => { setShowForm(false); setEditing(null); }} />}
+                {confirm && <ConfirmModal msg="¿Eliminar este libro?" onOk={() => del(confirm)} onCancel={() => setConfirm(null)} />}
+            </div>
+        );
+    };
+
+    // ═══════════════════════════════════════════════
+    // SECCIÓN: NOTAS
+    // ═══════════════════════════════════════════════
+    const CATEGORIAS_NOTA = ['Idea', 'Reflexión', 'Proyecto', 'Técnica', 'Inspiración', 'Otro'];
+    const catTag = (c) => {
+        const map = { 'Idea':'tag-amber','Reflexión':'tag-violet','Proyecto':'tag-blue','Técnica':'tag-green','Inspiración':'tag-rose' };
+        return map[c] || 'tag-slate';
+    };
+
+    const NotasSection = ({ onBack, onDataChange }) => {
+        const [items, setItems] = useState([]);
+        const [search, setSearch] = useState('');
+        const [showForm, setShowForm] = useState(false);
+        const [editing, setEditing] = useState(null);
+        const [confirm, setConfirm] = useState(null);
+
+        const load = async () => { const d = await dbGetAll('notas'); setItems(d); };
+        useEffect(() => { load(); }, []);
+
+        const filtered = items.filter(i => !search || [i.titulo, i.contenido, i.categoria].join(' ').toLowerCase().includes(search.toLowerCase()));
+
+        const save = async (form) => {
+            const item = { ...form, id: editing ? editing.id : Date.now(), fecha: editing ? editing.fecha : todayStr() };
+            await dbSave('notas', item);
+            setShowForm(false); setEditing(null); load(); onDataChange();
+        };
+        const del = async (id) => { await dbDelete('notas', id); setConfirm(null); load(); onDataChange(); };
+
+        const fields = [
+            { key: 'titulo', label: 'Título', required: true, placeholder: 'Ej: Ideas para serie de acuarelas' },
+            { key: 'categoria', label: 'Categoría', type: 'select', options: CATEGORIAS_NOTA },
+            { key: 'contenido', label: 'Contenido', type: 'textarea', rows: 6, placeholder: 'Escribe tu nota...' }
+        ];
+
+        return (
+            <div className="fade-in">
+                <SectionHeader title="Notas" subtitle="anotaciones" onBack={onBack} onAdd={() => { setEditing(null); setShowForm(true); }} count={items.length} />
+                <SearchBar value={search} onChange={setSearch} placeholder="Buscar notas..." />
+                {filtered.length === 0 ? <EmptyState icon={NoteIco} text="No hay notas todavía" /> : (
+                    <div className="space-y-3">
+                        {filtered.map(item => (
+                            <div key={item.id} className="p-5 rounded-2xl nm-flat fade-in">
+                                <div className="flex justify-between items-start mb-2">
+                                    <h3 className="font-display text-lg italic text-[#4a5568] flex-1 mr-2">{item.titulo}</h3>
+                                    <div className="flex gap-1 flex-shrink-0">
+                                        <button onClick={() => { setEditing(item); setShowForm(true); }} className="p-2 nm-btn rounded-xl text-gray-400"><EditIco size={14} /></button>
+                                        <button onClick={() => setConfirm(item.id)} className="p-2 nm-btn rounded-xl text-gray-400"><TrashIco size={14} /></button>
+                                    </div>
+                                </div>
+                                {item.contenido && <p className="text-sm text-gray-500 line-clamp-3 mb-3 leading-relaxed">{item.contenido}</p>}
+                                <div className="flex justify-between items-center">
+                                    <span className={`tag ${catTag(item.categoria)}`}>{item.categoria || 'Otro'}</span>
+                                    <span className="text-[10px] text-gray-400">{item.fecha}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+                {showForm && <FormModal title={editing ? 'Editar Nota' : 'Nueva Nota'} fields={fields} data={editing || { categoria: CATEGORIAS_NOTA[0] }} onSave={save} onClose={() => { setShowForm(false); setEditing(null); }} />}
+                {confirm && <ConfirmModal msg="¿Eliminar esta nota?" onOk={() => del(confirm)} onCancel={() => setConfirm(null)} />}
+            </div>
+        );
+    };
+
+    // ═══════════════════════════════════════════════
+    // SECCIÓN: GALERÍA / REFERENCIAS
+    // ═══════════════════════════════════════════════
+    const TIPOS_REF = ['Pintura', 'Escultura', 'Fotografía', 'Grabado', 'Dibujo', 'Digital', 'Mixta', 'Otra'];
+    const tipoTag = (t) => {
+        const map = { 'Pintura':'tag-blue','Escultura':'tag-slate','Fotografía':'tag-green','Grabado':'tag-amber','Dibujo':'tag-violet','Digital':'tag-rose' };
+        return map[t] || 'tag-slate';
+    };
+
+    const GaleriaSection = ({ onBack, onDataChange }) => {
+        const [items, setItems] = useState([]);
+        const [search, setSearch] = useState('');
+        const [showForm, setShowForm] = useState(false);
+        const [editing, setEditing] = useState(null);
+        const [confirm, setConfirm] = useState(null);
+
+        const load = async () => { const d = await dbGetAll('referencias'); setItems(d); };
+        useEffect(() => { load(); }, []);
+
+        const filtered = items.filter(i => !search || [i.titulo, i.artista, i.tipo, i.descripcion].join(' ').toLowerCase().includes(search.toLowerCase()));
+
+        const save = async (form) => {
+            const item = { ...form, id: editing ? editing.id : Date.now(), fecha: editing ? editing.fecha : todayStr() };
+            await dbSave('referencias', item);
+            setShowForm(false); setEditing(null); load(); onDataChange();
+        };
+        const del = async (id) => { await dbDelete('referencias', id); setConfirm(null); load(); onDataChange(); };
+
+        const fields = [
+            { key: 'titulo', label: 'Título de la Obra', required: true, placeholder: 'Ej: La Gran Ola de Kanagawa' },
+            { key: 'artista', label: 'Artista', placeholder: 'Ej: Katsushika Hokusai' },
+            { key: 'tipo', label: 'Tipo', type: 'select', options: TIPOS_REF },
+            { key: 'url', label: 'URL de imagen', placeholder: 'https://...' },
+            { key: 'descripcion', label: 'Descripción / Notas', type: 'textarea', rows: 3, placeholder: '¿Por qué te inspira esta obra?' }
+        ];
+
+        return (
+            <div className="fade-in">
+                <SectionHeader title="Galería" subtitle="referencias" onBack={onBack} onAdd={() => { setEditing(null); setShowForm(true); }} count={items.length} />
+                <SearchBar value={search} onChange={setSearch} placeholder="Buscar referencias..." />
+                {filtered.length === 0 ? <EmptyState icon={GalleryIco} text="Tu galería está vacía" /> : (
+                    <div className="space-y-3">
+                        {filtered.map(item => (
+                            <div key={item.id} className="rounded-2xl nm-flat fade-in overflow-hidden">
+                                {item.url && (
+                                    <div className="w-full h-40 bg-gray-200 overflow-hidden">
+                                        <img src={item.url} alt={item.titulo} className="w-full h-full object-cover" onError={e => { e.target.style.display = 'none'; }} />
+                                    </div>
+                                )}
+                                <div className="p-5">
+                                    <div className="flex justify-between items-start mb-1">
+                                        <h3 className="font-display text-lg italic text-[#4a5568] flex-1 mr-2">{item.titulo}</h3>
+                                        <div className="flex gap-1 flex-shrink-0">
+                                            <button onClick={() => { setEditing(item); setShowForm(true); }} className="p-2 nm-btn rounded-xl text-gray-400"><EditIco size={14} /></button>
+                                            <button onClick={() => setConfirm(item.id)} className="p-2 nm-btn rounded-xl text-gray-400"><TrashIco size={14} /></button>
+                                        </div>
+                                    </div>
+                                    {item.artista && <p className="text-xs text-[#5b85b5] font-bold uppercase tracking-wider mb-2">{item.artista}</p>}
+                                    {item.descripcion && <p className="text-sm text-gray-500 line-clamp-2 mb-3">{item.descripcion}</p>}
+                                    <div className="flex justify-between items-center">
+                                        <span className={`tag ${tipoTag(item.tipo)}`}>{item.tipo || 'Otra'}</span>
+                                        <span className="text-[10px] text-gray-400">{item.fecha}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+                {showForm && <FormModal title={editing ? 'Editar Referencia' : 'Nueva Referencia'} fields={fields} data={editing || { tipo: TIPOS_REF[0] }} onSave={save} onClose={() => { setShowForm(false); setEditing(null); }} />}
+                {confirm && <ConfirmModal msg="¿Eliminar esta referencia?" onOk={() => del(confirm)} onCancel={() => setConfirm(null)} />}
+            </div>
+        );
+    };
+
+    // ═══════════════════════════════════════════════
+    // SECCIÓN: EXPOSICIONES
+    // ═══════════════════════════════════════════════
+    const ESTADO_EXPO = ['Por visitar', 'Visitada', 'En curso'];
+    const expoTag = (e) => {
+        const map = { 'Por visitar':'tag-amber','Visitada':'tag-green','En curso':'tag-blue' };
+        return map[e] || 'tag-slate';
+    };
+
+    const ExposSection = ({ onBack, onDataChange }) => {
+        const [items, setItems] = useState([]);
+        const [search, setSearch] = useState('');
+        const [showForm, setShowForm] = useState(false);
+        const [editing, setEditing] = useState(null);
+        const [confirm, setConfirm] = useState(null);
+
+        const load = async () => { const d = await dbGetAll('expos'); setItems(d); };
+        useEffect(() => { load(); }, []);
+
+        const filtered = items.filter(i => !search || [i.nombre, i.lugar, i.estado, i.notas].join(' ').toLowerCase().includes(search.toLowerCase()));
+
+        const save = async (form) => {
+            const item = { ...form, id: editing ? editing.id : Date.now(), fecha: editing ? editing.fecha : todayStr() };
+            await dbSave('expos', item);
+            setShowForm(false); setEditing(null); load(); onDataChange();
+        };
+        const del = async (id) => { await dbDelete('expos', id); setConfirm(null); load(); onDataChange(); };
+
+        const fields = [
+            { key: 'nombre', label: 'Nombre', required: true, placeholder: 'Ej: Hokusai — Más allá de La Gran Ola' },
+            { key: 'lugar', label: 'Lugar', placeholder: 'Ej: Museo del Prado, Madrid' },
+            { key: 'estado', label: 'Estado', type: 'select', options: ESTADO_EXPO },
+            { key: 'fechaEvento', label: 'Fecha de la exposición', placeholder: 'Ej: 15/03/2026 – 30/06/2026' },
+            { key: 'valoracion', label: 'Valoración', type: 'rating' },
+            { key: 'notas', label: 'Notas', type: 'textarea', rows: 4, placeholder: 'Impresiones, obras destacadas...' }
+        ];
+
+        return (
+            <div className="fade-in">
+                <SectionHeader title="Exposiciones" subtitle="expos registradas" onBack={onBack} onAdd={() => { setEditing(null); setShowForm(true); }} count={items.length} />
+                <SearchBar value={search} onChange={setSearch} placeholder="Buscar exposiciones..." />
+                {filtered.length === 0 ? <EmptyState icon={ExpoIco} text="Sin exposiciones registradas" /> : (
+                    <div className="space-y-3">
+                        {filtered.map(item => (
+                            <div key={item.id} className="p-5 rounded-2xl nm-flat fade-in">
+                                <div className="flex justify-between items-start mb-1">
+                                    <h3 className="font-display text-lg italic text-[#4a5568] flex-1 mr-2">{item.nombre}</h3>
+                                    <div className="flex gap-1 flex-shrink-0">
+                                        <button onClick={() => { setEditing(item); setShowForm(true); }} className="p-2 nm-btn rounded-xl text-gray-400"><EditIco size={14} /></button>
+                                        <button onClick={() => setConfirm(item.id)} className="p-2 nm-btn rounded-xl text-gray-400"><TrashIco size={14} /></button>
+                                    </div>
+                                </div>
+                                {item.lugar && <p className="text-xs text-[#5b85b5] font-bold uppercase tracking-wider mb-1">{item.lugar}</p>}
+                                {item.fechaEvento && <p className="text-[10px] text-gray-400 mb-2">{item.fechaEvento}</p>}
+                                {item.notas && <p className="text-sm text-gray-500 line-clamp-2 mb-3 leading-relaxed">{item.notas}</p>}
+                                <div className="flex justify-between items-center">
+                                    <div className="flex items-center gap-2">
+                                        <span className={`tag ${expoTag(item.estado)}`}>{item.estado || 'Por visitar'}</span>
+                                        {item.valoracion > 0 && (
+                                            <span className="text-[10px] text-amber-400">{'★'.repeat(item.valoracion)}{'☆'.repeat(5-item.valoracion)}</span>
+                                        )}
+                                    </div>
+                                    <span className="text-[10px] text-gray-400">{item.fecha}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+                {showForm && <FormModal title={editing ? 'Editar Exposición' : 'Nueva Exposición'} fields={fields} data={editing || { estado: ESTADO_EXPO[0], valoracion: 0 }} onSave={save} onClose={() => { setShowForm(false); setEditing(null); }} />}
+                {confirm && <ConfirmModal msg="¿Eliminar esta exposición?" onOk={() => del(confirm)} onCancel={() => setConfirm(null)} />}
+            </div>
+        );
+    };
+
+    // ═══════════════════════════════════════════════
+    // SECCIÓN: TÉCNICAS
+    // ═══════════════════════════════════════════════
+    const MEDIOS = ['Óleo', 'Acuarela', 'Acrílico', 'Pastel', 'Grafito', 'Tinta', 'Digital', 'Mixta', 'Cerámica', 'Grabado', 'Otro'];
+    const NIVELES = ['Principiante', 'Intermedio', 'Avanzado', 'Dominado'];
+    const nivelTag = (n) => {
+        const map = { 'Principiante':'tag-slate','Intermedio':'tag-blue','Avanzado':'tag-amber','Dominado':'tag-green' };
+        return map[n] || 'tag-slate';
+    };
+
+    const TecnicasSection = ({ onBack, onDataChange }) => {
+        const [items, setItems] = useState([]);
+        const [search, setSearch] = useState('');
+        const [showForm, setShowForm] = useState(false);
+        const [editing, setEditing] = useState(null);
+        const [confirm, setConfirm] = useState(null);
+
+        const load = async () => { const d = await dbGetAll('tecnicas'); setItems(d); };
+        useEffect(() => { load(); }, []);
+
+        const filtered = items.filter(i => !search || [i.nombre, i.medio, i.descripcion, i.nivel].join(' ').toLowerCase().includes(search.toLowerCase()));
+
+        const save = async (form) => {
+            const item = { ...form, id: editing ? editing.id : Date.now(), fecha: editing ? editing.fecha : todayStr() };
+            await dbSave('tecnicas', item);
+            setShowForm(false); setEditing(null); load(); onDataChange();
+        };
+        const del = async (id) => { await dbDelete('tecnicas', id); setConfirm(null); load(); onDataChange(); };
+
+        const fields = [
+            { key: 'nombre', label: 'Técnica', required: true, placeholder: 'Ej: Wet-on-wet / Húmedo sobre húmedo' },
+            { key: 'medio', label: 'Medio', type: 'select', options: MEDIOS },
+            { key: 'nivel', label: 'Nivel de dominio', type: 'select', options: NIVELES },
+            { key: 'descripcion', label: 'Descripción / Notas', type: 'textarea', rows: 5, placeholder: 'Describe la técnica, materiales, trucos...' }
+        ];
+
+        return (
+            <div className="fade-in">
+                <SectionHeader title="Técnicas" subtitle="técnicas aprendidas" onBack={onBack} onAdd={() => { setEditing(null); setShowForm(true); }} count={items.length} />
+                <SearchBar value={search} onChange={setSearch} placeholder="Buscar técnicas..." />
+                {filtered.length === 0 ? <EmptyState icon={NoteIco} text="Sin técnicas registradas" /> : (
+                    <div className="space-y-3">
+                        {filtered.map(item => (
+                            <div key={item.id} className="p-5 rounded-2xl nm-flat fade-in">
+                                <div className="flex justify-between items-start mb-2">
+                                    <h3 className="font-display text-lg italic text-[#4a5568] flex-1 mr-2">{item.nombre}</h3>
+                                    <div className="flex gap-1 flex-shrink-0">
+                                        <button onClick={() => { setEditing(item); setShowForm(true); }} className="p-2 nm-btn rounded-xl text-gray-400"><EditIco size={14} /></button>
+                                        <button onClick={() => setConfirm(item.id)} className="p-2 nm-btn rounded-xl text-gray-400"><TrashIco size={14} /></button>
+                                    </div>
+                                </div>
+                                {item.descripcion && <p className="text-sm text-gray-500 line-clamp-3 mb-3 leading-relaxed">{item.descripcion}</p>}
+                                <div className="flex justify-between items-center">
+                                    <div className="flex items-center gap-2">
+                                        {item.medio && <span className="tag tag-blue">{item.medio}</span>}
+                                        {item.nivel && <span className={`tag ${nivelTag(item.nivel)}`}>{item.nivel}</span>}
+                                    </div>
+                                    <span className="text-[10px] text-gray-400">{item.fecha}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+                {showForm && <FormModal title={editing ? 'Editar Técnica' : 'Nueva Técnica'} fields={fields} data={editing || { medio: MEDIOS[0], nivel: NIVELES[0] }} onSave={save} onClose={() => { setShowForm(false); setEditing(null); }} />}
+                {confirm && <ConfirmModal msg="¿Eliminar esta técnica?" onOk={() => del(confirm)} onCancel={() => setConfirm(null)} />}
+            </div>
+        );
+    };
+
+    // ═══════════════════════════════════════════════
+    // INSPIRACIÓN CARD
+    // ═══════════════════════════════════════════════
     const InspirationCard = ({ data, loading }) => {
         if (loading) return (
             <div className="w-full aspect-[4/5] rounded-3xl nm-inset flex flex-col items-center justify-center text-gray-400 mb-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#5b85b5] mb-4"></div>
-                <p className="font-serif italic text-sm">Buscando una obra para ti...</p>
+                <p className="font-display italic text-sm">Buscando una obra para ti...</p>
             </div>
         );
+        if (!data) return null;
 
         return (
             <div className="w-full rounded-3xl p-3 nm-flat fade-in mb-8">
@@ -102,29 +685,28 @@
                     <img src={data.image} alt="Arte diario" className="w-full h-full object-cover" onError={(e) => e.target.src = FALLBACK_ART[0].img} />
                     <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 via-black/20 to-transparent text-white">
                         <p className="text-[10px] uppercase tracking-widest font-bold opacity-80">Inspiración del día</p>
-                        <p className="text-base font-serif italic truncate">{data.title}</p>
+                        <p className="text-base font-display italic truncate">{data.title}</p>
                         <p className="text-[10px] opacity-70">{data.artist}</p>
                     </div>
                 </div>
                 <div className="px-4 py-3 text-center">
-                    <p className="font-serif italic text-lg text-[#4a5568] leading-tight">"{data.quote}"</p>
+                    <p className="font-display italic text-lg text-[#4a5568] leading-tight">"{data.quote}"</p>
                     <p className="text-[10px] text-[#5b85b5] font-bold uppercase tracking-widest mt-3">— {data.quoteAuthor}</p>
                 </div>
             </div>
         );
     };
 
+    // ═══════════════════════════════════════════════
+    // APP PRINCIPAL
+    // ═══════════════════════════════════════════════
     const App = () => {
         const [activeTab, setActiveTab] = useState('inicio');
         const [inspiration, setInspiration] = useState(null);
         const [loadingInspiration, setLoadingInspiration] = useState(true);
         const [counts, setCounts] = useState({ historia: 0, libros: 0, notas: 0, referencias: 0, tecnicas: 0, expos: 0 });
         const [lastHist, setLastHist] = useState(null);
-
-        useEffect(() => {
-            loadData();
-            getDailyContent();
-        }, []);
+        const scrollRef = useRef(null);
 
         const loadData = async () => {
             const h = await dbGetAll('historia');
@@ -135,48 +717,43 @@
             const e = await dbGetAll('expos');
             setCounts({ historia: h.length, libros: l.length, notas: n.length, referencias: r.length, tecnicas: t.length, expos: e.length });
             if (h.length > 0) setLastHist(h[0]);
+            else setLastHist(null);
         };
+
+        useEffect(() => { loadData(); getDailyContent(); }, []);
+        useEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = 0; }, [activeTab]);
 
         const getDailyContent = async () => {
             const today = new Date().toDateString();
             const saved = localStorage.getItem('atelier_daily_v2');
-            
             if (saved) {
                 const parsed = JSON.parse(saved);
-                if (parsed.date === today) {
-                    setInspiration(parsed.data);
-                    setLoadingInspiration(false);
-                    return;
-                }
+                if (parsed.date === today) { setInspiration(parsed.data); setLoadingInspiration(false); return; }
             }
-
-            // Seleccionar frase e imagen de respaldo inmediatamente por si falla la API
             const fallbackArt = FALLBACK_ART[Math.floor(Math.random() * FALLBACK_ART.length)];
             const fallbackQuote = QUOTES[Math.floor(Math.random() * QUOTES.length)];
-
             try {
-                // API Museo Chicago
                 const artRes = await fetch(`https://api.artic.edu/api/v1/artworks?page=${Math.floor(Math.random()*50)+1}&limit=1&fields=title,artist_display,image_id`);
                 const artJson = await artRes.json();
                 const art = artJson.data[0];
-
                 const finalData = {
                     image: art.image_id ? `https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg` : fallbackArt.img,
-                    title: art.title || fallbackArt.title,
-                    artist: art.artist_display || fallbackArt.artist,
-                    quote: fallbackQuote.q,
-                    quoteAuthor: fallbackQuote.a
+                    title: art.title || fallbackArt.title, artist: art.artist_display || fallbackArt.artist,
+                    quote: fallbackQuote.q, quoteAuthor: fallbackQuote.a
                 };
-
                 setInspiration(finalData);
                 localStorage.setItem('atelier_daily_v2', JSON.stringify({ date: today, data: finalData }));
-            } catch (err) {
+            } catch {
                 const finalData = { image: fallbackArt.img, title: fallbackArt.title, artist: fallbackArt.artist, quote: fallbackQuote.q, quoteAuthor: fallbackQuote.a };
                 setInspiration(finalData);
-            } finally {
-                setLoadingInspiration(false);
-            }
+            } finally { setLoadingInspiration(false); }
         };
+
+        const goBack = () => setActiveTab('inicio');
+
+        // Greeting dinámico
+        const hour = new Date().getHours();
+        const greeting = hour < 13 ? 'Buenos días.' : hour < 20 ? 'Buenas tardes.' : 'Buenas noches.';
 
         return (
             <div className="w-full h-screen-safe flex flex-col bg-[#f5f6f8] overflow-hidden relative">
@@ -185,11 +762,12 @@
                     <span className="text-[10px] uppercase font-bold text-[#5b85b5] tracking-widest">Estudio</span>
                 </header>
 
-                <div className="flex-1 overflow-y-auto hide-scrollbar main-content-pb px-6 pt-2">
+                <div ref={scrollRef} className="flex-1 overflow-y-auto hide-scrollbar main-content-pb px-6 pt-2">
+
                     {activeTab === 'inicio' && (
-                        <div className="space-y-8">
+                        <div className="space-y-8 fade-in">
                             <div>
-                                <h2 className="font-serif text-3xl italic text-[#4a5568] mb-1">Buenos días.</h2>
+                                <h2 className="font-display text-3xl italic text-[#4a5568] mb-1">{greeting}</h2>
                                 <p className="text-xs text-gray-400 capitalize">{new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}</p>
                             </div>
 
@@ -197,10 +775,10 @@
 
                             <div>
                                 <h3 className="text-[10px] text-gray-400 mb-3 ml-2 font-bold uppercase tracking-widest">Reflexión Reciente</h3>
-                                <div className="p-6 rounded-3xl nm-flat border-l-4 border-[#5b85b5] active:nm-inset transition-all">
+                                <div className="p-6 rounded-3xl nm-flat border-l-4 border-[#5b85b5]" onClick={() => lastHist && setActiveTab('historia')}>
                                     {lastHist ? (
                                         <>
-                                            <p className="font-serif italic text-lg text-[#4a5568] line-clamp-3 leading-relaxed">"{lastHist.resumen}"</p>
+                                            <p className="font-display italic text-lg text-[#4a5568] line-clamp-3 leading-relaxed">"{lastHist.resumen}"</p>
                                             <div className="flex justify-between items-center mt-4">
                                                 <span className="text-[10px] text-[#5b85b5] font-bold uppercase truncate max-w-[60%]">{lastHist.tema}</span>
                                                 <span className="text-[10px] text-gray-400 uppercase">{lastHist.fecha}</span>
@@ -214,15 +792,16 @@
                                 <h3 className="text-[10px] text-gray-400 mb-3 ml-2 font-bold uppercase tracking-widest">Tu Estudio</h3>
                                 <div className="grid grid-cols-3 gap-4 pb-4">
                                     {[
-                                        { l: 'HISTORIA', c: counts.historia, t: 'historia' },
-                                        { l: 'LIBROS', c: counts.libros, t: 'libros' },
-                                        { l: 'NOTAS', c: counts.notas, t: 'notas' },
-                                        { l: 'REFS', c: counts.referencias, t: 'galeria' },
-                                        { l: 'TECNICA', c: counts.tecnicas, t: 'tecnicas' },
-                                        { l: 'EXPOS', c: counts.expos, t: 'expos' }
+                                        { l: 'HISTORIA', c: counts.historia, t: 'historia', ico: '🏛' },
+                                        { l: 'LIBROS', c: counts.libros, t: 'libros', ico: '📚' },
+                                        { l: 'NOTAS', c: counts.notas, t: 'notas', ico: '✏️' },
+                                        { l: 'GALERÍA', c: counts.referencias, t: 'galeria', ico: '🖼' },
+                                        { l: 'TÉCNICA', c: counts.tecnicas, t: 'tecnicas', ico: '🎨' },
+                                        { l: 'EXPOS', c: counts.expos, t: 'expos', ico: '🎭' }
                                     ].map((item, i) => (
                                         <button key={i} onClick={() => setActiveTab(item.t)} className="aspect-square rounded-2xl flex flex-col items-center justify-center gap-1 nm-flat active:nm-inset transition-all">
-                                            <span className={`text-xl font-serif ${item.c > 0 ? 'text-[#5b85b5]' : 'text-gray-400'}`}>{item.c}</span>
+                                            <span className="text-lg mb-0.5">{item.ico}</span>
+                                            <span className={`text-xl font-display ${item.c > 0 ? 'text-[#5b85b5]' : 'text-gray-400'}`}>{item.c}</span>
                                             <span className="text-[8px] font-bold text-gray-500 tracking-tighter">{item.l}</span>
                                         </button>
                                     ))}
@@ -230,13 +809,13 @@
                             </div>
                         </div>
                     )}
-                    {activeTab !== 'inicio' && (
-                        <div className="flex flex-col items-center justify-center h-64 text-gray-400 fade-in">
-                            <HistIco size={48} className="opacity-20 mb-4" />
-                            <p className="font-serif italic text-lg">Sección {activeTab}</p>
-                            <button onClick={() => setActiveTab('inicio')} className="mt-6 text-[10px] font-bold text-[#5b85b5] uppercase tracking-widest px-6 py-3 nm-flat rounded-full">Volver al inicio</button>
-                        </div>
-                    )}
+
+                    {activeTab === 'historia' && <HistoriaSection onBack={goBack} onDataChange={loadData} />}
+                    {activeTab === 'libros' && <LibrosSection onBack={goBack} onDataChange={loadData} />}
+                    {activeTab === 'notas' && <NotasSection onBack={goBack} onDataChange={loadData} />}
+                    {activeTab === 'galeria' && <GaleriaSection onBack={goBack} onDataChange={loadData} />}
+                    {activeTab === 'expos' && <ExposSection onBack={goBack} onDataChange={loadData} />}
+                    {activeTab === 'tecnicas' && <TecnicasSection onBack={goBack} onDataChange={loadData} />}
                 </div>
 
                 <nav className="absolute bottom-0 w-full px-1 pt-3 safe-pb-nav nm-flat flex justify-between rounded-t-3xl z-50">
@@ -261,7 +840,6 @@
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
 </script>
+
 </body>
 </html>
-
-
