@@ -298,17 +298,18 @@
         
         setFrase(frases[Math.floor(Math.random() * frases.length)]);
 
-        const randomPage = Math.floor(Math.random() * 50) + 1;
-        fetch(`https://api.artic.edu/api/v1/artworks/search?query[term][is_public_domain]=true&page=${randomPage}&limit=10&fields=id,title,image_id,artist_display`)
+        // Usamos la API del Cleveland Museum of Art, mucho más estable para imágenes web
+        const randomSkip = Math.floor(Math.random() * 3000); 
+        fetch(`https://openaccess-api.clevelandart.org/api/artworks/?has_image=1&type=Painting&limit=10&skip=${randomSkip}`)
           .then(res => res.json())
           .then(response => {
             if (response && response.data) {
-              const obra = response.data.find(item => item.image_id != null);
+              const obra = response.data.find(item => item.images && item.images.web && item.images.web.url);
               if (obra) {
                 setInspiracion({
-                  img: `https://www.artic.edu/iiif/2/${obra.image_id}/full/843,/0/default.jpg`,
+                  img: obra.images.web.url,
                   titulo: obra.title || 'Obra sin título',
-                  autor: obra.artist_display || 'Artista desconocido'
+                  autor: obra.creators && obra.creators.length > 0 ? obra.creators[0].description : 'Artista desconocido'
                 });
               } else {
                  setFallbackInspiracion();
@@ -403,7 +404,7 @@
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
                     onError={(e) => {
                        e.target.onerror = null; 
-                       e.target.src = 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=800&q=80';
+                       setFallbackInspiracion();
                     }}
                   />
                 ) : (
