@@ -4,83 +4,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Atelier">
-    <meta name="theme-color" content="#f5f6f8">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23f5f6f8' width='100' height='100' rx='20'/><text y='65' x='50' text-anchor='middle' font-size='50'>🎨</text></svg>">
-    <title>Atelier アトリエ</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
 ```
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Atelier">
+<meta name="theme-color" content="#f5f6f8">
 
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23f5f6f8' width='100' height='100' rx='20'/><text y='65' x='50' text-anchor='middle' font-size='50'>🎨</text></svg>">
+<title>Atelier アトリエ</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<style>
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    
     html, body {
-        margin: 0; padding: 0; width: 100%; height: 100%;
-        background-color: #f5f6f8; overscroll-behavior-y: none; overflow: hidden;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #f5f6f8;
+        overscroll-behavior-y: none;
+        overflow: hidden;
     }
+
     #root { width: 100%; height: 100%; }
-    .h-screen-safe { height: 100vh; height: 100dvh; }
+
+    .h-screen-safe {
+        height: 100vh;
+        height: 100dvh;
+    }
+
     .safe-pt { padding-top: max(env(safe-area-inset-top), 20px); }
     .safe-pb-nav { padding-bottom: max(env(safe-area-inset-bottom), 16px); }
-    .main-content-pb { padding-bottom: calc(110px + env(safe-area-inset-bottom)); }
+    .main-content-pb { padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
 
-    input, textarea, select { font-size: 16px !important; touch-action: manipulation; }
-    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-    
-    .fade-in { animation: fadeIn 0.4s ease-out forwards; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .slide-up { animation: slideUp 0.3s ease-out forwards; }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(100%); } to { opacity: 1; transform: translateY(0); } }
-
-    .nm-flat { background: #f5f6f8; box-shadow: 6px 6px 16px #d8dde6, -6px -6px 16px #ffffff; }
-    .nm-inset { background: #f5f6f8; box-shadow: inset 4px 4px 8px #d8dde6, inset -4px -4px 8px #ffffff; }
-    .nm-btn { background: #f5f6f8; box-shadow: 4px 4px 10px #d8dde6, -4px -4px 10px #ffffff; }
-    .nm-btn:active { box-shadow: inset 4px 4px 8px #d8dde6, inset -4px -4px 8px #ffffff; }
-
-    .font-display { font-family: 'Cormorant Garamond', Georgia, serif; }
-
-    .nm-input {
-        background: #f5f6f8;
-        box-shadow: inset 3px 3px 6px #d8dde6, inset -3px -3px 6px #ffffff;
-        border: none; outline: none;
-        border-radius: 16px; padding: 14px 18px;
-        width: 100%; color: #4a5568;
+    input, textarea, select {
+        font-size: 16px !important;
+        line-height: normal !important;
         -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border-radius: 0;
+        touch-action: manipulation; 
     }
-    .nm-input:focus { box-shadow: inset 4px 4px 8px #d0d5de, inset -4px -4px 8px #ffffff; }
-    .nm-input::placeholder { color: #a0aec0; }
-
-    select.nm-input { padding-right: 40px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%235b85b5' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 5.5l6.5 6 6.5-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; }
-
-    .modal-overlay {
-        position: fixed; inset: 0; z-index: 100;
-        background: rgba(0,0,0,0.3); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-        display: flex; align-items: flex-end; justify-content: center;
-    }
-    .modal-body {
-        background: #f5f6f8; border-radius: 28px 28px 0 0;
-        width: 100%; max-width: 500px;
-        max-height: 92vh; overflow-y: auto;
-        padding: 24px 24px calc(24px + env(safe-area-inset-bottom));
+    
+    input[type="date"] {
+        min-height: 48px;
     }
 
-    .tag { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
-    .tag-blue { background: #dbeafe; color: #3b82f6; }
-    .tag-green { background: #dcfce7; color: #22c55e; }
-    .tag-amber { background: #fef3c7; color: #f59e0b; }
-    .tag-rose { background: #ffe4e6; color: #f43f5e; }
-    .tag-violet { background: #ede9fe; color: #8b5cf6; }
-    .tag-slate { background: #e2e8f0; color: #64748b; }
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* Inspiración del día - shimmer loading */
+    @keyframes shimmer {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+    }
+    .shimmer-loading {
+        background: linear-gradient(90deg, #e8eaee 25%, #f0f1f4 50%, #e8eaee 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.8s ease-in-out infinite;
+    }
+
+    /* Fade-in suave para la imagen de inspiración */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(12px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in-up {
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
 </style>
 ```
 
@@ -89,757 +100,1182 @@
     <div id="root"></div>
 
 <script type="text/babel">
-    const { useState, useEffect, useCallback, useRef } = React;
+    const { useState, useEffect, useCallback } = React;
 
-    // ═══════════════════════════════════════════════
-    // INDEXEDDB
-    // ═══════════════════════════════════════════════
+    // --- BASE DE DATOS INDEXEDDB ---
+    const DB_NAME = "AtelierDB";
+    const DB_VERSION = 1;
     const STORES = ['notas', 'referencias', 'libros', 'historia', 'expos', 'tecnicas'];
-    const initDB = () => new Promise((res) => {
-        const req = indexedDB.open("AtelierDB", 1);
-        req.onupgradeneeded = e => STORES.forEach(s => !e.target.result.objectStoreNames.contains(s) && e.target.result.createObjectStore(s, {keyPath: "id"}));
-        req.onsuccess = () => res(req.result);
-    });
-    const dbGetAll = async (s) => {
-        const db = await initDB();
-        return new Promise(res => {
-            const req = db.transaction(s, "readonly").objectStore(s).getAll();
-            req.onsuccess = () => res(req.result.sort((a,b) => b.id - a.id));
+
+    const initDB = () => {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(DB_NAME, DB_VERSION);
+            request.onupgradeneeded = (e) => {
+                const db = e.target.result;
+                STORES.forEach(store => {
+                    if (!db.objectStoreNames.contains(store)) {
+                        db.createObjectStore(store, { keyPath: "id" });
+                    }
+                });
+            };
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
         });
     };
-    const dbSave = async (s, d) => { const db = await initDB(); db.transaction(s, "readwrite").objectStore(s).put(d); };
-    const dbDelete = async (s, id) => { const db = await initDB(); db.transaction(s, "readwrite").objectStore(s).delete(id); };
 
-    // ═══════════════════════════════════════════════
-    // ICONOS
-    // ═══════════════════════════════════════════════
-    const Icon = ({ path, size = 24, className = "" }) => (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} dangerouslySetInnerHTML={{ __html: path }} />
+    const dbGetAll = async (storeName) => {
+        const db = await initDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, "readonly");
+            const store = tx.objectStore(storeName);
+            const request = store.getAll();
+            request.onsuccess = () => resolve(request.result.sort((a,b) => b.id - a.id));
+            request.onerror = () => reject(request.error);
+        });
+    };
+
+    const dbSave = async (storeName, data) => {
+        const db = await initDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, "readwrite");
+            const store = tx.objectStore(storeName);
+            const request = store.put(data);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    };
+
+    const dbDelete = async (storeName, id) => {
+        const db = await initDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, "readwrite");
+            const store = tx.objectStore(storeName);
+            const request = store.delete(id);
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    };
+
+    // --- ICONOS INTEGRADOS ---
+    const Icon = ({ path, size = 24, strokeWidth = 2, className = "" }) => (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" className={className} dangerouslySetInnerHTML={{ __html: path }} />
     );
-    const HomeIco = (p) => <Icon {...p} path='<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline>' />;
-    const BookIco = (p) => <Icon {...p} path='<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>' />;
-    const NoteIco = (p) => <Icon {...p} path='<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line>' />;
-    const GalleryIco = (p) => <Icon {...p} path='<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline>' />;
-    const ExpoIco = (p) => <Icon {...p} path='<rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline>' />;
-    const HistIco = (p) => <Icon {...p} path='<circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>' />;
-    const PlusIco = (p) => <Icon {...p} path='<line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line>' />;
-    const TrashIco = (p) => <Icon {...p} path='<polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>' />;
-    const EditIco = (p) => <Icon {...p} path='<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>' />;
-    const BackIco = (p) => <Icon {...p} path='<line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline>' />;
-    const SearchIco = (p) => <Icon {...p} path='<circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>' />;
-    const StarIco = (p) => <Icon {...p} path='<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>' />;
-    const XIco = (p) => <Icon {...p} path='<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>' />;
 
-    // ═══════════════════════════════════════════════
-    // DATOS DE RESPALDO
-    // ═══════════════════════════════════════════════
-    const FALLBACK_ART = [
-        { img: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800", title: "Composición Floral", artist: "Abstracción Moderna" },
-        { img: "https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=800", title: "Impresión de Amanecer", artist: "Claude Monet (Ref)" },
-        { img: "https://images.unsplash.com/photo-1549490349-8643362247b5?w=800", title: "Estudio de Color", artist: "Galería Atelier" }
+    const Home = (p) => <Icon {...p} path='<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline>' />;
+    const Target = (p) => <Icon {...p} path='<circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle>' />;
+    const Book = (p) => <Icon {...p} path='<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>' />;
+    const FileText = (p) => <Icon {...p} path='<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline>' />;
+    const ImageIcon = (p) => <Icon {...p} path='<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline>' />;
+    const ArrowLeft = (p) => <Icon {...p} path='<line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline>' />;
+    const Plus = (p) => <Icon {...p} path='<line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line>' />;
+    const Check = (p) => <Icon {...p} path='<polyline points="20 6 9 17 4 12"></polyline>' />;
+    const Landmark = (p) => <Icon {...p} path='<line x1="3" y1="22" x2="21" y2="22"></line><line x1="6" y1="18" x2="6" y2="11"></line><line x1="10" y1="18" x2="10" y2="11"></line><line x1="14" y1="18" x2="14" y2="11"></line><line x1="18" y1="18" x2="18" y2="11"></line><polygon points="12 2 20 7 4 7"></polygon>' />;
+    const Bookmark = (p) => <Icon {...p} path='<path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>' />;
+    const Tag = (p) => <Icon {...p} path='<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line>' />;
+    const Trash2 = (p) => <Icon {...p} path='<polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line>' />;
+    const Info = (p) => <Icon {...p} path='<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line>' />;
+    const Edit2 = (p) => <Icon {...p} path='<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>' />;
+    const MapPin = (p) => <Icon {...p} path='<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle>' />;
+    const Calendar = (p) => <Icon {...p} path='<rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>' />;
+    const Ticket = (p) => <Icon {...p} path='<path d="M15 5.25a3 3 0 0 1-3-3H6a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3a3 3 0 0 1-3-3v-5.25z"></path><line x1="9" y1="9" x2="15" y2="9"></line><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="15" y2="17"></line>' />;
+    const Palette = (p) => <Icon {...p} path='<circle cx="13.5" cy="6.5" r=".5"></circle><circle cx="17.5" cy="10.5" r=".5"></circle><circle cx="8.5" cy="7.5" r=".5"></circle><circle cx="6.5" cy="12.5" r=".5"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path>' />;
+    const Camera = (p) => <Icon {...p} path='<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle>' />;
+    const X = (p) => <Icon {...p} path='<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>' />;
+    const RefreshCw = (p) => <Icon {...p} path='<polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>' />;
+
+    // --- TEMA Y ESTILOS CONSTANTES ---
+    const theme = {
+      bgMain: "bg-[#f5f6f8]",
+      textDark: "text-[#4a5568]",
+      bgAccent: "bg-[#5b85b5]",
+      shadowFlat: "shadow-[6px_6px_16px_#d8dde6,-6px_-6px_16px_#ffffff]",
+      shadowInset: "shadow-[inset_4px_4px_8px_#d8dde6,inset_-4px_-4px_8px_#ffffff]"
+    };
+
+    // --- FRASES INSPIRADORAS DE ARTE ---
+    const FRASES_ARTE = [
+      { texto: "No pinto lo que veo, sino lo que siento.", autor: "Vincent van Gogh" },
+      { texto: "El arte es la mentira que nos permite comprender la verdad.", autor: "Pablo Picasso" },
+      { texto: "Los colores son las sonrisas de la naturaleza.", autor: "Leigh Hunt" },
+      { texto: "Todo artista fue primero un aficionado.", autor: "Ralph Waldo Emerson" },
+      { texto: "La creatividad requiere el coraje de soltar las certezas.", autor: "Erich Fromm" },
+      { texto: "La pintura es poesía silenciosa, y la poesía es pintura que habla.", autor: "Plutarco" },
+      { texto: "El arte no reproduce lo visible, lo hace visible.", autor: "Paul Klee" },
+      { texto: "El objetivo del arte es representar no la apariencia exterior, sino el significado interior.", autor: "Aristóteles" },
+      { texto: "Cada niño es un artista. El problema es seguir siendo artista cuando creces.", autor: "Pablo Picasso" },
+      { texto: "Aprendí que no se puede dar marcha atrás, que la esencia de la vida es ir hacia adelante.", autor: "Frida Kahlo" },
+      { texto: "El color es un poder que influye directamente en el alma.", autor: "Wassily Kandinsky" },
+      { texto: "Pinto para no llorar.", autor: "Paul Klee" },
+      { texto: "Un cuadro es un poema sin palabras.", autor: "Horacio" },
+      { texto: "Si pudiera decirlo con palabras, no habría razón para pintar.", autor: "Edward Hopper" },
+      { texto: "El arte lava del alma el polvo de la vida cotidiana.", autor: "Pablo Picasso" },
+      { texto: "El dibujo es la sinceridad del arte. No hay posibilidad de trampas.", autor: "Jean-Auguste-Dominique Ingres" },
+      { texto: "El verdadero arte es siempre donde menos lo esperas.", autor: "Jean Dubuffet" },
+      { texto: "El artista no es una persona especial; cada persona es un artista especial.", autor: "Meister Eckhart" },
+      { texto: "Un artista es un explorador. No debería tener miedo de lo desconocido.", autor: "Henri Matisse" },
+      { texto: "En la naturaleza, la luz crea el color. En la pintura, el color crea la luz.", autor: "Hans Hofmann" },
+      { texto: "La inspiración existe, pero tiene que encontrarte trabajando.", autor: "Pablo Picasso" },
+      { texto: "La perfección no es cosa pequeña, pero está hecha de pequeñas cosas.", autor: "Miguel Ángel" },
+      { texto: "Tengo miedo del día en que la tecnología supere la interacción humana.", autor: "Albert Einstein" },
+      { texto: "La simplicidad es la mayor sofisticación.", autor: "Leonardo da Vinci" },
+      { texto: "Uno no puede ser a la vez precavido e imaginativo.", autor: "Georgia O'Keeffe" },
+      { texto: "El arte es la expresión de los más profundos pensamientos por el camino más sencillo.", autor: "Albert Einstein" },
+      { texto: "Cierra los ojos y verás.", autor: "Joseph Joubert" },
+      { texto: "La vida es corta, el arte largo.", autor: "Hipócrates" },
+      { texto: "Donde el espíritu no trabaja con la mano, no hay arte.", autor: "Leonardo da Vinci" },
+      { texto: "Sin atmósfera, un cuadro no es nada.", autor: "Rembrandt" },
+      { texto: "La pintura es cosa mental.", autor: "Leonardo da Vinci" },
     ];
-    const QUOTES = [
-        { q: "La pintura es poesía muda; la poesía pintura ciega.", a: "Leonardo da Vinci" },
-        { q: "Aprende las reglas como un profesional para poder romperlas como un artista.", a: "Pablo Picasso" },
-        { q: "No pinto lo que veo, sino lo que siento.", a: "Vincent van Gogh" },
-        { q: "El arte lava del alma el polvo de la vida cotidiana.", a: "Pablo Picasso" },
-        { q: "La inspiración existe, pero tiene que encontrarte trabajando.", a: "Pablo Picasso" }
-    ];
-    const todayStr = () => new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
-    // ═══════════════════════════════════════════════
-    // MODAL CONFIRMAR
-    // ═══════════════════════════════════════════════
-    const ConfirmModal = ({ msg, onOk, onCancel }) => (
-        <div className="modal-overlay" onClick={onCancel}>
-            <div className="modal-body slide-up" onClick={e => e.stopPropagation()} style={{borderRadius: '28px', maxWidth: '360px', margin: '0 auto 0'}}>
-                <p className="text-center text-[#4a5568] text-sm mb-6 mt-2">{msg}</p>
-                <div className="flex gap-3">
-                    <button onClick={onCancel} className="flex-1 py-3 rounded-2xl nm-btn text-sm font-bold text-gray-500">Cancelar</button>
-                    <button onClick={onOk} className="flex-1 py-3 rounded-2xl bg-red-400 text-white text-sm font-bold" style={{boxShadow:'4px 4px 10px #d8dde6, -4px -4px 10px #ffffff'}}>Eliminar</button>
-                </div>
-            </div>
-        </div>
-    );
+    // --- Función para obtener un número "semilla" basado en el día ---
+    const getDaySeed = () => {
+      const today = new Date();
+      const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
+      return today.getFullYear() * 1000 + dayOfYear;
+    };
 
-    // ═══════════════════════════════════════════════
-    // FORM MODAL GENÉRICO
-    // ═══════════════════════════════════════════════
-    const FormModal = ({ title, fields, data, onSave, onClose }) => {
-        const [form, setForm] = useState(data || {});
-        const set = (k, v) => setForm(p => ({...p, [k]: v}));
-        const handleSave = () => {
-            const required = fields.filter(f => f.required);
-            for (const f of required) {
-                if (!form[f.key] || !form[f.key].trim()) return;
+    // --- Seeded pseudo-random (para consistencia diaria) ---
+    const seededRandom = (seed) => {
+      const x = Math.sin(seed * 9301 + 49297) * 49297;
+      return x - Math.floor(x);
+    };
+
+    // --- FUNCIONES UTILERÍA ---
+    const formatShortDate = (dateString) => {
+      if (!dateString) return 'S/F';
+      const date = new Date(dateString + 'T00:00:00');
+      if (isNaN(date)) return dateString;
+      return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+    };
+
+    const obtenerFechaActual = () => {
+      return new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    };
+
+    // --- COMPONENTE: INSPIRACIÓN DEL DÍA ---
+    const InspiracionDelDia = () => {
+      const [obra, setObra] = useState(null);
+      const [frase, setFrase] = useState(null);
+      const [loading, setLoading] = useState(true);
+      const [error, setError] = useState(false);
+      const [imgLoaded, setImgLoaded] = useState(false);
+
+      const fetchObraDelDia = useCallback(async (forceNew = false) => {
+        setLoading(true);
+        setError(false);
+        setImgLoaded(false);
+
+        const seed = getDaySeed() + (forceNew ? Math.floor(Math.random() * 10000) : 0);
+
+        // Seleccionar frase del día
+        const fraseIndex = Math.floor(seededRandom(seed) * FRASES_ARTE.length);
+        setFrase(FRASES_ARTE[fraseIndex]);
+
+        // Comprobar caché en sessionStorage (solo si no es forzado)
+        if (!forceNew) {
+          try {
+            const cached = sessionStorage.getItem('atelier_inspiracion');
+            if (cached) {
+              const parsed = JSON.parse(cached);
+              if (parsed.seed === getDaySeed()) {
+                setObra(parsed.obra);
+                setLoading(false);
+                return;
+              }
             }
-            onSave(form);
-        };
+          } catch(e) {}
+        }
+
+        try {
+          // IDs de obras destacadas del Art Institute of Chicago (public domain, con imagen)
+          // Mezcla de estilos: impresionismo, renacimiento, barroco, japonés, moderno...
+          const CURATED_IDS = [
+            27992, 28560, 111628, 129884, 80607, 87479, 14598, 20684, 
+            16568, 111317, 111442, 16571, 16487, 28067, 59426, 21023,
+            14655, 100858, 76395, 117271, 185905, 151363, 24645, 4081,
+            11434, 15401, 6596, 14620, 117266, 16327, 86385, 109819,
+            25865, 76244, 83642, 102611, 11272, 15468, 229406, 75644,
+            27281, 24836, 89856, 66039, 64818, 100472, 70443, 87045,
+            52560, 21976, 80084, 7124, 23684, 20579, 73417, 146953,
+            36161, 110634, 8958, 142476, 22432, 71829, 90048, 93820,
+          ];
+
+          const artworkIndex = Math.floor(seededRandom(seed + 1) * CURATED_IDS.length);
+          const artworkId = CURATED_IDS[artworkIndex];
+
+          const response = await fetch(
+            `https://api.artic.edu/api/v1/artworks/${artworkId}?fields=id,title,artist_display,date_display,image_id,thumbnail,medium_display,dimensions,classification_title`
+          );
+
+          if (!response.ok) throw new Error('API error');
+          const data = await response.json();
+          const artwork = data.data;
+
+          if (!artwork || !artwork.image_id) throw new Error('No image');
+
+          const obraData = {
+            titulo: artwork.title || 'Sin título',
+            artista: artwork.artist_display || 'Artista desconocido',
+            fecha: artwork.date_display || '',
+            medio: artwork.medium_display || '',
+            clasificacion: artwork.classification_title || '',
+            imageUrl: `https://www.artic.edu/iiif/2/${artwork.image_id}/full/843,/0/default.jpg`,
+            thumbColor: artwork.thumbnail?.lqip || null,
+            altText: artwork.thumbnail?.alt_text || artwork.title,
+            link: `https://www.artic.edu/artworks/${artwork.id}`,
+          };
+
+          setObra(obraData);
+
+          // Cachear para el día
+          try {
+            sessionStorage.setItem('atelier_inspiracion', JSON.stringify({ seed: getDaySeed(), obra: obraData }));
+          } catch(e) {}
+
+        } catch (err) {
+          console.warn('Error fetching artwork:', err);
+          setError(true);
+        }
+        setLoading(false);
+      }, []);
+
+      useEffect(() => { fetchObraDelDia(); }, [fetchObraDelDia]);
+
+      // Estado: cargando
+      if (loading) {
         return (
-            <div className="modal-overlay" onClick={onClose}>
-                <div className="modal-body slide-up hide-scrollbar" onClick={e => e.stopPropagation()}>
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="font-display text-2xl italic text-[#4a5568]">{title}</h2>
-                        <button onClick={onClose} className="p-2 nm-btn rounded-full"><XIco size={18} /></button>
-                    </div>
-                    <div className="space-y-4">
-                        {fields.map(f => (
-                            <div key={f.key}>
-                                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-2 mb-1 block">{f.label}</label>
-                                {f.type === 'textarea' ? (
-                                    <textarea className="nm-input" rows={f.rows || 4} placeholder={f.placeholder || ''} value={form[f.key] || ''} onChange={e => set(f.key, e.target.value)} />
-                                ) : f.type === 'select' ? (
-                                    <select className="nm-input" value={form[f.key] || f.options[0]} onChange={e => set(f.key, e.target.value)}>
-                                        {f.options.map(o => <option key={o} value={o}>{o}</option>)}
-                                    </select>
-                                ) : f.type === 'rating' ? (
-                                    <div className="flex gap-2 ml-2 mt-1">
-                                        {[1,2,3,4,5].map(n => (
-                                            <button key={n} onClick={() => set(f.key, n)} className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${(form[f.key] || 0) >= n ? 'text-amber-400' : 'text-gray-300'} nm-btn`}>
-                                                <StarIco size={18} className={(form[f.key] || 0) >= n ? 'fill-amber-400' : ''} />
-                                            </button>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <input type={f.type || 'text'} className="nm-input" placeholder={f.placeholder || ''} value={form[f.key] || ''} onChange={e => set(f.key, e.target.value)} />
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                    <button onClick={handleSave} className="w-full mt-6 py-4 rounded-2xl bg-[#5b85b5] text-white font-bold text-sm tracking-wider uppercase" style={{boxShadow:'4px 4px 10px #d8dde6, -4px -4px 10px #ffffff'}}>
-                        Guardar
-                    </button>
-                </div>
+          <div className="mb-8">
+            <h3 className="text-xs text-gray-400 mb-3 ml-2 font-bold uppercase tracking-widest">Inspiración del Día</h3>
+            <div className={`rounded-3xl ${theme.bgMain} ${theme.shadowFlat} overflow-hidden`}>
+              <div className="shimmer-loading w-full" style={{ aspectRatio: '4/5' }}></div>
+              <div className="px-5 py-5 space-y-2">
+                <div className="shimmer-loading h-3 w-2/3 rounded-full"></div>
+                <div className="shimmer-loading h-2 w-1/2 rounded-full"></div>
+              </div>
             </div>
+          </div>
         );
+      }
+
+      // Estado: error
+      if (error || !obra) {
+        return (
+          <div className="mb-8">
+            <h3 className="text-xs text-gray-400 mb-3 ml-2 font-bold uppercase tracking-widest">Inspiración del Día</h3>
+            <div className={`p-6 rounded-3xl ${theme.bgMain} ${theme.shadowFlat} text-center`}>
+              <Palette size={32} className="mx-auto mb-3 text-gray-300" />
+              <p className="text-sm text-gray-400 italic font-serif mb-4">No se pudo cargar la obra de hoy.</p>
+              <button onClick={() => fetchObraDelDia(true)} className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest text-[#5b85b5] ${theme.shadowFlat} active:shadow-[inset_4px_4px_8px_#d8dde6,inset_-4px_-4px_8px_#ffffff] active:scale-95 transition-all`}>
+                <RefreshCw size={14} /> Reintentar
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      return (
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-3 ml-2 mr-2">
+            <h3 className="text-xs text-gray-400 font-bold uppercase tracking-widest">Inspiración del Día</h3>
+            <button onClick={() => fetchObraDelDia(true)} className="text-gray-300 active:text-[#5b85b5] active:scale-90 transition-all p-1" title="Otra obra">
+              <RefreshCw size={14} />
+            </button>
+          </div>
+          
+          <div className={`rounded-3xl ${theme.bgMain} ${theme.shadowFlat} overflow-hidden fade-in-up`}>
+            {/* Imagen de la obra */}
+            <div className="relative w-full overflow-hidden rounded-t-3xl" style={{ 
+              backgroundColor: obra.thumbColor ? undefined : '#2a2a2a',
+            }}>
+              {/* LQIP background while loading */}
+              {obra.thumbColor && !imgLoaded && (
+                <img src={obra.thumbColor} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ filter: 'blur(20px)', transform: 'scale(1.1)' }} />
+              )}
+              <img 
+                src={obra.imageUrl} 
+                alt={obra.altText}
+                className="w-full object-contain relative z-[1]"
+                style={{ 
+                  maxHeight: '420px',
+                  opacity: imgLoaded ? 1 : 0,
+                  transition: 'opacity 0.5s ease-in-out',
+                  backgroundColor: '#1a1a1a'
+                }}
+                onLoad={() => setImgLoaded(true)}
+                onError={(e) => { e.target.style.display = 'none'; }}
+              />
+              
+              {/* Overlay con info en la parte inferior de la imagen */}
+              <div className="absolute bottom-0 left-0 right-0 z-[2]" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.3) 60%, transparent 100%)' }}>
+                <div className="px-5 py-4">
+                  <p className="text-[9px] text-white/60 uppercase tracking-[0.2em] font-bold mb-1">Inspiración del Día</p>
+                  <p className="text-white text-sm font-serif leading-snug line-clamp-2" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>{obra.titulo}</p>
+                  <p className="text-white/70 text-xs mt-1 line-clamp-1">{obra.artista}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Frase inspiradora */}
+            {frase && (
+              <div className="px-6 py-5 text-center">
+                <p className={`font-serif italic ${theme.textDark} text-base leading-relaxed mb-2`}>"{frase.texto}"</p>
+                <p className="text-[10px] text-[#5b85b5] font-bold uppercase tracking-[0.2em]">— {frase.autor}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      );
     };
 
-    // ═══════════════════════════════════════════════
-    // SECTION HEADER (reutilizable)
-    // ═══════════════════════════════════════════════
-    const SectionHeader = ({ title, subtitle, onBack, onAdd, count }) => (
-        <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-                <button onClick={onBack} className="p-2 nm-btn rounded-full"><BackIco size={18} /></button>
-                <div>
-                    <h2 className="font-display text-xl italic text-[#4a5568]">{title}</h2>
-                    <p className="text-[10px] text-gray-400 uppercase tracking-widest">{count} {subtitle}</p>
+    // --- COMPONENTES DE UI ---
+
+    const BottomNav = ({ activeTab, setActiveTab }) => {
+      const tabs = [
+        { id: 'inicio', icon: Home, label: 'INICIO' },
+        { id: 'historia', icon: Landmark, label: 'HISTORIA' },
+        { id: 'libros', icon: Book, label: 'LIBROS' },
+        { id: 'notas', icon: FileText, label: 'NOTAS' },
+        { id: 'galeria', icon: ImageIcon, label: 'GALERÍA' },
+        { id: 'expos', icon: Ticket, label: 'EXPOS' },
+      ];
+
+      return (
+        <nav className={`absolute bottom-0 w-full px-1 pt-3 safe-pb-nav ${theme.bgMain} shadow-[0_-10px_20px_rgba(216,221,230,0.5)] flex justify-between rounded-t-3xl z-[50]`}>
+          {tabs.map((tab) => (
+            <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex flex-col items-center justify-center flex-1 py-1 gap-1 min-w-0 transition-all active:scale-95 ${activeTab === tab.id ? 'text-[#5b85b5]' : 'text-gray-400 hover:text-gray-500'}`}>
+              <tab.icon size={22} strokeWidth={activeTab === tab.id ? 2.5 : 2} className="flex-shrink-0" />
+              <span className="text-[9px] font-bold tracking-wider truncate px-1 w-full text-center">{tab.label}</span>
+            </button>
+          ))}
+        </nav>
+      );
+    };
+
+    const HomeView = ({ historia, libros, notas, referencias, expos, tecnicas, setActiveTab, abrirFormulario }) => {
+      const menuItems = [
+        { label: 'HISTORIA', count: historia.length, tab: 'historia' },
+        { label: 'LIBROS', count: libros.length, tab: 'libros' },
+        { label: 'NOTAS', count: notas.length, tab: 'notas' },
+        { label: 'REFS', count: referencias.length, tab: 'galeria' },
+        { label: 'TÉCNICAS', count: tecnicas.length, tab: 'tecnicas' },
+        { label: 'EXPOS', count: expos.length, tab: 'expos' },
+      ];
+
+      return (
+        <main className="px-6 space-y-10 h-full overflow-y-auto hide-scrollbar main-content-pb pt-4">
+          <div className="mt-2">
+            <h2 className={`font-serif text-3xl italic ${theme.textDark} mb-1`}>Buenos días, artista.</h2>
+            <p className="text-sm text-gray-500 capitalize">{obtenerFechaActual()}</p>
+          </div>
+
+          {/* === INSPIRACIÓN DEL DÍA === */}
+          <InspiracionDelDia />
+
+          <div>
+            <h3 className="text-xs text-gray-400 mb-3 ml-2 font-bold uppercase tracking-widest">Reflexión Reciente</h3>
+            <div onClick={() => historia.length > 0 ? setActiveTab('historia') : abrirFormulario('historia')} className={`p-6 rounded-3xl ${theme.bgMain} ${theme.shadowFlat} border-l-4 border-[#5b85b5] cursor-pointer active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-[0.98]`}>
+              {historia.length > 0 ? (
+                <>
+                  <p className={`font-serif italic ${theme.textDark} text-lg leading-relaxed line-clamp-3`}>"{historia[0].resumen}"</p>
+                  <div className="flex justify-between items-center mt-4">
+                    <span className="text-[10px] text-[#5b85b5] font-bold uppercase tracking-widest line-clamp-1">Del apunte: {historia[0].tema}</span>
+                    <span className="text-[10px] text-gray-400 uppercase tracking-widest flex-shrink-0 ml-2">{historia[0].fecha}</span>
+                  </div>
+                </>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-2 text-gray-400">
+                  <Plus size={24} className="mb-2 text-[#5b85b5]" />
+                  <p className="font-serif italic text-sm">Aún no tienes apuntes.</p>
+                  <p className="text-xs font-bold uppercase tracking-widest mt-1 text-[#5b85b5]">Escribe tu primera reflexión</p>
                 </div>
+              )}
             </div>
-            <button onClick={onAdd} className="p-3 nm-btn rounded-full text-[#5b85b5]"><PlusIco size={20} /></button>
+          </div>
+
+          <div>
+            <h3 className="text-xs text-gray-400 mb-3 ml-2 font-bold uppercase tracking-widest">Tu Estudio</h3>
+            <div className="grid grid-cols-3 gap-4">
+              {menuItems.map((item, index) => (
+                <button key={index} onClick={() => setActiveTab(item.tab)} className={`aspect-square rounded-2xl flex flex-col items-center justify-center gap-2 ${theme.bgMain} ${theme.shadowFlat} active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-95`}>
+                  <span className={`text-2xl font-serif ${item.count > 0 ? 'text-[#5b85b5]' : 'text-gray-400'}`}>{item.count > 0 ? item.count : 'O'}</span>
+                  <span className="text-[10px] uppercase tracking-widest text-gray-500">{item.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </main>
+      );
+    };
+
+    const HistoriaList = ({ historia, abrirFormulario, setSelectedItem }) => (
+      <main className="px-6 h-full overflow-y-auto hide-scrollbar main-content-pb pt-4 bg-[#f5f6f8]">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className={`font-serif text-2xl ${theme.textDark}`}>Apuntes e Historia</h2>
+          <button onClick={() => abrirFormulario('historia')} className={`w-10 h-10 rounded-full ${theme.bgMain} ${theme.shadowFlat} flex items-center justify-center text-[#5b85b5] active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-95`}><Plus size={20} /></button>
         </div>
+        <div className="space-y-6">
+          {historia.length === 0 && <div className="text-center mt-16 text-gray-400"><Landmark size={40} className="mx-auto mb-4 opacity-30" /><p className="italic font-serif">Tu cuaderno de historia está en blanco.</p></div>}
+          {historia.map(apunte => (
+            <div key={apunte.id} className={`p-6 rounded-3xl ${theme.bgMain} ${theme.shadowFlat} relative overflow-hidden transition-all`}>
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#5b85b5] opacity-50"></div>
+              <div className="flex justify-between items-baseline mb-2">
+                <h3 className={`font-serif text-xl ${theme.textDark}`}>{apunte.tema}</h3>
+                <span className="text-xs text-gray-400 font-mono">{apunte.fecha}</span>
+              </div>
+              <div className="flex gap-2 mb-4 flex-wrap">
+                {apunte.etiquetas.map((tag, i) => <span key={i} className={`text-[9px] px-2 py-1 rounded-md ${theme.shadowInset} text-[#5b85b5] uppercase tracking-widest`}>{tag}</span>)}
+              </div>
+              <p className="text-sm text-gray-600 leading-relaxed line-clamp-3 mb-4">{apunte.resumen}</p>
+              <button onClick={() => setSelectedItem({ type: 'historia', data: apunte })} className="text-xs font-bold text-[#5b85b5] uppercase tracking-widest flex items-center gap-1 active:opacity-50">Leer apunte <ArrowLeft size={12} className="rotate-180" /></button>
+            </div>
+          ))}
+        </div>
+      </main>
     );
 
-    // ═══════════════════════════════════════════════
-    // SEARCH BAR
-    // ═══════════════════════════════════════════════
-    const SearchBar = ({ value, onChange, placeholder }) => (
-        <div className="relative mb-4">
-            <SearchIco size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-            <input className="nm-input pl-11" placeholder={placeholder || 'Buscar...'} value={value} onChange={e => onChange(e.target.value)} />
+    const LibrosList = ({ libros, abrirFormulario, setSelectedItem }) => (
+      <main className="px-6 h-full overflow-y-auto hide-scrollbar main-content-pb pt-4 bg-[#f5f6f8]">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className={`font-serif text-2xl ${theme.textDark}`}>Mi Biblioteca</h2>
+          <button onClick={() => abrirFormulario('libro')} className={`w-10 h-10 rounded-full ${theme.bgMain} ${theme.shadowFlat} flex items-center justify-center text-[#5b85b5] active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-95`}><Plus size={20} /></button>
         </div>
+        <div className="space-y-6">
+          {libros.length === 0 && <div className="text-center mt-16 text-gray-400"><Book size={40} className="mx-auto mb-4 opacity-30" /><p className="italic font-serif">Añade tu primer libro.</p></div>}
+          {libros.map(libro => (
+            <div key={libro.id} onClick={() => setSelectedItem({ type: 'libro', data: libro })} className={`p-4 rounded-3xl ${theme.bgMain} ${theme.shadowFlat} flex gap-4 items-center cursor-pointer active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-[0.98]`}>
+              <div className="w-20 h-28 rounded-xl overflow-hidden shadow-inner flex-shrink-0 bg-gray-200">
+                <img src={libro.imagen} alt={libro.titulo} className="w-full h-full object-cover" />
+              </div>
+              <div className="flex-1 pr-2">
+                <h3 className={`font-serif text-lg leading-tight mb-1 ${theme.textDark}`}>{libro.titulo}</h3>
+                <p className="text-xs text-[#5b85b5] mb-2">{libro.autor}</p>
+                <div className="flex items-center gap-2 mb-2">
+                  <Bookmark size={12} className={libro.estado === 'Terminado' ? "text-[#b85b5b]" : "text-gray-400"} />
+                  <span className="text-[10px] uppercase tracking-widest text-gray-500">{libro.estado}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </main>
     );
 
-    // ═══════════════════════════════════════════════
-    // EMPTY STATE
-    // ═══════════════════════════════════════════════
-    const EmptyState = ({ icon: Ico, text }) => (
-        <div className="flex flex-col items-center justify-center py-20 text-gray-400 fade-in">
-            <Ico size={48} className="opacity-20 mb-4" />
-            <p className="font-display italic text-lg">{text}</p>
+    const NotasList = ({ notas, abrirFormulario, setSelectedItem }) => (
+      <main className="px-6 h-full overflow-y-auto hide-scrollbar main-content-pb pt-4 bg-[#f5f6f8]">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className={`font-serif text-2xl ${theme.textDark}`}>Cuaderno de Obras</h2>
+          <button onClick={() => abrirFormulario('nota')} className={`w-12 h-12 rounded-full ${theme.bgMain} ${theme.shadowFlat} flex items-center justify-center text-[#5b85b5] active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-95`}><Plus size={24} /></button>
         </div>
+        <div className="space-y-6">
+          {notas.length === 0 && <div className="text-center mt-16 text-gray-400"><FileText size={40} className="mx-auto mb-4 opacity-30" /><p className="italic font-serif">Aún no has analizado ninguna obra.</p></div>}
+          {notas.map(nota => (
+            <div key={nota.id} onClick={() => setSelectedItem({ type: 'nota', data: nota })} className={`p-4 rounded-3xl ${theme.bgMain} ${theme.shadowFlat} active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all cursor-pointer active:scale-[0.98]`}>
+              <div className="aspect-[4/3] w-full rounded-2xl overflow-hidden mb-4 shadow-inner bg-gray-200">
+                <img src={nota.imagen} alt={nota.titulo} className="w-full h-full object-cover opacity-90" />
+              </div>
+              <div className="px-2">
+                <div className="flex justify-between items-start mb-1">
+                  <h3 className={`font-serif text-xl ${theme.textDark}`}>{nota.titulo}</h3>
+                  <span className="text-xs text-gray-400 font-mono">{nota.año}</span>
+                </div>
+                <p className="text-sm text-[#5b85b5] mb-3">{nota.autor}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </main>
     );
 
-    // ═══════════════════════════════════════════════
-    // SECCIÓN: HISTORIA
-    // ═══════════════════════════════════════════════
-    const PERIODOS = ['Prehistoria', 'Antigüedad', 'Medieval', 'Renacimiento', 'Barroco', 'Neoclásico', 'Romanticismo', 'Impresionismo', 'Moderno', 'Contemporáneo', 'Otro'];
-    const periodoTag = (p) => {
-        const map = { 'Prehistoria':'tag-slate','Antigüedad':'tag-amber','Medieval':'tag-rose','Renacimiento':'tag-green','Barroco':'tag-violet','Impresionismo':'tag-blue','Moderno':'tag-amber','Contemporáneo':'tag-blue' };
-        return map[p] || 'tag-slate';
-    };
-
-    const HistoriaSection = ({ onBack, onDataChange }) => {
-        const [items, setItems] = useState([]);
-        const [search, setSearch] = useState('');
-        const [showForm, setShowForm] = useState(false);
-        const [editing, setEditing] = useState(null);
-        const [confirm, setConfirm] = useState(null);
-
-        const load = async () => { const d = await dbGetAll('historia'); setItems(d); };
-        useEffect(() => { load(); }, []);
-
-        const filtered = items.filter(i => !search || [i.tema, i.resumen, i.periodo].join(' ').toLowerCase().includes(search.toLowerCase()));
-
-        const save = async (form) => {
-            const item = { ...form, id: editing ? editing.id : Date.now(), fecha: editing ? editing.fecha : todayStr() };
-            await dbSave('historia', item);
-            setShowForm(false); setEditing(null); load(); onDataChange();
-        };
-        const del = async (id) => { await dbDelete('historia', id); setConfirm(null); load(); onDataChange(); };
-
-        const fields = [
-            { key: 'tema', label: 'Tema', required: true, placeholder: 'Ej: El claroscuro de Caravaggio' },
-            { key: 'periodo', label: 'Periodo', type: 'select', options: PERIODOS },
-            { key: 'resumen', label: 'Apuntes', type: 'textarea', rows: 5, placeholder: 'Tu reflexión o apuntes sobre el tema...' }
-        ];
-
-        return (
-            <div className="fade-in">
-                <SectionHeader title="Historia" subtitle="apuntes" onBack={onBack} onAdd={() => { setEditing(null); setShowForm(true); }} count={items.length} />
-                <SearchBar value={search} onChange={setSearch} placeholder="Buscar en historia..." />
-                {filtered.length === 0 ? <EmptyState icon={HistIco} text="Sin apuntes de historia aún" /> : (
-                    <div className="space-y-3">
-                        {filtered.map(item => (
-                            <div key={item.id} className="p-5 rounded-2xl nm-flat fade-in">
-                                <div className="flex justify-between items-start mb-2">
-                                    <h3 className="font-display text-lg italic text-[#4a5568] flex-1 mr-2">{item.tema}</h3>
-                                    <div className="flex gap-1 flex-shrink-0">
-                                        <button onClick={() => { setEditing(item); setShowForm(true); }} className="p-2 nm-btn rounded-xl text-gray-400"><EditIco size={14} /></button>
-                                        <button onClick={() => setConfirm(item.id)} className="p-2 nm-btn rounded-xl text-gray-400"><TrashIco size={14} /></button>
-                                    </div>
-                                </div>
-                                {item.resumen && <p className="text-sm text-gray-500 line-clamp-3 mb-3 leading-relaxed">{item.resumen}</p>}
-                                <div className="flex justify-between items-center">
-                                    {item.periodo && <span className={`tag ${periodoTag(item.periodo)}`}>{item.periodo}</span>}
-                                    <span className="text-[10px] text-gray-400">{item.fecha}</span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-                {showForm && <FormModal title={editing ? 'Editar Apunte' : 'Nuevo Apunte'} fields={fields} data={editing || { periodo: PERIODOS[0] }} onSave={save} onClose={() => { setShowForm(false); setEditing(null); }} />}
-                {confirm && <ConfirmModal msg="¿Eliminar este apunte de historia?" onOk={() => del(confirm)} onCancel={() => setConfirm(null)} />}
-            </div>
-        );
-    };
-
-    // ═══════════════════════════════════════════════
-    // SECCIÓN: LIBROS
-    // ═══════════════════════════════════════════════
-    const ESTADOS_LIBRO = ['Pendiente', 'Leyendo', 'Leído', 'Abandonado'];
-    const estadoTag = (e) => {
-        const map = { 'Pendiente':'tag-slate','Leyendo':'tag-blue','Leído':'tag-green','Abandonado':'tag-rose' };
-        return map[e] || 'tag-slate';
-    };
-
-    const LibrosSection = ({ onBack, onDataChange }) => {
-        const [items, setItems] = useState([]);
-        const [search, setSearch] = useState('');
-        const [showForm, setShowForm] = useState(false);
-        const [editing, setEditing] = useState(null);
-        const [confirm, setConfirm] = useState(null);
-
-        const load = async () => { const d = await dbGetAll('libros'); setItems(d); };
-        useEffect(() => { load(); }, []);
-
-        const filtered = items.filter(i => !search || [i.titulo, i.autor, i.estado].join(' ').toLowerCase().includes(search.toLowerCase()));
-
-        const save = async (form) => {
-            const item = { ...form, id: editing ? editing.id : Date.now(), fecha: editing ? editing.fecha : todayStr() };
-            await dbSave('libros', item);
-            setShowForm(false); setEditing(null); load(); onDataChange();
-        };
-        const del = async (id) => { await dbDelete('libros', id); setConfirm(null); load(); onDataChange(); };
-
-        const fields = [
-            { key: 'titulo', label: 'Título', required: true, placeholder: 'Ej: Goodbye Things' },
-            { key: 'autor', label: 'Autor', placeholder: 'Ej: Fumio Sasaki' },
-            { key: 'estado', label: 'Estado', type: 'select', options: ESTADOS_LIBRO },
-            { key: 'valoracion', label: 'Valoración', type: 'rating' },
-            { key: 'notas', label: 'Notas', type: 'textarea', rows: 4, placeholder: 'Tus impresiones del libro...' }
-        ];
-
-        return (
-            <div className="fade-in">
-                <SectionHeader title="Libros" subtitle="en tu biblioteca" onBack={onBack} onAdd={() => { setEditing(null); setShowForm(true); }} count={items.length} />
-                <SearchBar value={search} onChange={setSearch} placeholder="Buscar libros..." />
-                {filtered.length === 0 ? <EmptyState icon={BookIco} text="Tu biblioteca está vacía" /> : (
-                    <div className="space-y-3">
-                        {filtered.map(item => (
-                            <div key={item.id} className="p-5 rounded-2xl nm-flat fade-in">
-                                <div className="flex justify-between items-start mb-1">
-                                    <h3 className="font-display text-lg italic text-[#4a5568] flex-1 mr-2">{item.titulo}</h3>
-                                    <div className="flex gap-1 flex-shrink-0">
-                                        <button onClick={() => { setEditing(item); setShowForm(true); }} className="p-2 nm-btn rounded-xl text-gray-400"><EditIco size={14} /></button>
-                                        <button onClick={() => setConfirm(item.id)} className="p-2 nm-btn rounded-xl text-gray-400"><TrashIco size={14} /></button>
-                                    </div>
-                                </div>
-                                {item.autor && <p className="text-xs text-[#5b85b5] font-bold uppercase tracking-wider mb-2">{item.autor}</p>}
-                                {item.notas && <p className="text-sm text-gray-500 line-clamp-2 mb-3 leading-relaxed">{item.notas}</p>}
-                                <div className="flex justify-between items-center">
-                                    <div className="flex items-center gap-2">
-                                        <span className={`tag ${estadoTag(item.estado)}`}>{item.estado || 'Pendiente'}</span>
-                                        {item.valoracion > 0 && (
-                                            <span className="text-[10px] text-amber-400">{'★'.repeat(item.valoracion)}{'☆'.repeat(5-item.valoracion)}</span>
-                                        )}
-                                    </div>
-                                    <span className="text-[10px] text-gray-400">{item.fecha}</span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-                {showForm && <FormModal title={editing ? 'Editar Libro' : 'Nuevo Libro'} fields={fields} data={editing || { estado: ESTADOS_LIBRO[0], valoracion: 0 }} onSave={save} onClose={() => { setShowForm(false); setEditing(null); }} />}
-                {confirm && <ConfirmModal msg="¿Eliminar este libro?" onOk={() => del(confirm)} onCancel={() => setConfirm(null)} />}
-            </div>
-        );
-    };
-
-    // ═══════════════════════════════════════════════
-    // SECCIÓN: NOTAS
-    // ═══════════════════════════════════════════════
-    const CATEGORIAS_NOTA = ['Idea', 'Reflexión', 'Proyecto', 'Técnica', 'Inspiración', 'Otro'];
-    const catTag = (c) => {
-        const map = { 'Idea':'tag-amber','Reflexión':'tag-violet','Proyecto':'tag-blue','Técnica':'tag-green','Inspiración':'tag-rose' };
-        return map[c] || 'tag-slate';
-    };
-
-    const NotasSection = ({ onBack, onDataChange }) => {
-        const [items, setItems] = useState([]);
-        const [search, setSearch] = useState('');
-        const [showForm, setShowForm] = useState(false);
-        const [editing, setEditing] = useState(null);
-        const [confirm, setConfirm] = useState(null);
-
-        const load = async () => { const d = await dbGetAll('notas'); setItems(d); };
-        useEffect(() => { load(); }, []);
-
-        const filtered = items.filter(i => !search || [i.titulo, i.contenido, i.categoria].join(' ').toLowerCase().includes(search.toLowerCase()));
-
-        const save = async (form) => {
-            const item = { ...form, id: editing ? editing.id : Date.now(), fecha: editing ? editing.fecha : todayStr() };
-            await dbSave('notas', item);
-            setShowForm(false); setEditing(null); load(); onDataChange();
-        };
-        const del = async (id) => { await dbDelete('notas', id); setConfirm(null); load(); onDataChange(); };
-
-        const fields = [
-            { key: 'titulo', label: 'Título', required: true, placeholder: 'Ej: Ideas para serie de acuarelas' },
-            { key: 'categoria', label: 'Categoría', type: 'select', options: CATEGORIAS_NOTA },
-            { key: 'contenido', label: 'Contenido', type: 'textarea', rows: 6, placeholder: 'Escribe tu nota...' }
-        ];
-
-        return (
-            <div className="fade-in">
-                <SectionHeader title="Notas" subtitle="anotaciones" onBack={onBack} onAdd={() => { setEditing(null); setShowForm(true); }} count={items.length} />
-                <SearchBar value={search} onChange={setSearch} placeholder="Buscar notas..." />
-                {filtered.length === 0 ? <EmptyState icon={NoteIco} text="No hay notas todavía" /> : (
-                    <div className="space-y-3">
-                        {filtered.map(item => (
-                            <div key={item.id} className="p-5 rounded-2xl nm-flat fade-in">
-                                <div className="flex justify-between items-start mb-2">
-                                    <h3 className="font-display text-lg italic text-[#4a5568] flex-1 mr-2">{item.titulo}</h3>
-                                    <div className="flex gap-1 flex-shrink-0">
-                                        <button onClick={() => { setEditing(item); setShowForm(true); }} className="p-2 nm-btn rounded-xl text-gray-400"><EditIco size={14} /></button>
-                                        <button onClick={() => setConfirm(item.id)} className="p-2 nm-btn rounded-xl text-gray-400"><TrashIco size={14} /></button>
-                                    </div>
-                                </div>
-                                {item.contenido && <p className="text-sm text-gray-500 line-clamp-3 mb-3 leading-relaxed">{item.contenido}</p>}
-                                <div className="flex justify-between items-center">
-                                    <span className={`tag ${catTag(item.categoria)}`}>{item.categoria || 'Otro'}</span>
-                                    <span className="text-[10px] text-gray-400">{item.fecha}</span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-                {showForm && <FormModal title={editing ? 'Editar Nota' : 'Nueva Nota'} fields={fields} data={editing || { categoria: CATEGORIAS_NOTA[0] }} onSave={save} onClose={() => { setShowForm(false); setEditing(null); }} />}
-                {confirm && <ConfirmModal msg="¿Eliminar esta nota?" onOk={() => del(confirm)} onCancel={() => setConfirm(null)} />}
-            </div>
-        );
-    };
-
-    // ═══════════════════════════════════════════════
-    // SECCIÓN: GALERÍA / REFERENCIAS
-    // ═══════════════════════════════════════════════
-    const TIPOS_REF = ['Pintura', 'Escultura', 'Fotografía', 'Grabado', 'Dibujo', 'Digital', 'Mixta', 'Otra'];
-    const tipoTag = (t) => {
-        const map = { 'Pintura':'tag-blue','Escultura':'tag-slate','Fotografía':'tag-green','Grabado':'tag-amber','Dibujo':'tag-violet','Digital':'tag-rose' };
-        return map[t] || 'tag-slate';
-    };
-
-    const GaleriaSection = ({ onBack, onDataChange }) => {
-        const [items, setItems] = useState([]);
-        const [search, setSearch] = useState('');
-        const [showForm, setShowForm] = useState(false);
-        const [editing, setEditing] = useState(null);
-        const [confirm, setConfirm] = useState(null);
-
-        const load = async () => { const d = await dbGetAll('referencias'); setItems(d); };
-        useEffect(() => { load(); }, []);
-
-        const filtered = items.filter(i => !search || [i.titulo, i.artista, i.tipo, i.descripcion].join(' ').toLowerCase().includes(search.toLowerCase()));
-
-        const save = async (form) => {
-            const item = { ...form, id: editing ? editing.id : Date.now(), fecha: editing ? editing.fecha : todayStr() };
-            await dbSave('referencias', item);
-            setShowForm(false); setEditing(null); load(); onDataChange();
-        };
-        const del = async (id) => { await dbDelete('referencias', id); setConfirm(null); load(); onDataChange(); };
-
-        const fields = [
-            { key: 'titulo', label: 'Título de la Obra', required: true, placeholder: 'Ej: La Gran Ola de Kanagawa' },
-            { key: 'artista', label: 'Artista', placeholder: 'Ej: Katsushika Hokusai' },
-            { key: 'tipo', label: 'Tipo', type: 'select', options: TIPOS_REF },
-            { key: 'url', label: 'URL de imagen', placeholder: 'https://...' },
-            { key: 'descripcion', label: 'Descripción / Notas', type: 'textarea', rows: 3, placeholder: '¿Por qué te inspira esta obra?' }
-        ];
-
-        return (
-            <div className="fade-in">
-                <SectionHeader title="Galería" subtitle="referencias" onBack={onBack} onAdd={() => { setEditing(null); setShowForm(true); }} count={items.length} />
-                <SearchBar value={search} onChange={setSearch} placeholder="Buscar referencias..." />
-                {filtered.length === 0 ? <EmptyState icon={GalleryIco} text="Tu galería está vacía" /> : (
-                    <div className="space-y-3">
-                        {filtered.map(item => (
-                            <div key={item.id} className="rounded-2xl nm-flat fade-in overflow-hidden">
-                                {item.url && (
-                                    <div className="w-full h-40 bg-gray-200 overflow-hidden">
-                                        <img src={item.url} alt={item.titulo} className="w-full h-full object-cover" onError={e => { e.target.style.display = 'none'; }} />
-                                    </div>
-                                )}
-                                <div className="p-5">
-                                    <div className="flex justify-between items-start mb-1">
-                                        <h3 className="font-display text-lg italic text-[#4a5568] flex-1 mr-2">{item.titulo}</h3>
-                                        <div className="flex gap-1 flex-shrink-0">
-                                            <button onClick={() => { setEditing(item); setShowForm(true); }} className="p-2 nm-btn rounded-xl text-gray-400"><EditIco size={14} /></button>
-                                            <button onClick={() => setConfirm(item.id)} className="p-2 nm-btn rounded-xl text-gray-400"><TrashIco size={14} /></button>
-                                        </div>
-                                    </div>
-                                    {item.artista && <p className="text-xs text-[#5b85b5] font-bold uppercase tracking-wider mb-2">{item.artista}</p>}
-                                    {item.descripcion && <p className="text-sm text-gray-500 line-clamp-2 mb-3">{item.descripcion}</p>}
-                                    <div className="flex justify-between items-center">
-                                        <span className={`tag ${tipoTag(item.tipo)}`}>{item.tipo || 'Otra'}</span>
-                                        <span className="text-[10px] text-gray-400">{item.fecha}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-                {showForm && <FormModal title={editing ? 'Editar Referencia' : 'Nueva Referencia'} fields={fields} data={editing || { tipo: TIPOS_REF[0] }} onSave={save} onClose={() => { setShowForm(false); setEditing(null); }} />}
-                {confirm && <ConfirmModal msg="¿Eliminar esta referencia?" onOk={() => del(confirm)} onCancel={() => setConfirm(null)} />}
-            </div>
-        );
-    };
-
-    // ═══════════════════════════════════════════════
-    // SECCIÓN: EXPOSICIONES
-    // ═══════════════════════════════════════════════
-    const ESTADO_EXPO = ['Por visitar', 'Visitada', 'En curso'];
-    const expoTag = (e) => {
-        const map = { 'Por visitar':'tag-amber','Visitada':'tag-green','En curso':'tag-blue' };
-        return map[e] || 'tag-slate';
-    };
-
-    const ExposSection = ({ onBack, onDataChange }) => {
-        const [items, setItems] = useState([]);
-        const [search, setSearch] = useState('');
-        const [showForm, setShowForm] = useState(false);
-        const [editing, setEditing] = useState(null);
-        const [confirm, setConfirm] = useState(null);
-
-        const load = async () => { const d = await dbGetAll('expos'); setItems(d); };
-        useEffect(() => { load(); }, []);
-
-        const filtered = items.filter(i => !search || [i.nombre, i.lugar, i.estado, i.notas].join(' ').toLowerCase().includes(search.toLowerCase()));
-
-        const save = async (form) => {
-            const item = { ...form, id: editing ? editing.id : Date.now(), fecha: editing ? editing.fecha : todayStr() };
-            await dbSave('expos', item);
-            setShowForm(false); setEditing(null); load(); onDataChange();
-        };
-        const del = async (id) => { await dbDelete('expos', id); setConfirm(null); load(); onDataChange(); };
-
-        const fields = [
-            { key: 'nombre', label: 'Nombre', required: true, placeholder: 'Ej: Hokusai — Más allá de La Gran Ola' },
-            { key: 'lugar', label: 'Lugar', placeholder: 'Ej: Museo del Prado, Madrid' },
-            { key: 'estado', label: 'Estado', type: 'select', options: ESTADO_EXPO },
-            { key: 'fechaEvento', label: 'Fecha de la exposición', placeholder: 'Ej: 15/03/2026 – 30/06/2026' },
-            { key: 'valoracion', label: 'Valoración', type: 'rating' },
-            { key: 'notas', label: 'Notas', type: 'textarea', rows: 4, placeholder: 'Impresiones, obras destacadas...' }
-        ];
-
-        return (
-            <div className="fade-in">
-                <SectionHeader title="Exposiciones" subtitle="expos registradas" onBack={onBack} onAdd={() => { setEditing(null); setShowForm(true); }} count={items.length} />
-                <SearchBar value={search} onChange={setSearch} placeholder="Buscar exposiciones..." />
-                {filtered.length === 0 ? <EmptyState icon={ExpoIco} text="Sin exposiciones registradas" /> : (
-                    <div className="space-y-3">
-                        {filtered.map(item => (
-                            <div key={item.id} className="p-5 rounded-2xl nm-flat fade-in">
-                                <div className="flex justify-between items-start mb-1">
-                                    <h3 className="font-display text-lg italic text-[#4a5568] flex-1 mr-2">{item.nombre}</h3>
-                                    <div className="flex gap-1 flex-shrink-0">
-                                        <button onClick={() => { setEditing(item); setShowForm(true); }} className="p-2 nm-btn rounded-xl text-gray-400"><EditIco size={14} /></button>
-                                        <button onClick={() => setConfirm(item.id)} className="p-2 nm-btn rounded-xl text-gray-400"><TrashIco size={14} /></button>
-                                    </div>
-                                </div>
-                                {item.lugar && <p className="text-xs text-[#5b85b5] font-bold uppercase tracking-wider mb-1">{item.lugar}</p>}
-                                {item.fechaEvento && <p className="text-[10px] text-gray-400 mb-2">{item.fechaEvento}</p>}
-                                {item.notas && <p className="text-sm text-gray-500 line-clamp-2 mb-3 leading-relaxed">{item.notas}</p>}
-                                <div className="flex justify-between items-center">
-                                    <div className="flex items-center gap-2">
-                                        <span className={`tag ${expoTag(item.estado)}`}>{item.estado || 'Por visitar'}</span>
-                                        {item.valoracion > 0 && (
-                                            <span className="text-[10px] text-amber-400">{'★'.repeat(item.valoracion)}{'☆'.repeat(5-item.valoracion)}</span>
-                                        )}
-                                    </div>
-                                    <span className="text-[10px] text-gray-400">{item.fecha}</span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-                {showForm && <FormModal title={editing ? 'Editar Exposición' : 'Nueva Exposición'} fields={fields} data={editing || { estado: ESTADO_EXPO[0], valoracion: 0 }} onSave={save} onClose={() => { setShowForm(false); setEditing(null); }} />}
-                {confirm && <ConfirmModal msg="¿Eliminar esta exposición?" onOk={() => del(confirm)} onCancel={() => setConfirm(null)} />}
-            </div>
-        );
-    };
-
-    // ═══════════════════════════════════════════════
-    // SECCIÓN: TÉCNICAS
-    // ═══════════════════════════════════════════════
-    const MEDIOS = ['Óleo', 'Acuarela', 'Acrílico', 'Pastel', 'Grafito', 'Tinta', 'Digital', 'Mixta', 'Cerámica', 'Grabado', 'Otro'];
-    const NIVELES = ['Principiante', 'Intermedio', 'Avanzado', 'Dominado'];
-    const nivelTag = (n) => {
-        const map = { 'Principiante':'tag-slate','Intermedio':'tag-blue','Avanzado':'tag-amber','Dominado':'tag-green' };
-        return map[n] || 'tag-slate';
-    };
-
-    const TecnicasSection = ({ onBack, onDataChange }) => {
-        const [items, setItems] = useState([]);
-        const [search, setSearch] = useState('');
-        const [showForm, setShowForm] = useState(false);
-        const [editing, setEditing] = useState(null);
-        const [confirm, setConfirm] = useState(null);
-
-        const load = async () => { const d = await dbGetAll('tecnicas'); setItems(d); };
-        useEffect(() => { load(); }, []);
-
-        const filtered = items.filter(i => !search || [i.nombre, i.medio, i.descripcion, i.nivel].join(' ').toLowerCase().includes(search.toLowerCase()));
-
-        const save = async (form) => {
-            const item = { ...form, id: editing ? editing.id : Date.now(), fecha: editing ? editing.fecha : todayStr() };
-            await dbSave('tecnicas', item);
-            setShowForm(false); setEditing(null); load(); onDataChange();
-        };
-        const del = async (id) => { await dbDelete('tecnicas', id); setConfirm(null); load(); onDataChange(); };
-
-        const fields = [
-            { key: 'nombre', label: 'Técnica', required: true, placeholder: 'Ej: Wet-on-wet / Húmedo sobre húmedo' },
-            { key: 'medio', label: 'Medio', type: 'select', options: MEDIOS },
-            { key: 'nivel', label: 'Nivel de dominio', type: 'select', options: NIVELES },
-            { key: 'descripcion', label: 'Descripción / Notas', type: 'textarea', rows: 5, placeholder: 'Describe la técnica, materiales, trucos...' }
-        ];
-
-        return (
-            <div className="fade-in">
-                <SectionHeader title="Técnicas" subtitle="técnicas aprendidas" onBack={onBack} onAdd={() => { setEditing(null); setShowForm(true); }} count={items.length} />
-                <SearchBar value={search} onChange={setSearch} placeholder="Buscar técnicas..." />
-                {filtered.length === 0 ? <EmptyState icon={NoteIco} text="Sin técnicas registradas" /> : (
-                    <div className="space-y-3">
-                        {filtered.map(item => (
-                            <div key={item.id} className="p-5 rounded-2xl nm-flat fade-in">
-                                <div className="flex justify-between items-start mb-2">
-                                    <h3 className="font-display text-lg italic text-[#4a5568] flex-1 mr-2">{item.nombre}</h3>
-                                    <div className="flex gap-1 flex-shrink-0">
-                                        <button onClick={() => { setEditing(item); setShowForm(true); }} className="p-2 nm-btn rounded-xl text-gray-400"><EditIco size={14} /></button>
-                                        <button onClick={() => setConfirm(item.id)} className="p-2 nm-btn rounded-xl text-gray-400"><TrashIco size={14} /></button>
-                                    </div>
-                                </div>
-                                {item.descripcion && <p className="text-sm text-gray-500 line-clamp-3 mb-3 leading-relaxed">{item.descripcion}</p>}
-                                <div className="flex justify-between items-center">
-                                    <div className="flex items-center gap-2">
-                                        {item.medio && <span className="tag tag-blue">{item.medio}</span>}
-                                        {item.nivel && <span className={`tag ${nivelTag(item.nivel)}`}>{item.nivel}</span>}
-                                    </div>
-                                    <span className="text-[10px] text-gray-400">{item.fecha}</span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-                {showForm && <FormModal title={editing ? 'Editar Técnica' : 'Nueva Técnica'} fields={fields} data={editing || { medio: MEDIOS[0], nivel: NIVELES[0] }} onSave={save} onClose={() => { setShowForm(false); setEditing(null); }} />}
-                {confirm && <ConfirmModal msg="¿Eliminar esta técnica?" onOk={() => del(confirm)} onCancel={() => setConfirm(null)} />}
-            </div>
-        );
-    };
-
-    // ═══════════════════════════════════════════════
-    // INSPIRACIÓN CARD
-    // ═══════════════════════════════════════════════
-    const InspirationCard = ({ data, loading }) => {
-        if (loading) return (
-            <div className="w-full aspect-[4/5] rounded-3xl nm-inset flex flex-col items-center justify-center text-gray-400 mb-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#5b85b5] mb-4"></div>
-                <p className="font-display italic text-sm">Buscando una obra para ti...</p>
-            </div>
-        );
-        if (!data) return null;
-
-        return (
-            <div className="w-full rounded-3xl p-3 nm-flat fade-in mb-8">
-                <div className="w-full aspect-[4/5] rounded-2xl overflow-hidden mb-4 shadow-inner relative bg-gray-200">
-                    <img src={data.image} alt="Arte diario" className="w-full h-full object-cover" onError={(e) => e.target.src = FALLBACK_ART[0].img} />
-                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 via-black/20 to-transparent text-white">
-                        <p className="text-[10px] uppercase tracking-widest font-bold opacity-80">Inspiración del día</p>
-                        <p className="text-base font-display italic truncate">{data.title}</p>
-                        <p className="text-[10px] opacity-70">{data.artist}</p>
-                    </div>
-                </div>
-                <div className="px-4 py-3 text-center">
-                    <p className="font-display italic text-lg text-[#4a5568] leading-tight">"{data.quote}"</p>
-                    <p className="text-[10px] text-[#5b85b5] font-bold uppercase tracking-widest mt-3">— {data.quoteAuthor}</p>
-                </div>
-            </div>
-        );
-    };
-
-    // ═══════════════════════════════════════════════
-    // APP PRINCIPAL
-    // ═══════════════════════════════════════════════
-    const App = () => {
-        const [activeTab, setActiveTab] = useState('inicio');
-        const [inspiration, setInspiration] = useState(null);
-        const [loadingInspiration, setLoadingInspiration] = useState(true);
-        const [counts, setCounts] = useState({ historia: 0, libros: 0, notas: 0, referencias: 0, tecnicas: 0, expos: 0 });
-        const [lastHist, setLastHist] = useState(null);
-        const scrollRef = useRef(null);
-
-        const loadData = async () => {
-            const h = await dbGetAll('historia');
-            const l = await dbGetAll('libros');
-            const n = await dbGetAll('notas');
-            const r = await dbGetAll('referencias');
-            const t = await dbGetAll('tecnicas');
-            const e = await dbGetAll('expos');
-            setCounts({ historia: h.length, libros: l.length, notas: n.length, referencias: r.length, tecnicas: t.length, expos: e.length });
-            if (h.length > 0) setLastHist(h[0]);
-            else setLastHist(null);
-        };
-
-        useEffect(() => { loadData(); getDailyContent(); }, []);
-        useEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = 0; }, [activeTab]);
-
-        const getDailyContent = async () => {
-            const today = new Date().toDateString();
-            const saved = localStorage.getItem('atelier_daily_v2');
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                if (parsed.date === today) { setInspiration(parsed.data); setLoadingInspiration(false); return; }
-            }
-            const fallbackArt = FALLBACK_ART[Math.floor(Math.random() * FALLBACK_ART.length)];
-            const fallbackQuote = QUOTES[Math.floor(Math.random() * QUOTES.length)];
-            try {
-                const artRes = await fetch(`https://api.artic.edu/api/v1/artworks?page=${Math.floor(Math.random()*50)+1}&limit=1&fields=title,artist_display,image_id`);
-                const artJson = await artRes.json();
-                const art = artJson.data[0];
-                const finalData = {
-                    image: art.image_id ? `https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg` : fallbackArt.img,
-                    title: art.title || fallbackArt.title, artist: art.artist_display || fallbackArt.artist,
-                    quote: fallbackQuote.q, quoteAuthor: fallbackQuote.a
-                };
-                setInspiration(finalData);
-                localStorage.setItem('atelier_daily_v2', JSON.stringify({ date: today, data: finalData }));
-            } catch {
-                const finalData = { image: fallbackArt.img, title: fallbackArt.title, artist: fallbackArt.artist, quote: fallbackQuote.q, quoteAuthor: fallbackQuote.a };
-                setInspiration(finalData);
-            } finally { setLoadingInspiration(false); }
-        };
-
-        const goBack = () => setActiveTab('inicio');
-
-        // Greeting dinámico
-        const hour = new Date().getHours();
-        const greeting = hour < 13 ? 'Buenos días.' : hour < 20 ? 'Buenas tardes.' : 'Buenas noches.';
-
-        return (
-            <div className="w-full h-screen-safe flex flex-col bg-[#f5f6f8] overflow-hidden relative">
-                <header className="px-6 pb-4 safe-pt flex justify-between items-end z-40">
-                    <h1 className="text-[#4a5568] text-2xl font-light tracking-wide">Atelier <span className="text-sm opacity-40">アトリエ</span></h1>
-                    <span className="text-[10px] uppercase font-bold text-[#5b85b5] tracking-widest">Estudio</span>
-                </header>
-
-                <div ref={scrollRef} className="flex-1 overflow-y-auto hide-scrollbar main-content-pb px-6 pt-2">
-
-                    {activeTab === 'inicio' && (
-                        <div className="space-y-8 fade-in">
-                            <div>
-                                <h2 className="font-display text-3xl italic text-[#4a5568] mb-1">{greeting}</h2>
-                                <p className="text-xs text-gray-400 capitalize">{new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}</p>
-                            </div>
-
-                            <InspirationCard data={inspiration} loading={loadingInspiration} />
-
-                            <div>
-                                <h3 className="text-[10px] text-gray-400 mb-3 ml-2 font-bold uppercase tracking-widest">Reflexión Reciente</h3>
-                                <div className="p-6 rounded-3xl nm-flat border-l-4 border-[#5b85b5]" onClick={() => lastHist && setActiveTab('historia')}>
-                                    {lastHist ? (
-                                        <>
-                                            <p className="font-display italic text-lg text-[#4a5568] line-clamp-3 leading-relaxed">"{lastHist.resumen}"</p>
-                                            <div className="flex justify-between items-center mt-4">
-                                                <span className="text-[10px] text-[#5b85b5] font-bold uppercase truncate max-w-[60%]">{lastHist.tema}</span>
-                                                <span className="text-[10px] text-gray-400 uppercase">{lastHist.fecha}</span>
-                                            </div>
-                                        </>
-                                    ) : <p className="text-gray-400 text-sm italic py-2">Escribe tu primer apunte para verlo aquí.</p>}
-                                </div>
-                            </div>
-
-                            <div>
-                                <h3 className="text-[10px] text-gray-400 mb-3 ml-2 font-bold uppercase tracking-widest">Tu Estudio</h3>
-                                <div className="grid grid-cols-3 gap-4 pb-4">
-                                    {[
-                                        { l: 'HISTORIA', c: counts.historia, t: 'historia', ico: '🏛' },
-                                        { l: 'LIBROS', c: counts.libros, t: 'libros', ico: '📚' },
-                                        { l: 'NOTAS', c: counts.notas, t: 'notas', ico: '✏️' },
-                                        { l: 'GALERÍA', c: counts.referencias, t: 'galeria', ico: '🖼' },
-                                        { l: 'TÉCNICA', c: counts.tecnicas, t: 'tecnicas', ico: '🎨' },
-                                        { l: 'EXPOS', c: counts.expos, t: 'expos', ico: '🎭' }
-                                    ].map((item, i) => (
-                                        <button key={i} onClick={() => setActiveTab(item.t)} className="aspect-square rounded-2xl flex flex-col items-center justify-center gap-1 nm-flat active:nm-inset transition-all">
-                                            <span className="text-lg mb-0.5">{item.ico}</span>
-                                            <span className={`text-xl font-display ${item.c > 0 ? 'text-[#5b85b5]' : 'text-gray-400'}`}>{item.c}</span>
-                                            <span className="text-[8px] font-bold text-gray-500 tracking-tighter">{item.l}</span>
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {activeTab === 'historia' && <HistoriaSection onBack={goBack} onDataChange={loadData} />}
-                    {activeTab === 'libros' && <LibrosSection onBack={goBack} onDataChange={loadData} />}
-                    {activeTab === 'notas' && <NotasSection onBack={goBack} onDataChange={loadData} />}
-                    {activeTab === 'galeria' && <GaleriaSection onBack={goBack} onDataChange={loadData} />}
-                    {activeTab === 'expos' && <ExposSection onBack={goBack} onDataChange={loadData} />}
-                    {activeTab === 'tecnicas' && <TecnicasSection onBack={goBack} onDataChange={loadData} />}
-                </div>
-
-                <nav className="absolute bottom-0 w-full px-1 pt-3 safe-pb-nav nm-flat flex justify-between rounded-t-3xl z-50">
-                    {[
-                        { id: 'inicio', ico: HomeIco, l: 'INICIO' },
-                        { id: 'historia', ico: HistIco, l: 'HISTORIA' },
-                        { id: 'libros', ico: BookIco, l: 'LIBROS' },
-                        { id: 'notas', ico: NoteIco, l: 'NOTAS' },
-                        { id: 'galeria', ico: GalleryIco, l: 'GALERÍA' },
-                        { id: 'expos', ico: ExpoIco, l: 'EXPOS' }
-                    ].map((tab) => (
-                        <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex flex-col items-center justify-center flex-1 py-1 gap-1 transition-all active:scale-90 ${activeTab === tab.id ? 'text-[#5b85b5]' : 'text-gray-400'}`}>
-                            <tab.ico size={22} className="flex-shrink-0" />
-                            <span className="text-[8px] font-bold tracking-tighter">{tab.l}</span>
-                        </button>
+    const TecnicasList = ({ tecnicas, abrirFormulario, setSelectedItem }) => (
+      <main className="px-6 h-full overflow-y-auto hide-scrollbar main-content-pb pt-4 bg-[#f5f6f8]">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className={`font-serif text-2xl ${theme.textDark}`}>Técnicas y Recetas</h2>
+          <button onClick={() => abrirFormulario('tecnica')} className={`w-10 h-10 rounded-full ${theme.bgMain} ${theme.shadowFlat} flex items-center justify-center text-[#5b85b5] active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-95`}><Plus size={20} /></button>
+        </div>
+        <div className="space-y-6">
+          {tecnicas.length === 0 && <div className="text-center mt-16 text-gray-400"><Palette size={40} className="mx-auto mb-4 opacity-30" /><p className="italic font-serif">Guarda tus recetas de color y procesos paso a paso.</p></div>}
+          {tecnicas.map(tecnica => (
+            <div key={tecnica.id} onClick={() => setSelectedItem({ type: 'tecnica', data: tecnica })} className={`p-6 rounded-3xl ${theme.bgMain} ${theme.shadowFlat} cursor-pointer active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-[0.98]`}>
+              <div className="flex justify-between items-start mb-3">
+                <h3 className={`font-serif text-xl ${theme.textDark} leading-tight pr-4`}>{tecnica.titulo}</h3>
+                <span className={`text-[10px] px-3 py-1 rounded-full ${theme.shadowInset} text-[#5b85b5] font-bold uppercase tracking-widest whitespace-nowrap`}>{tecnica.medio}</span>
+              </div>
+              <p className="text-sm text-gray-500 line-clamp-2 leading-relaxed mb-3">{tecnica.pasos}</p>
+              {tecnica.imagenesRef && tecnica.imagenesRef.length > 0 && (
+                 <div className="flex gap-2 mt-2">
+                    {tecnica.imagenesRef.slice(0, 3).map((img, idx) => (
+                      <div key={idx} className="w-8 h-8 rounded-md overflow-hidden bg-gray-200 border border-gray-100">
+                         <img src={img} alt="ref" className="w-full h-full object-cover" />
+                      </div>
                     ))}
-                </nav>
+                    {tecnica.imagenesRef.length > 3 && (
+                       <div className="w-8 h-8 rounded-md bg-gray-200 flex items-center justify-center text-[10px] font-bold text-gray-500">
+                         +{tecnica.imagenesRef.length - 3}
+                       </div>
+                    )}
+                 </div>
+              )}
             </div>
-        );
+          ))}
+        </div>
+      </main>
+    );
+
+    const ExposicionesList = ({ expos, abrirFormulario, setSelectedItem }) => (
+      <main className="px-6 h-full overflow-y-auto hide-scrollbar main-content-pb pt-4 bg-[#f5f6f8]">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className={`font-serif text-2xl ${theme.textDark}`}>Exposiciones</h2>
+          <button onClick={() => abrirFormulario('expo')} className={`w-10 h-10 rounded-full ${theme.bgMain} ${theme.shadowFlat} flex items-center justify-center text-[#5b85b5] active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-95`}><Plus size={20} /></button>
+        </div>
+        <div className="space-y-6">
+          {expos.length === 0 && <div className="text-center mt-16 text-gray-400"><Ticket size={40} className="mx-auto mb-4 opacity-30" /><p className="italic font-serif">Aún no has guardado ninguna exposición.</p></div>}
+          {expos.map(expo => (
+            <div key={expo.id} onClick={() => setSelectedItem({ type: 'expo', data: expo })} className={`p-4 rounded-3xl ${theme.bgMain} ${theme.shadowFlat} flex flex-col cursor-pointer active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-[0.98]`}>
+              <div className="h-32 w-full rounded-xl overflow-hidden shadow-inner bg-gray-200 mb-3 relative">
+                <img src={expo.imagen} alt={expo.titulo} className="w-full h-full object-cover" />
+                <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-md text-[10px] font-bold text-gray-600 shadow-sm uppercase tracking-widest">
+                  {expo.esGratis ? 'Gratis' : (expo.precio ? `${expo.precio}€` : 'De Pago')}
+                </div>
+              </div>
+              <div className="px-2">
+                <h3 className={`font-serif text-lg leading-tight mb-1 ${theme.textDark}`}>{expo.titulo}</h3>
+                <div className="flex items-center gap-2 text-xs text-[#5b85b5] mb-1">
+                  <MapPin size={12} /> <span className="truncate">{expo.lugar}</span>
+                </div>
+                <div className="flex items-center gap-2 text-[10px] text-gray-400 font-mono uppercase">
+                  <Calendar size={12} /> <span>{formatShortDate(expo.fechaInicio)} {expo.fechaFin ? `- ${formatShortDate(expo.fechaFin)}` : ''}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </main>
+    );
+
+    const GaleriaList = ({ referencias, filtroGaleria, setFiltroGaleria, abrirFormulario, handleEliminarReferenciaClick }) => {
+      const refsFiltradas = filtroGaleria === 'Todas' ? referencias : referencias.filter(r => r.cat === filtroGaleria);
+      const categorias = ['Todas', 'Luz', 'Color', 'Composición', 'Textura'];
+
+      return (
+        <main className="h-full overflow-y-auto hide-scrollbar main-content-pb pt-4 bg-[#f5f6f8]">
+          <div className="px-6 flex justify-between items-center mb-6">
+            <h2 className={`font-serif text-2xl ${theme.textDark}`}>Referencias</h2>
+            <button onClick={() => abrirFormulario('galeria')} className={`w-10 h-10 rounded-full ${theme.bgMain} ${theme.shadowFlat} flex items-center justify-center text-[#5b85b5] active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-95`}><Plus size={20} /></button>
+          </div>
+          
+          <div className="px-6 mb-8 overflow-x-auto hide-scrollbar flex gap-4 pb-4" style={{WebkitOverflowScrolling: 'touch'}}>
+            {categorias.map(cat => (
+              <button key={cat} onClick={() => setFiltroGaleria(cat)} className={`px-5 py-2 rounded-full text-xs font-bold tracking-wider uppercase transition-all whitespace-nowrap active:scale-95 ${filtroGaleria === cat ? `shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] text-[#5b85b5]` : `${theme.shadowFlat} text-gray-500 hover:text-[#4a729e]`}`}>
+                {cat}
+              </button>
+            ))}
+          </div>
+          <div className="px-6 grid grid-cols-2 gap-4">
+            {refsFiltradas.length === 0 && <div className="col-span-2 text-center mt-10 text-gray-400"><ImageIcon size={40} className="mx-auto mb-4 opacity-30" /><p className="italic font-serif">No hay referencias guardadas aquí.</p></div>}
+            {refsFiltradas.map((ref, i) => (
+              <div key={ref.id} className={`p-2 rounded-2xl ${theme.bgMain} ${theme.shadowFlat} flex flex-col relative group ${i % 2 === 0 ? 'mt-0' : 'mt-6'}`}>
+                <button onClick={(e) => { e.stopPropagation(); handleEliminarReferenciaClick(ref.id); }} className="absolute top-4 right-4 z-10 bg-white/80 p-1.5 rounded-full text-red-400 transition-opacity backdrop-blur-sm shadow-md active:scale-90">
+                  <Trash2 size={12} />
+                </button>
+                <div className="w-full rounded-xl overflow-hidden shadow-inner aspect-[3/4] bg-gray-200">
+                  <img src={ref.img} alt={ref.nota} className="w-full h-full object-cover" />
+                </div>
+                <p className="text-[10px] text-center text-gray-500 mt-3 mb-1 uppercase tracking-widest px-1 line-clamp-2">{ref.nota}</p>
+              </div>
+            ))}
+          </div>
+        </main>
+      );
     };
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
-</script>
+    const FormularioDinamico = ({ isAdding, formData, handleInputChange, toggleDia, resetForm, handleGuardar, setFormData }) => {
+      const titulos = { nota: 'Nueva Obra', historia: 'Nuevo Apunte', libro: 'Añadir Libro', galeria: 'Nueva Referencia', expo: 'Añadir Exposición', tecnica: 'Nueva Receta / Técnica' };
 
+      const handleLocalImageUpload = (e) => {
+        const files = Array.from(e.target.files);
+        files.forEach(file => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = () => {
+              const canvas = document.createElement('canvas');
+              const MAX_WIDTH = 800; const MAX_HEIGHT = 800;
+              let width = img.width; let height = img.height;
+              if (width > height) { if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; } } 
+              else { if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; } }
+              canvas.width = width; canvas.height = height;
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0, width, height);
+              const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6); 
+              setFormData(prev => ({ ...prev, imagenesRef: [...(prev.imagenesRef || []), compressedBase64] }));
+            }
+          };
+        });
+      };
+
+      const removeImageRef = (indexToRemove) => setFormData(prev => ({ ...prev, imagenesRef: prev.imagenesRef.filter((_, idx) => idx !== indexToRemove) }));
+
+      return (
+        <main className="h-full overflow-y-auto hide-scrollbar pb-36 bg-[#f5f6f8]">
+          <div className="px-6 pb-4 safe-pt flex justify-between items-center sticky top-0 z-[40] bg-[#f5f6f8]/90 backdrop-blur-md" style={{WebkitBackdropFilter: 'blur(12px)'}}>
+            <button onClick={resetForm} className={`w-10 h-10 rounded-full ${theme.shadowFlat} flex items-center justify-center text-gray-500 active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-95`}><ArrowLeft size={20} /></button>
+            <h2 className={`font-serif text-xl ${theme.textDark}`}>{titulos[isAdding]}</h2>
+            <button onClick={handleGuardar} className={`w-10 h-10 rounded-full ${theme.bgAccent} text-white shadow-[4px_4px_10px_#d8dde6,-4px_-4px_10px_#ffffff] flex items-center justify-center active:shadow-inner transition-all active:scale-95`}><Check size={20} /></button>
+          </div>
+          
+          <div className="px-6 space-y-6 mt-4">
+            {isAdding === 'nota' && (
+              <div className="space-y-4">
+                <input type="text" name="titulo" value={formData.titulo || ''} placeholder="Título de la obra..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 font-serif ${theme.textDark} text-base focus:outline-none`} />
+                <input type="text" name="autor" value={formData.autor || ''} placeholder="Autor del cuadro..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`} />
+                <div className="flex gap-4">
+                  <input type="text" name="año" value={formData.año || ''} placeholder="Año (Ej. 1889)" onChange={handleInputChange} className={`flex-1 min-w-0 ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`} />
+                  <input type="text" name="disciplina" value={formData.disciplina || ''} placeholder="Disciplina..." onChange={handleInputChange} className={`flex-1 min-w-0 ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`} />
+                </div>
+                <input type="text" name="imagen" value={formData.imagen || ''} placeholder="URL de la imagen de la obra..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base text-[#5b85b5] focus:outline-none`} />
+                <div className="pt-2">
+                  <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Visión Especializada</label>
+                  <textarea name="historia" value={formData.historia || ''} placeholder="Análisis técnico, composición, color..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-3xl px-6 py-5 min-h-[120px] text-base ${theme.textDark} leading-relaxed focus:outline-none`}></textarea>
+
+```
+            </div>
+            <div>
+              <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Inspiración personal</label>
+              <textarea name="inspiracion" value={formData.inspiracion || ''} placeholder="¿Qué ideas sacas para tus cuadros?" onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-3xl px-6 py-5 min-h-[100px] text-base ${theme.textDark} italic font-serif leading-relaxed focus:outline-none`}></textarea>
+            </div>
+          </div>
+        )}
+
+        {isAdding === 'historia' && (
+          <div className="space-y-4">
+            <input type="text" name="tema" value={formData.tema || ''} placeholder="Tema (ej. Renacimiento)..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 font-serif ${theme.textDark} text-base focus:outline-none`} />
+            <input type="text" name="etiquetas" value={formData.etiquetas || ''} placeholder="Etiquetas (luz, oleo...)" onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`} />
+            <div className="pt-2">
+              <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Tu reflexión o resumen</label>
+              <textarea name="resumen" value={formData.resumen || ''} placeholder="Escribe aquí los puntos clave aprendidos..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-3xl px-6 py-5 min-h-[200px] text-base ${theme.textDark} leading-relaxed focus:outline-none`}></textarea>
+            </div>
+          </div>
+        )}
+
+        {isAdding === 'libro' && (
+          <div className="space-y-4">
+            <input type="text" name="titulo" value={formData.titulo || ''} placeholder="Título del libro..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 font-serif ${theme.textDark} text-base focus:outline-none`} />
+            <input type="text" name="autor" value={formData.autor || ''} placeholder="Autor del libro..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`} />
+            <div>
+              <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Estado de lectura</label>
+              <select name="estado" value={formData.estado || 'Pendiente'} onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`}>
+                <option value="Pendiente">Pendiente</option>
+                <option value="Leyendo">Leyendo</option>
+                <option value="Terminado">Terminado</option>
+              </select>
+            </div>
+            <input type="text" name="imagen" value={formData.imagen || ''} placeholder="URL de la portada..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base text-[#5b85b5] focus:outline-none`} />
+            <div className="pt-2">
+              <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Reseña o notas clave</label>
+              <textarea name="reseña" value={formData.reseña || ''} placeholder="Lecciones más valiosas de este libro..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-3xl px-6 py-5 min-h-[120px] text-base ${theme.textDark} leading-relaxed focus:outline-none`}></textarea>
+            </div>
+          </div>
+        )}
+
+        {isAdding === 'tecnica' && (
+          <div className="space-y-4">
+            <input type="text" name="titulo" value={formData.titulo || ''} placeholder="Título (ej. Mezcla piel)..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 font-serif ${theme.textDark} text-base focus:outline-none`} />
+            <div>
+              <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Medio / Material</label>
+              <select name="medio" value={formData.medio || 'Óleo'} onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`}>
+                <option value="Óleo">Óleo</option>
+                <option value="Acrílico">Acrílico</option>
+                <option value="Acuarela">Acuarela</option>
+                <option value="Dibujo">Dibujo / Grafito</option>
+                <option value="Soporte">Preparación de Soporte</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+            <div className="pt-2">
+              <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Proceso o Receta</label>
+              <textarea name="pasos" value={formData.pasos || ''} placeholder="Colores exactos, proporciones o pasos..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-3xl px-6 py-5 min-h-[200px] text-base ${theme.textDark} leading-relaxed focus:outline-none`}></textarea>
+            </div>
+            <div className="pt-4 border-t border-gray-200/50">
+              <label className="text-[10px] text-[#5b85b5] uppercase tracking-widest ml-2 mb-3 block font-bold">Imágenes de Referencia (Carrete)</label>
+              <div className="flex flex-wrap gap-4">
+                {formData.imagenesRef && formData.imagenesRef.map((imgSrc, idx) => (
+                  <div key={idx} className={`relative w-20 h-20 rounded-2xl ${theme.shadowFlat} bg-[#f5f6f8] p-1`}>
+                    <img src={imgSrc} alt="Preview" className="w-full h-full object-cover rounded-xl" />
+                    <button onClick={() => removeImageRef(idx)} className="absolute -top-2 -right-2 bg-red-400 text-white p-1 rounded-full shadow-md active:scale-90"><X size={10} /></button>
+                  </div>
+                ))}
+                <label className={`w-20 h-20 rounded-2xl ${theme.shadowInset} flex flex-col items-center justify-center text-[#5b85b5] cursor-pointer hover:opacity-80 transition-opacity active:scale-95`}>
+                   <Camera size={24} className="mb-1" />
+                   <span className="text-[8px] uppercase tracking-widest font-bold">Añadir</span>
+                   <input type="file" accept="image/*" multiple onChange={handleLocalImageUpload} className="hidden" />
+                </label>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {isAdding === 'galeria' && (
+          <div className="space-y-4">
+            <input type="text" name="imagen" value={formData.imagen || ''} placeholder="URL de la imagen de referencia..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base text-[#5b85b5] focus:outline-none`} />
+            <div>
+              <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Categoría principal</label>
+              <select name="categoria" value={formData.categoria || 'Luz'} onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`}>
+                <option value="Luz">Luz</option>
+                <option value="Color">Color</option>
+                <option value="Composición">Composición</option>
+                <option value="Textura">Textura</option>
+              </select>
+            </div>
+            <div className="pt-2">
+              <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Nota rápida</label>
+              <textarea name="nota" value={formData.nota || ''} placeholder="Ej. Fíjate en el contraste de bordes..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-3xl px-6 py-5 min-h-[100px] text-base ${theme.textDark} leading-relaxed focus:outline-none`}></textarea>
+            </div>
+          </div>
+        )}
+
+        {isAdding === 'expo' && (
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <input type="text" name="titulo" value={formData.titulo || ''} placeholder="Nombre de la exposición..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 font-serif ${theme.textDark} text-base focus:outline-none`} />
+              <input type="text" name="lugar" value={formData.lugar || ''} placeholder="Museo o Galería" onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`} />
+            </div>
+            <div className="flex gap-4">
+              <div className="flex-1 min-w-0">
+                <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Inicia</label>
+                <input type="date" name="fechaInicio" value={formData.fechaInicio || ''} onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-4 py-3 text-base text-gray-500 uppercase focus:outline-none`} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Termina</label>
+                <input type="date" name="fechaFin" value={formData.fechaFin || ''} onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-4 py-3 text-base text-gray-500 uppercase focus:outline-none`} />
+              </div>
+            </div>
+            <div>
+              <label className="text-[10px] text-gray-400 uppercase tracking-widest ml-2 mb-2 block font-bold">Días de apertura</label>
+              <div className="flex justify-between gap-1">
+                {['L', 'M', 'X', 'J', 'V', 'S', 'D'].map(dia => {
+                  const isSelected = (formData.dias || []).includes(dia);
+                  return <button key={dia} onClick={(e) => { e.preventDefault(); toggleDia(dia); }} className={`w-[13%] aspect-square rounded-full flex items-center justify-center text-xs font-bold transition-all active:scale-90 ${isSelected ? `${theme.bgAccent} text-white shadow-inner` : `${theme.bgMain} ${theme.shadowFlat} text-gray-400 hover:text-[#5b85b5]`}`}>{dia}</button>
+                })}
+              </div>
+            </div>
+            <div className="flex gap-4 items-center">
+              <select name="esGratis" value={formData.esGratis ? 'true' : 'false'} onChange={(e) => setFormData({...formData, esGratis: e.target.value === 'true', precio: e.target.value === 'true' ? '' : formData.precio})} className={`flex-1 min-w-0 ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base ${theme.textDark} focus:outline-none`}>
+                <option value="false">De Pago</option>
+                <option value="true">Entrada Libre</option>
+              </select>
+              {formData.esGratis !== true && (
+                <input type="text" name="precio" value={formData.precio || ''} placeholder="Ej. 12€" onChange={handleInputChange} className={`w-28 flex-shrink-0 ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base text-center ${theme.textDark} focus:outline-none`} />
+              )}
+            </div>
+            <div className="space-y-4 pt-4 border-t border-gray-200/50">
+              <input type="text" name="imagen" value={formData.imagen || ''} placeholder="URL foto o cartel..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-2xl px-5 py-4 text-base text-[#5b85b5] focus:outline-none`} />
+              <textarea name="reseña" value={formData.reseña || ''} placeholder="Anota tus impresiones sobre la exposición..." onChange={handleInputChange} className={`w-full ${theme.bgMain} ${theme.shadowInset} rounded-3xl px-6 py-5 min-h-[120px] text-base ${theme.textDark} leading-relaxed focus:outline-none`}></textarea>
+            </div>
+          </div>
+        )}
+      </div>
+    </main>
+  );
+};
+
+const VistaDetalle = ({ 
+  selectedItem, setSelectedItem, handleEliminarClick, 
+  isEditingImage, setIsEditingImage, tempImageUrl, setTempImageUrl, handleSaveImageEdit, handleKeyDownImageEdit,
+  isEditingResena, setIsEditingResena, tempResena, setTempResena, handleSaveResena
+}) => {
+  const { type, data } = selectedItem;
+  const titulosDetalle = { nota: 'Obra', historia: 'Apunte', libro: 'Libro', expo: 'Exposición', tecnica: 'Receta de Estudio' };
+
+  return (
+    <main className="h-full overflow-y-auto hide-scrollbar pb-36 bg-[#f5f6f8]">
+      <div className="px-6 pb-4 safe-pt flex justify-between items-center sticky top-0 z-[40] bg-[#f5f6f8]/90 backdrop-blur-md" style={{WebkitBackdropFilter: 'blur(12px)', position: '-webkit-sticky'}}>
+        <button onClick={() => setSelectedItem(null)} className={`w-10 h-10 rounded-full ${theme.shadowFlat} flex items-center justify-center text-gray-500 active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-95`}><ArrowLeft size={20} /></button>
+        <span className="text-xs uppercase tracking-widest font-bold text-gray-400">{titulosDetalle[type]}</span>
+        <button onClick={handleEliminarClick} className={`w-10 h-10 rounded-full ${theme.shadowFlat} flex items-center justify-center text-red-400 hover:text-red-500 active:shadow-[inset_6px_6px_12px_#d8dde6,inset_-6px_-6px_12px_#ffffff] transition-all active:scale-95`}><Trash2 size={18} /></button>
+      </div>
+      
+      {type === 'expo' && (
+        <>
+          <div className="px-6 mb-8 mt-2 relative">
+            {isEditingImage ? (
+               <div className={`w-full rounded-3xl p-6 ${theme.shadowInset} flex flex-col items-center justify-center min-h-[200px] bg-[#f5f6f8]`}>
+                  <ImageIcon size={32} className="text-[#5b85b5] mb-4 opacity-50" />
+                  <input autoFocus type="text" value={tempImageUrl} onChange={(e) => setTempImageUrl(e.target.value)} onBlur={handleSaveImageEdit} onKeyDown={handleKeyDownImageEdit} placeholder="URL (vacío para cancelar)" className="w-full text-center bg-transparent border-b border-[#5b85b5] text-base text-[#4a5568] focus:outline-none pb-2" />
+                  <p className="text-[10px] text-gray-400 mt-4 uppercase tracking-widest">Esc para cancelar · Enter para guardar</p>
+               </div>
+            ) : (
+              <div onClick={() => { setTempImageUrl(data.imagen); setIsEditingImage(true); }} className={`w-full rounded-3xl p-2 ${theme.shadowFlat} cursor-pointer hover:opacity-90 transition-opacity relative group active:scale-[0.98]`}>
+                <div className="w-full rounded-2xl overflow-hidden shadow-inner bg-gray-200 aspect-[16/9]">
+                  <img src={data.imagen} alt={data.titulo} className="w-full h-full object-cover" />
+                </div>
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                   <div className="bg-black/50 text-white px-4 py-2 rounded-full text-xs font-bold tracking-widest uppercase flex items-center gap-2 backdrop-blur-sm"><Edit2 size={12} /> Cambiar Foto</div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="px-8 mb-8 text-center">
+            <h1 className={`font-serif text-3xl ${theme.textDark} mb-3 leading-tight`}>{data.titulo}</h1>
+            <div className="flex flex-col items-center gap-2 text-xs text-gray-500 uppercase tracking-widest mb-6">
+              <span className="flex items-center gap-1 text-[#5b85b5] font-bold"><MapPin size={14}/> {data.lugar}</span>
+              <span className="flex items-center gap-1"><Calendar size={14}/> {formatShortDate(data.fechaInicio)} {data.fechaFin ? ` al ${formatShortDate(data.fechaFin)}` : ''}</span>
+              <span className="flex items-center gap-1 bg-white px-3 py-1 rounded-full shadow-sm mt-1">
+                <Tag size={12} className={data.esGratis ? 'text-green-500' : 'text-[#b85b5b]'} /> 
+                <span className={data.esGratis ? 'text-green-600' : 'text-[#b85b5b]'}>{data.esGratis ? 'Entrada Libre' : (data.precio ? `${data.precio}€` : 'De Pago')}</span>
+              </span>
+            </div>
+          </div>
+          
+          <div className="px-8 space-y-10">
+            <section>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className={`w-8 h-8 rounded-full ${theme.shadowInset} flex items-center justify-center text-[#5b85b5]`}><Ticket size={14} /></div>
+                  <h3 className="text-sm uppercase tracking-widest text-gray-500 font-bold">Mis Impresiones</h3>
+                </div>
+                {!isEditingResena && (
+                  <button onClick={() => { setTempResena(data.reseña || ''); setIsEditingResena(true); }} className="text-xs font-bold text-[#5b85b5] uppercase tracking-widest flex items-center gap-1 px-3 py-1 rounded-full active:shadow-inner transition-all"><Edit2 size={12} /> Editar</button>
+                )}
+              </div>
+
+              <div className={`p-6 rounded-3xl ${isEditingResena ? theme.shadowInset : theme.shadowFlat} border-l-4 border-[#5b85b5] bg-[#f5f6f8] transition-all`}>
+                {isEditingResena ? (
+                  <div className="flex flex-col gap-3">
+                    <textarea autoFocus value={tempResena} onChange={e => setTempResena(e.target.value)} placeholder="Escribe aquí lo que te ha parecido..." className={`w-full bg-transparent text-base ${theme.textDark} leading-relaxed focus:outline-none min-h-[150px] resize-none`} />
+                    <div className="flex justify-end gap-2 mt-2">
+                      <button onClick={() => setIsEditingResena(false)} className="px-4 py-2 rounded-xl text-xs font-bold text-gray-400 uppercase tracking-widest active:scale-95">Cancelar</button>
+                      <button onClick={handleSaveResena} className={`px-4 py-2 rounded-xl ${theme.bgAccent} text-white text-xs font-bold uppercase tracking-widest shadow-md active:scale-95`}>Guardar</button>
+                    </div>
+                  </div>
+                ) : (
+                  data.reseña ? <p className={`${theme.textDark} leading-relaxed text-sm whitespace-pre-line`}>{data.reseña}</p> : <p className="text-gray-400 text-sm italic font-serif">"Aún no has anotado nada."</p>
+                )}
+              </div>
+            </section>
+          </div>
+        </>
+      )}
+
+      {type === 'nota' && (
+        <>
+          <div className="px-6 mb-8 mt-2 relative">
+            {isEditingImage ? (
+               <div className={`w-full rounded-3xl p-6 ${theme.shadowInset} flex flex-col items-center justify-center min-h-[250px] bg-[#f5f6f8]`}>
+                  <ImageIcon size={32} className="text-[#5b85b5] mb-4 opacity-50" />
+                  <input autoFocus type="text" value={tempImageUrl} onChange={(e) => setTempImageUrl(e.target.value)} onBlur={handleSaveImageEdit} onKeyDown={handleKeyDownImageEdit} placeholder="URL (dejar vacío para cancelar)" className="w-full text-center bg-transparent border-b border-[#5b85b5] text-base text-[#4a5568] focus:outline-none pb-2" />
+               </div>
+            ) : (
+              <div onClick={() => { setTempImageUrl(data.imagen); setIsEditingImage(true); }} className={`w-full rounded-3xl p-2 ${theme.shadowFlat} cursor-pointer hover:opacity-90 transition-opacity relative group active:scale-[0.98]`}>
+                <div className="w-full rounded-2xl overflow-hidden shadow-inner bg-gray-200">
+                  <img src={data.imagen} alt={data.titulo} className="w-full object-cover min-h-[200px]" />
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="px-8 mb-10 text-center">
+            <h1 className={`font-serif text-3xl ${theme.textDark} mb-2`}>{data.titulo}</h1>
+            <p className="text-[#5b85b5] text-lg mb-4">{data.autor} <span className="text-gray-400 text-sm">({data.año})</span></p>
+          </div>
+          <div className="px-8 space-y-10">
+            <section>
+              <div className="flex items-center gap-3 mb-4"><div className={`w-8 h-8 rounded-full ${theme.shadowInset} flex items-center justify-center text-[#5b85b5]`}><Book size={14} /></div><h3 className="text-sm uppercase tracking-widest text-gray-500 font-bold">Visión Especializada</h3></div>
+              <div className={`p-6 rounded-3xl ${theme.shadowInset} bg-[#f5f6f8]`}><p className={`${theme.textDark} leading-relaxed text-sm whitespace-pre-line`}>{data.historia}</p></div>
+            </section>
+          </div>
+        </>
+      )}
+
+      {type === 'historia' && (
+        <div className="px-8 mt-6 space-y-8">
+          <div className="text-center">
+            <h1 className={`font-serif text-3xl ${theme.textDark} mb-2 leading-tight`}>{data.tema}</h1>
+            <p className="text-xs text-gray-400 font-mono mb-4">{data.fecha}</p>
+          </div>
+          <div className={`p-8 rounded-3xl ${theme.shadowInset} bg-[#f5f6f8]`}>
+            <p className={`${theme.textDark} leading-relaxed text-sm whitespace-pre-line`}>{data.resumen}</p>
+          </div>
+        </div>
+      )}
+
+      {type === 'libro' && (
+        <div className="px-6 mt-6 space-y-8">
+          <div className="flex justify-center mb-6 relative">
+             {isEditingImage ? (
+               <div className={`w-40 h-56 rounded-2xl p-4 ${theme.shadowInset} flex flex-col items-center justify-center bg-[#f5f6f8]`}>
+                  <ImageIcon size={24} className="text-[#5b85b5] mb-2 opacity-50" />
+                  <input autoFocus type="text" value={tempImageUrl} onChange={(e) => setTempImageUrl(e.target.value)} onBlur={handleSaveImageEdit} onKeyDown={handleKeyDownImageEdit} placeholder="URL foto" className="w-full text-center bg-transparent border-b border-[#5b85b5] text-base text-[#4a5568] focus:outline-none pb-1" />
+               </div>
+            ) : (
+              <div onClick={() => { setTempImageUrl(data.imagen); setIsEditingImage(true); }} className={`w-40 h-56 rounded-2xl p-1.5 ${theme.shadowFlat} cursor-pointer hover:opacity-90 transition-opacity relative group active:scale-95`}>
+                <div className="w-full h-full rounded-xl overflow-hidden shadow-inner bg-gray-200">
+                  <img src={data.imagen} alt={data.titulo} className="w-full h-full object-cover" />
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="text-center px-4">
+            <h1 className={`font-serif text-2xl ${theme.textDark} mb-2 leading-tight`}>{data.titulo}</h1>
+            <p className="text-[#5b85b5] text-sm mb-4">{data.autor}</p>
+          </div>
+
+          <section className="px-2">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className={`w-8 h-8 rounded-full ${theme.shadowInset} flex items-center justify-center text-[#5b85b5]`}><Book size={14} /></div>
+                <h3 className="text-sm uppercase tracking-widest text-gray-500 font-bold">Mis Notas</h3>
+              </div>
+              {!isEditingResena && (
+                <button onClick={() => { setTempResena(data.reseña || ''); setIsEditingResena(true); }} className="text-xs font-bold text-[#5b85b5] uppercase tracking-widest flex items-center gap-1 px-3 py-1 rounded-full active:shadow-inner transition-all"><Edit2 size={12} /> Editar</button>
+              )}
+            </div>
+
+            <div className={`p-6 rounded-3xl ${isEditingResena ? theme.shadowInset : theme.shadowFlat} bg-[#f5f6f8] transition-all`}>
+              {isEditingResena ? (
+                <div className="flex flex-col gap-3">
+                  <textarea autoFocus value={tempResena} onChange={e => setTempResena(e.target.value)} placeholder="Anota aquí las lecciones de este libro..." className={`w-full bg-transparent text-base ${theme.textDark} leading-relaxed focus:outline-none min-h-[150px] resize-none`} />
+                  <div className="flex justify-end gap-2 mt-2">
+                    <button onClick={() => setIsEditingResena(false)} className="px-4 py-2 rounded-xl text-xs font-bold text-gray-400 uppercase tracking-widest active:scale-95">Cancelar</button>
+                    <button onClick={handleSaveResena} className={`px-4 py-2 rounded-xl ${theme.bgAccent} text-white text-xs font-bold uppercase tracking-widest shadow-md active:scale-95`}>Guardar</button>
+                  </div>
+                </div>
+              ) : (
+                data.reseña ? <p className={`${theme.textDark} leading-relaxed text-sm whitespace-pre-line`}>{data.reseña}</p> : <p className="text-gray-400 text-sm italic font-serif">"Sin notas. Pulsa Editar para escribir."</p>
+              )}
+            </div>
+          </section>
+        </div>
+      )}
+
+      {type === 'tecnica' && (
+        <div className="px-8 mt-6 space-y-8">
+          <div className="text-center border-b border-gray-200/50 pb-6">
+            <span className="inline-flex items-center justify-center w-12 h-12 rounded-full text-[#5b85b5] mb-4 bg-[#f5f6f8] shadow-[inset_4px_4px_8px_#d8dde6,inset_-4px_-4px_8px_#ffffff]">
+              <Palette size={20} />
+            </span>
+            <h1 className={`font-serif text-3xl ${theme.textDark} mb-4 leading-tight`}>{data.titulo}</h1>
+          </div>
+          <div className="pt-2">
+            <h3 className="text-xs text-gray-400 mb-4 font-bold uppercase tracking-widest text-center">Proceso / Receta</h3>
+            <div className={`p-8 rounded-3xl ${theme.shadowInset} bg-[#f5f6f8] mb-8`}>
+              <p className={`${theme.textDark} leading-relaxed text-sm whitespace-pre-line`}>{data.pasos}</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </main>
+  );
+};
+
+const App = () => {
+  const [activeTab, setActiveTab] = useState('inicio');
+  const [selectedItem, setSelectedItem] = useState(null); 
+  const [isAdding, setIsAdding] = useState(null); 
+  const [filtroGaleria, setFiltroGaleria] = useState('Todas');
+
+  const [isEditingImage, setIsEditingImage] = useState(false);
+  const [tempImageUrl, setTempImageUrl] = useState('');
+  const [itemToDelete, setItemToDelete] = useState(null);
+
+  const [isEditingResena, setIsEditingResena] = useState(false);
+  const [tempResena, setTempResena] = useState('');
+
+  const [notas, setNotas] = useState([]);
+  const [referencias, setReferencias] = useState([]);
+  const [libros, setLibros] = useState([]);
+  const [historia, setHistoria] = useState([]);
+  const [expos, setExpos] = useState([]);
+  const [tecnicas, setTecnicas] = useState([]);
+
+  useEffect(() => {
+    const loadAllData = async () => {
+      try {
+        const storesMap = {
+          'atelier_notas': 'notas', 'atelier_referencias': 'referencias',
+          'atelier_libros': 'libros', 'atelier_historia': 'historia',
+          'atelier_expos': 'expos', 'atelier_tecnicas': 'tecnicas'
+        };
+        for (const [localKey, dbStore] of Object.entries(storesMap)) {
+          const localData = localStorage.getItem(localKey);
+          if (localData) {
+            try {
+              const parsedData = JSON.parse(localData);
+              if (Array.isArray(parsedData) && parsedData.length > 0) {
+                const currentDbData = await dbGetAll(dbStore);
+                if (currentDbData.length === 0) {
+                  for (const item of parsedData) await dbSave(dbStore, item);
+                }
+              }
+            } catch (e) {}
+          }
+        }
+        setNotas(await dbGetAll('notas')); setReferencias(await dbGetAll('referencias'));
+        setLibros(await dbGetAll('libros')); setHistoria(await dbGetAll('historia'));
+        setExpos(await dbGetAll('expos')); setTecnicas(await dbGetAll('tecnicas'));
+      } catch (error) { console.error(error); }
+    };
+    loadAllData();
+  }, []);
+
+  const [formData, setFormData] = useState({});
+  const handleInputChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const toggleDia = (dia) => {
+    const diasActuales = formData.dias || [];
+    if (diasActuales.includes(dia)) { setFormData({ ...formData, dias: diasActuales.filter(d => d !== dia) }); } 
+    else { setFormData({ ...formData, dias: [...diasActuales, dia] }); }
+  };
+
+  const abrirFormulario = (tipo) => {
+    setFormData(tipo === 'expo' ? { esGratis: false, dias: [] } : {});
+    setIsAdding(tipo);
+  };
+
+  const resetForm = () => { setFormData({}); setIsAdding(null); };
+
+  const handleGuardar = async () => {
+    const id = Date.now();
+    let nuevoItem = null; let storeName = "";
+    
+    if (isAdding === 'nota') {
+      storeName = 'notas'; nuevoItem = { id, titulo: formData.titulo || 'Sin título', autor: formData.autor || 'Desconocido', año: formData.año || 'S/F', disciplina: formData.disciplina || 'Pintura', imagen: formData.imagen || 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=800&q=80', etiquetas: [(formData.disciplina || 'Pintura').toLowerCase()], historia: formData.historia || 'Sin detalles.', inspiracion: formData.inspiracion || 'Sin notas.', evolucion: [] };
+      setNotas([nuevoItem, ...notas]);
+    } 
+    else if (isAdding === 'historia') {
+      storeName = 'historia'; const etiquetasArray = formData.etiquetas ? formData.etiquetas.split(',').map(e => e.trim()) : [];
+      nuevoItem = { id, tema: formData.tema || 'Apunte sin título', fecha: new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short' }), etiquetas: etiquetasArray, resumen: formData.resumen || 'Sin contenido.' };
+      setHistoria([nuevoItem, ...historia]);
+    }
+    else if (isAdding === 'libro') {
+      storeName = 'libros'; nuevoItem = { id, titulo: formData.titulo || 'Libro sin título', autor: formData.autor || 'S/A', estado: formData.estado || 'Pendiente', progreso: 0, imagen: formData.imagen || 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400&q=80', reseña: formData.reseña || '' };
+      setLibros([nuevoItem, ...libros]);
+    }
+    else if (isAdding === 'galeria') {
+      storeName = 'referencias'; nuevoItem = { id, img: formData.imagen || 'https://images.unsplash.com/photo-1597255998145-66270ebfc6e1?w=500&q=80', cat: formData.categoria || 'Luz', nota: formData.nota || 'Sin nota' };
+      setReferencias([nuevoItem, ...referencias]);
+    }
+    else if (isAdding === 'tecnica') {
+      storeName = 'tecnicas'; nuevoItem = { id, titulo: formData.titulo || 'Receta sin título', medio: formData.medio || 'Óleo', pasos: formData.pasos || 'Sin pasos descritos.', imagenesRef: formData.imagenesRef || [] };
+      setTecnicas([nuevoItem, ...tecnicas]);
+    }
+    else if (isAdding === 'expo') {
+      storeName = 'expos'; nuevoItem = { id, titulo: formData.titulo || 'Exposición sin título', lugar: formData.lugar || 'Lugar desconocido', fechaInicio: formData.fechaInicio || '', fechaFin: formData.fechaFin || '', dias: formData.dias || [], esGratis: formData.esGratis === true, precio: formData.esGratis ? '0' : (formData.precio || ''), imagen: formData.imagen || 'https://images.unsplash.com/photo-1531058020387-3be344556be6?w=800&q=80', reseña: formData.reseña || '' };
+      setExpos([nuevoItem, ...expos]);
+    }
+    if (nuevoItem && storeName) await dbSave(storeName, nuevoItem);
+    resetForm();
+  };
+
+  const handleEliminarClick = () => setItemToDelete({ type: selectedItem.type, id: selectedItem.data.id, isDetail: true });
+  const handleEliminarReferenciaClick = (id) => setItemToDelete({ type: 'referencia', id: id, isDetail: false });
+
+  const confirmarEliminar = async () => {
+    const storeMap = { nota: 'notas', historia: 'historia', libro: 'libros', referencia: 'referencias', expo: 'expos', tecnica: 'tecnicas' };
+    const storeName = storeMap[itemToDelete.type];
+    if (storeName) await dbDelete(storeName, itemToDelete.id);
+
+    if (itemToDelete.type === 'nota') setNotas(notas.filter(n => n.id !== itemToDelete.id));
+    if (itemToDelete.type === 'historia') setHistoria(historia.filter(h => h.id !== itemToDelete.id));
+    if (itemToDelete.type === 'libro') setLibros(libros.filter(l => l.id !== itemToDelete.id));
+    if (itemToDelete.type === 'referencia') setReferencias(referencias.filter(r => r.id !== itemToDelete.id));
+    if (itemToDelete.type === 'expo') setExpos(expos.filter(e => e.id !== itemToDelete.id));
+    if (itemToDelete.type === 'tecnica') setTecnicas(tecnicas.filter(t => t.id !== itemToDelete.id));
+    
+    if (itemToDelete.isDetail) setSelectedItem(null);
+    setItemToDelete(null);
+  };
+
+  const handleSaveImageEdit = async () => {
+    if (!tempImageUrl.trim()) { setIsEditingImage(false); return; }
+    let storeName = ""; let updatedItem = null;
+    if (selectedItem && selectedItem.type === 'nota') { updatedItem = { ...selectedItem.data, imagen: tempImageUrl }; storeName = 'notas'; setNotas(notas.map(nota => nota.id === selectedItem.data.id ? updatedItem : nota)); }
+    else if (selectedItem && selectedItem.type === 'expo') { updatedItem = { ...selectedItem.data, imagen: tempImageUrl }; storeName = 'expos'; setExpos(expos.map(expo => expo.id === selectedItem.data.id ? updatedItem : expo)); }
+    else if (selectedItem && selectedItem.type === 'libro') { updatedItem = { ...selectedItem.data, imagen: tempImageUrl }; storeName = 'libros'; setLibros(libros.map(libro => libro.id === selectedItem.data.id ? updatedItem : libro)); }
+    if (updatedItem && storeName) { await dbSave(storeName, updatedItem); setSelectedItem({ ...selectedItem, data: updatedItem }); }
+    setIsEditingImage(false);
+  };
+
+  const handleKeyDownImageEdit = (e) => {
+    if (e.key === 'Enter') handleSaveImageEdit();
+    if (e.key === 'Escape') setIsEditingImage(false); 
+  };
+
+  const handleSaveResena = async () => {
+    let storeName = ""; let updatedItem = null;
+    if (selectedItem && selectedItem.type === 'expo') { updatedItem = { ...selectedItem.data, reseña: tempResena }; storeName = 'expos'; setExpos(expos.map(expo => expo.id === selectedItem.data.id ? updatedItem : expo)); }
+    else if (selectedItem && selectedItem.type === 'libro') { updatedItem = { ...selectedItem.data, reseña: tempResena }; storeName = 'libros'; setLibros(libros.map(libro => libro.id === selectedItem.data.id ? updatedItem : libro)); }
+    if (updatedItem && storeName) { await dbSave(storeName, updatedItem); setSelectedItem({ ...selectedItem, data: updatedItem }); }
+    setIsEditingResena(false);
+  };
+
+  const renderModal = () => {
+    if (!itemToDelete) return null;
+    return (
+      <div className="absolute inset-0 z-[60] bg-black/40 backdrop-blur-sm flex items-center justify-center px-6 transition-all" style={{WebkitBackdropFilter: 'blur(4px)'}}>
+        <div className={`w-full max-w-sm ${theme.bgMain} rounded-3xl p-6 ${theme.shadowFlat} flex flex-col items-center text-center`}>
+          <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mb-4 shadow-inner"><Trash2 size={28} className="text-red-400" /></div>
+          <h3 className={`font-serif text-2xl ${theme.textDark} mb-2`}>¿Eliminar elemento?</h3>
+          <p className="text-sm text-gray-500 mb-8 px-4">Esta acción no se puede deshacer.</p>
+          <div className="flex gap-4 w-full">
+            <button onClick={() => setItemToDelete(null)} className={`flex-1 py-4 rounded-2xl ${theme.bgMain} ${theme.shadowFlat} text-gray-500 font-bold text-xs uppercase tracking-widest active:scale-95 transition-all`}>Cancelar</button>
+            <button onClick={confirmarEliminar} className="flex-1 py-4 rounded-2xl bg-red-400 text-white font-bold text-xs uppercase tracking-widest shadow-[4px_4px_10px_#d8dde6,-4px_-4px_10px_#ffffff] active:shadow-inner transition-all active:scale-95">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderCurrentView = () => {
+    if (isAdding) return <FormularioDinamico {...{isAdding, formData, handleInputChange, toggleDia, setFormData, resetForm, handleGuardar}} />;
+    if (selectedItem) return <VistaDetalle {...{ selectedItem, setSelectedItem, handleEliminarClick, isEditingImage, setIsEditingImage, tempImageUrl, setTempImageUrl, handleSaveImageEdit, handleKeyDownImageEdit, isEditingResena, setIsEditingResena, tempResena, setTempResena, handleSaveResena }} />;
+    
+    switch (activeTab) {
+      case 'inicio': return <HomeView {...{historia, libros, notas, referencias, expos, tecnicas, setActiveTab, abrirFormulario}} />;
+      case 'historia': return <HistoriaList {...{historia, abrirFormulario, setSelectedItem}} />;
+      case 'libros': return <LibrosList {...{libros, abrirFormulario, setSelectedItem}} />;
+      case 'notas': return <NotasList {...{notas, abrirFormulario, setSelectedItem}} />;
+      case 'tecnicas': return <TecnicasList {...{tecnicas, abrirFormulario, setSelectedItem}} />;
+      case 'galeria': return <GaleriaList {...{referencias, filtroGaleria, setFiltroGaleria, abrirFormulario, handleEliminarReferenciaClick}} />;
+      case 'expos': return <ExposicionesList {...{expos, abrirFormulario, setSelectedItem}} />;
+      default: return <HomeView {...{historia, libros, notas, referencias, expos, tecnicas, setActiveTab, abrirFormulario}} />;
+    }
+  };
+
+  const showBottomNav = !isAdding && !selectedItem;
+
+  return (
+    <div className={`min-h-screen ${theme.bgMain} font-sans flex justify-center`}>
+      <div className={`w-full relative ${theme.bgMain} overflow-hidden flex flex-col h-screen-safe`}>
+        {renderModal()}
+        {showBottomNav && (
+          <header className="px-6 pb-4 safe-pt flex justify-between items-end flex-shrink-0 z-[40]">
+            <div>
+              <h1 className={`${theme.textDark} text-2xl font-light tracking-wide flex items-baseline gap-2`}>
+                Atelier <span className="text-sm text-gray-400 font-sans">アトリエ</span>
+              </h1>
+            </div>
+            <div className="flex gap-4 text-gray-500">
+              <span className="text-xs uppercase tracking-widest mt-2">Estudio</span>
+            </div>
+          </header>
+        )}
+        <div className="flex-1 overflow-hidden relative">
+          {renderCurrentView()}
+        </div>
+        {showBottomNav && <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />}
+      </div>
+    </div>
+  );
+};
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+```
+
+</script>
 </body>
 </html>
